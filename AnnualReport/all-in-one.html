@@ -82,6 +82,10 @@
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
+        /* 确保iframe中的链接在新标签页打开 */
+        iframe[src*=".html"] {
+            sandbox: "allow-same-origin allow-scripts allow-forms allow-popups";
+        }
         .footer {
             background: #2c3e50;
             color: white;
@@ -142,7 +146,7 @@
         </div>
 
         <div class="content-area" id="contentArea">
-            <iframe src="2025.html" onload="updateStatus('2025年工作总结')"></iframe>
+            <iframe src="2025.html" onload="updateStatus('2025年工作总结')" sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
         </div>
 
         <div class="status-bar" id="statusBar">
@@ -198,9 +202,12 @@
             const title = pageTitles[pageKey];
 
             contentArea.innerHTML = `
-                <iframe src="${filename}" onload="updateStatus('${title}')"></iframe>
+                <iframe src="${filename}" onload="updateStatus('${title}')" sandbox="allow-same-origin allow-scripts allow-forms allow-popups"></iframe>
             `;
             statusBar.textContent = `正在加载：${title}...`;
+
+            // 延迟处理iframe链接,确保新页面已加载
+            setTimeout(handleIframeLinks, 500);
         }
 
         function updateStatus(title) {
@@ -208,10 +215,33 @@
             statusBar.textContent = `当前页面：${title} | 加载完成`;
         }
 
+        // 处理iframe中的链接点击,在父窗口打开
+        function handleIframeLinks() {
+            const iframe = document.querySelector('iframe');
+            if (iframe && iframe.contentWindow) {
+                try {
+                    iframe.contentWindow.document.addEventListener('click', function(e) {
+                        const link = e.target.closest('a');
+                        if (link && (link.target === '_blank' || link.href.includes('.html'))) {
+                            e.preventDefault();
+                            // 在新标签页打开
+                            const url = link.href;
+                            window.open(url, '_blank');
+                        }
+                    }, true);
+                } catch (e) {
+                    // 跨域或其他错误时忽略
+                    console.log('无法访问iframe内容:', e);
+                }
+            }
+        }
+
         // 页面加载完成提示
         window.addEventListener('load', function() {
             console.log('国有资产管理处文档系统已加载');
             console.log('包含文件：2025.html, 2026.html, 孙义.html, 陈刚.html, 郭芸.html, 陈岗.html, 张旭东.html, 佟玲.html');
+            // 延迟处理iframe链接,确保iframe已加载
+            setTimeout(handleIframeLinks, 1000);
         });
     </script>
 </body>
