@@ -4,7 +4,285 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>资产数据可视化中枢</title>
-  <link rel="stylesheet" href="assets/style.css" />
+  <style>
+    :root{
+      --bg: #0b1220;
+      --bg-alt: #0f1b33;
+      --panel: rgba(18, 28, 52, 0.78);
+      --panel-strong: rgba(21, 36, 68, 0.92);
+      --border: rgba(115, 169, 255, 0.2);
+      --text: #e6f1ff;
+      --muted: #9fb3d9;
+      --accent: #4ee6ff;
+      --accent-2: #ffb347;
+      --glow: rgba(78, 230, 255, 0.35);
+      --shadow: 0 18px 40px rgba(7, 12, 24, 0.45);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: "Bahnschrift","Segoe UI Variable","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+      background: radial-gradient(1200px 520px at 15% -10%, rgba(78,230,255,0.15), transparent 70%),
+                  radial-gradient(900px 480px at 90% 10%, rgba(255,179,71,0.12), transparent 70%),
+                  linear-gradient(180deg, #0b1220 0%, #101a2f 50%, #0b1220 100%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .bg-grid{
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.5;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .bg-orb{
+      position: fixed;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      filter: blur(0px);
+      opacity: 0.6;
+      pointer-events: none;
+      z-index: 0;
+      animation: float 10s ease-in-out infinite;
+    }
+    .orb-1{
+      left: -120px;
+      bottom: 10%;
+      background: radial-gradient(circle at 30% 30%, rgba(78,230,255,0.5), transparent 70%);
+    }
+    .orb-2{
+      right: -160px;
+      top: 5%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,179,71,0.4), transparent 70%);
+      animation-delay: 2s;
+    }
+
+    @keyframes float{
+      0%,100%{transform: translateY(0)}
+      50%{transform: translateY(-18px)}
+    }
+
+    .hero{
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      padding: 32px clamp(20px, 5vw, 56px) 16px;
+      align-items: center;
+    }
+
+    .hero-tag{
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(78,230,255,0.15);
+      color: var(--accent);
+      letter-spacing: 2px;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    h1{
+      margin: 14px 0 10px;
+      font-size: clamp(26px, 4vw, 40px);
+      letter-spacing: 1px;
+    }
+
+    .hero-sub{
+      margin: 0;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.6;
+    }
+
+    .hero-right{
+      display: grid;
+      gap: 12px;
+    }
+
+    .meta-card{
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .meta-title{
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .meta-value{
+      margin-top: 6px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .container{
+      position: relative;
+      z-index: 1;
+      padding: 0 clamp(20px, 5vw, 56px) 48px;
+    }
+
+    .kpi-row{
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      margin-bottom: 28px;
+    }
+
+    .kpi-card{
+      background: var(--panel-strong);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .kpi-card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:16px;
+      border:1px solid rgba(78,230,255,0.3);
+      opacity:0.35;
+      pointer-events:none;
+    }
+    .kpi-label{
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+    .kpi-value{
+      font-size: 26px;
+      font-weight: 700;
+      margin: 6px 0 4px;
+      color: var(--accent);
+    }
+    .kpi-note{
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .grid{
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(12, 1fr);
+    }
+
+    .panel{
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+    .panel-wide{
+      grid-column: span 12;
+    }
+    .panel-half{
+      grid-column: span 6;
+    }
+
+    .panel-head{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .panel-title{
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .panel-sub{
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .panel-chip{
+      font-size: 11px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(78,230,255,0.4);
+      color: var(--accent);
+    }
+    .panel-actions{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .toggle-btn{
+      background: rgba(78,230,255,0.08);
+      color: var(--muted);
+      border: 1px solid rgba(78,230,255,0.3);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .toggle-btn.active{
+      color: #0b1220;
+      background: var(--accent);
+      border-color: transparent;
+      box-shadow: 0 0 16px var(--glow);
+      font-weight: 700;
+    }
+
+    .chart{
+      height: 320px;
+    }
+
+    .rules{
+      margin-top: 24px;
+      padding: 18px;
+      background: rgba(12, 20, 40, 0.8);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+    }
+    .rules-title{
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .rules-body{
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .rules-label{
+      color: var(--text);
+    }
+
+    .footer{
+      text-align: center;
+      padding: 24px 16px 40px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    code{
+      color: var(--accent);
+    }
+
+    @media (max-width: 900px){
+      .panel-half{grid-column: span 12;}
+      .chart{height: 280px;}
+    }
+  </style>
   <!-- 默认使用 CDN。若需离线使用：下载 echarts.min.js 到 assets/ 并替换 src -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 </head>
@@ -40,7 +318,7 @@
       <div class="kpi-card">
         <div class="kpi-label">资产总量</div>
         <div class="kpi-value" id="kpiAssetCount">-</div>
-        <div class="kpi-note">全量记录数量</div>
+      <div class="kpi-note">数量合计</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">资产总金额</div>
@@ -98,7 +376,11 @@
             <div class="panel-title">超期资产分类</div>
             <div class="panel-sub">金额（万元）+ 数量</div>
           </div>
-          <div class="panel-chip">OVERDUE</div>
+          <div class="panel-actions">
+            <button class="toggle-btn active" id="btnOverdueCategory" type="button">按类别</button>
+            <button class="toggle-btn" id="btnOverdueUnit" type="button">按部门</button>
+            <div class="panel-chip">OVERDUE</div>
+          </div>
         </div>
         <div id="chartOverdue" class="chart"></div>
       </article>
@@ -153,8 +435,12 @@ function sumField(list, field){
 }
 
 function setKpis(data){
-  const assetTotalCount = sumField(data.asset_category, 'count');
-  const assetTotalAmount = sumField(data.asset_category, 'sum_wan');
+  const assetTotalCount = (data.meta && data.meta.total_quantity != null)
+    ? Number(data.meta.total_quantity)
+    : sumField(data.asset_category, 'count');
+  const assetTotalAmount = (data.meta && data.meta.total_amount_wan != null)
+    ? Number(data.meta.total_amount_wan)
+    : sumField(data.asset_category, 'sum_wan');
   document.getElementById('kpiAssetCount').textContent = fmtInt(assetTotalCount);
   document.getElementById('kpiAssetAmount').textContent = fmtWan(assetTotalAmount);
   document.getElementById('kpiCategoryCount').textContent = fmtInt((data.asset_category || []).length);
@@ -229,12 +515,21 @@ function renderBarLine(el, names, amountWan, counts, amountLabel){
   window.addEventListener('resize', () => chart.resize());
 }
 
-function renderChartFromList(elId, list, labelField, amountField, countField, limit){
-  const dataList = (list || []).slice(0, limit || list.length);
+function renderChartFromList(elId, list, labelField, amountField, countField, limit, filterFn){
+  const source = (list || []).filter(item => filterFn ? filterFn(item) : true);
+  const dataList = source.slice(0, limit || source.length);
   const names = dataList.map(d => d[labelField] ?? '未分类');
   const amount = dataList.map(d => Number(d[amountField]) || 0);
   const counts = dataList.map(d => Number(d[countField]) || 0);
   renderBarLine(document.getElementById(elId), names, amount, counts, '金额(万元)');
+}
+
+function renderOverdue(data, mode){
+  const isUnit = mode === 'unit';
+  const list = isUnit ? data.overdue_by_unit : data.overdue_by_category;
+  const labelField = isUnit ? '使用单位' : '资产类别';
+  const filterFn = isUnit ? null : (item) => item['资产类别'] !== '构筑物';
+  renderChartFromList('chartOverdue', list, labelField, 'sum_wan', 'count', undefined, filterFn);
 }
 
 function setRules(data){
@@ -265,8 +560,21 @@ function setRules(data){
 
   renderChartFromList('chartAssetCategory', data.asset_category, '资产类别', 'sum_wan', 'count');
   renderChartFromList('chartUnitCategory', data.unit_category, '使用单位', 'sum_wan', 'count', 12);
-  renderChartFromList('chartOverdue', data.overdue_by_category, '资产类别', 'sum_wan', 'count');
+  renderOverdue(data, 'category');
   renderChartFromList('chartBigEquip', data.big_equipment_by_unit, '使用单位', 'sum_wan', 'count');
+
+  const btnCategory = document.getElementById('btnOverdueCategory');
+  const btnUnit = document.getElementById('btnOverdueUnit');
+  btnCategory.addEventListener('click', () => {
+    btnCategory.classList.add('active');
+    btnUnit.classList.remove('active');
+    renderOverdue(data, 'category');
+  });
+  btnUnit.addEventListener('click', () => {
+    btnUnit.classList.add('active');
+    btnCategory.classList.remove('active');
+    renderOverdue(data, 'unit');
+  });
 })();
 </script>
 </body>
