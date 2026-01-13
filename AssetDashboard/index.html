@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>资产数据可视化中枢</title>
+  <link rel="stylesheet" href="assets/style.css" />
+  <!-- 默认使用 CDN。若需离线使用：下载 echarts.min.js 到 assets/ 并替换 src -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-orb orb-1"></div>
+  <div class="bg-orb orb-2"></div>
+
+  <header class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">STATIC ASSET INTEL</div>
+      <h1>资产数据可视化中枢</h1>
+      <p class="hero-sub">以“数量 + 金额”双维度驱动分析，聚焦超期资产与教学大仪分布。</p>
+    </div>
+    <div class="hero-right">
+      <div class="meta-card">
+        <div class="meta-title">数据源</div>
+        <div class="meta-value" id="metaLine">data/extra_stats.json</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-title">生成时间</div>
+        <div class="meta-value" id="metaTime">-</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-title">金额口径</div>
+        <div class="meta-value" id="metaAmountField">资产原总金额（元）</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">资产总量</div>
+        <div class="kpi-value" id="kpiAssetCount">-</div>
+        <div class="kpi-note">全量记录数量</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">资产总金额</div>
+        <div class="kpi-value" id="kpiAssetAmount">-</div>
+        <div class="kpi-note">万元</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">资产类别数</div>
+        <div class="kpi-value" id="kpiCategoryCount">-</div>
+        <div class="kpi-note">分类维度</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">使用单位数</div>
+        <div class="kpi-value" id="kpiUnitCount">-</div>
+        <div class="kpi-note">部门维度</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">超期资产</div>
+        <div class="kpi-value" id="kpiOverdueCount">-</div>
+        <div class="kpi-note" id="kpiOverdueAmount">金额：- 万元</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">教学大仪</div>
+        <div class="kpi-value" id="kpiBigCount">-</div>
+        <div class="kpi-note" id="kpiBigAmount">金额：- 万元</div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="panel panel-wide">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">资产分类统计</div>
+            <div class="panel-sub">金额（万元）+ 数量</div>
+          </div>
+          <div class="panel-chip">ASSET CATEGORY</div>
+        </div>
+        <div id="chartAssetCategory" class="chart"></div>
+      </article>
+
+      <article class="panel panel-wide">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">部门分类统计</div>
+            <div class="panel-sub">Top 12 金额（万元）+ 数量</div>
+          </div>
+          <div class="panel-chip">DEPARTMENT</div>
+        </div>
+        <div id="chartUnitCategory" class="chart"></div>
+      </article>
+
+      <article class="panel panel-half">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">超期资产分类</div>
+            <div class="panel-sub">金额（万元）+ 数量</div>
+          </div>
+          <div class="panel-chip">OVERDUE</div>
+        </div>
+        <div id="chartOverdue" class="chart"></div>
+      </article>
+
+      <article class="panel panel-half">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">教学大仪分布</div>
+            <div class="panel-sub">金额（万元）+ 数量</div>
+          </div>
+          <div class="panel-chip">BIG EQUIPMENT</div>
+        </div>
+        <div id="chartBigEquip" class="chart"></div>
+      </article>
+    </section>
+
+    <section class="rules">
+      <div class="rules-title">统计口径</div>
+      <div class="rules-body">
+        <div>
+          <span class="rules-label">超期资产：</span>
+          <span id="ruleOverdue">-</span>
+        </div>
+        <div>
+          <span class="rules-label">教学大仪：</span>
+          <span id="ruleBigEquip">-</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    本页面为静态可视化看板，数据来源 <code>data/extra_stats.json</code>
+  </footer>
+
+<script>
+async function loadData(){
+  const res = await fetch('data/extra_stats.json');
+  return await res.json();
+}
+
+function fmtInt(n){
+  return new Intl.NumberFormat('zh-CN').format(Math.round(n || 0));
+}
+function fmtWan(n){
+  const v = (typeof n === 'number') ? n : 0;
+  return new Intl.NumberFormat('zh-CN', {maximumFractionDigits:2}).format(v);
+}
+
+function sumField(list, field){
+  return (list || []).reduce((acc, item) => acc + (Number(item[field]) || 0), 0);
+}
+
+function setKpis(data){
+  const assetTotalCount = sumField(data.asset_category, 'count');
+  const assetTotalAmount = sumField(data.asset_category, 'sum_wan');
+  document.getElementById('kpiAssetCount').textContent = fmtInt(assetTotalCount);
+  document.getElementById('kpiAssetAmount').textContent = fmtWan(assetTotalAmount);
+  document.getElementById('kpiCategoryCount').textContent = fmtInt((data.asset_category || []).length);
+  document.getElementById('kpiUnitCount').textContent = fmtInt((data.unit_category || []).length);
+
+  document.getElementById('kpiOverdueCount').textContent = fmtInt(data.overdue_total?.count);
+  document.getElementById('kpiOverdueAmount').textContent =
+    `金额：${fmtWan(data.overdue_total?.sum_wan)} 万元`;
+
+  document.getElementById('kpiBigCount').textContent = fmtInt(data.big_equipment_total?.count);
+  document.getElementById('kpiBigAmount').textContent =
+    `金额：${fmtWan(data.big_equipment_total?.sum_wan)} 万元`;
+}
+
+function renderBarLine(el, names, amountWan, counts, amountLabel){
+  const chart = echarts.init(el);
+  chart.setOption({
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: 'rgba(10,16,28,0.92)',
+      borderColor: 'rgba(66,226,255,0.4)',
+      textStyle: {color: '#e8f2ff'},
+      axisPointer: {type: 'shadow'}
+    },
+    grid: {left: 50, right: 50, top: 30, bottom: 60},
+    xAxis: {
+      type: 'category',
+      data: names,
+      axisLabel: {rotate: 28, color: '#b6c7e6'},
+      axisLine: {lineStyle: {color: 'rgba(117,163,255,0.35)'}},
+      axisTick: {show: false}
+    },
+    yAxis: [
+      {
+        type: 'value',
+        name: amountLabel,
+        axisLabel: {color: '#b6c7e6'},
+        splitLine: {lineStyle: {color: 'rgba(117,163,255,0.15)'}}
+      },
+      {
+        type: 'value',
+        name: '数量',
+        axisLabel: {color: '#b6c7e6'},
+        splitLine: {show: false}
+      }
+    ],
+    series: [
+      {
+        name: amountLabel,
+        type: 'bar',
+        data: amountWan,
+        barWidth: '46%',
+        itemStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {offset: 0, color: '#4ee6ff'},
+            {offset: 1, color: '#1b6fff'}
+          ])
+        }
+      },
+      {
+        name: '数量',
+        type: 'line',
+        yAxisIndex: 1,
+        data: counts,
+        smooth: true,
+        symbolSize: 8,
+        lineStyle: {color: '#ffb347', width: 2},
+        itemStyle: {color: '#ffb347'}
+      }
+    ]
+  });
+  window.addEventListener('resize', () => chart.resize());
+}
+
+function renderChartFromList(elId, list, labelField, amountField, countField, limit){
+  const dataList = (list || []).slice(0, limit || list.length);
+  const names = dataList.map(d => d[labelField] ?? '未分类');
+  const amount = dataList.map(d => Number(d[amountField]) || 0);
+  const counts = dataList.map(d => Number(d[countField]) || 0);
+  renderBarLine(document.getElementById(elId), names, amount, counts, '金额(万元)');
+}
+
+function setRules(data){
+  if (data.overdue_rules){
+    document.getElementById('ruleOverdue').textContent = data.overdue_rules.condition;
+  }
+  if (data.big_equipment_rules){
+    const rules = data.big_equipment_rules;
+    const parts = [
+      `${rules.asset_category_contains}类`,
+      `金额≥${fmtInt(rules.amount_min)}元`,
+      `排除：${(rules.exclude_units || []).join('、') || '无'}`,
+      `剔除包含“${rules.exclude_software_name_contains}”`,
+      `保留例外：${(rules.include_software_exceptions || []).join('、') || '无'}`
+    ];
+    document.getElementById('ruleBigEquip').textContent = parts.join('；');
+  }
+}
+
+(async () => {
+  const data = await loadData();
+  document.getElementById('metaLine').textContent = 'data/extra_stats.json';
+  document.getElementById('metaTime').textContent = data.meta?.generated_at || '-';
+  document.getElementById('metaAmountField').textContent = `${data.meta?.amount_field || '资产原总金额'}（${data.meta?.currency_unit || '元'}）`;
+
+  setKpis(data);
+  setRules(data);
+
+  renderChartFromList('chartAssetCategory', data.asset_category, '资产类别', 'sum_wan', 'count');
+  renderChartFromList('chartUnitCategory', data.unit_category, '使用单位', 'sum_wan', 'count', 12);
+  renderChartFromList('chartOverdue', data.overdue_by_category, '资产类别', 'sum_wan', 'count');
+  renderChartFromList('chartBigEquip', data.big_equipment_by_unit, '使用单位', 'sum_wan', 'count');
+})();
+</script>
+</body>
+</html>
