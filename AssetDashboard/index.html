@@ -542,8 +542,7 @@ function setRules(data){
       `${rules.asset_category_contains}类`,
       `金额≥${fmtInt(rules.amount_min)}元`,
       `排除：${(rules.exclude_units || []).join('、') || '无'}`,
-      `剔除包含“${rules.exclude_software_name_contains}”`,
-      `保留例外：${(rules.include_software_exceptions || []).join('、') || '无'}`
+      `剔除包含“${rules.exclude_software_name_contains}”`
     ];
     document.getElementById('ruleBigEquip').textContent = parts.join('；');
   }
