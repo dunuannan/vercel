@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>固定资产全生命周期管理实务培训</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #1a5f7a;
+            --secondary-color: #2c8fb5;
+            --accent-color: #e74c3c;
+            --bg-color: #f5f7fa;
+            --text-color: #2c3e50;
+            --card-bg: #ffffff;
+            --border-color: #e1e8ed;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 12px 30px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            height: 4px;
+            background: #ffd700;
+            transition: width 0.3s;
+            z-index: 999;
+        }
+
+        /* 侧边导航 */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 60px;
+            bottom: 0;
+            width: 280px;
+            background: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            padding: 20px 0;
+            z-index: 100;
+            transition: transform 0.3s;
+        }
+
+        .sidebar.hidden {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .sidebar-item:hover {
+            background: #f0f4f8;
+        }
+
+        .sidebar-item.active {
+            background: #e8f4fc;
+            border-left-color: var(--secondary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .sidebar-item.section-header {
+            font-weight: 700;
+            color: var(--primary-color);
+            background: #f8fafc;
+            margin-top: 10px;
+        }
+
+        .sidebar-item.scenario {
+            padding-left: 35px;
+            font-size: 13px;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            margin-left: 280px;
+            margin-top: 60px;
+            padding: 40px 50px;
+            max-width: 1000px;
+            transition: margin-left 0.3s;
+        }
+
+        .main-content.full-width {
+            margin-left: 0;
+        }
+
+        /* 幻灯片样式 */
+        .slide {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 封面页 */
+        .cover-slide {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 16px;
+            margin-bottom: 30px;
+        }
+
+        .cover-slide h1 {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .cover-slide .subtitle {
+            font-size: 1.3em;
+            opacity: 0.95;
+            margin-bottom: 40px;
+        }
+
+        .cover-meta {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .cover-meta-item {
+            background: rgba(255,255,255,0.15);
+            padding: 15px 25px;
+            border-radius: 10px;
+        }
+
+        .cover-meta-item strong {
+            display: block;
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        /* 内容卡片 */
+        .content-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 35px 40px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-size: 1.6em;
+            margin-bottom: 10px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+
+        .section-time {
+            color: #666;
+            font-size: 0.95em;
+            margin-bottom: 25px;
+        }
+
+        .core-logic {
+            background: linear-gradient(135deg, #fff9e6, #fff3cd);
+            border-left: 5px solid #ffc107;
+            padding: 18px 25px;
+            margin: 25px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .core-logic strong {
+            color: #856404;
+        }
+
+        /* 场景卡片 */
+        .scenario-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px 35px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+            border-top: 4px solid var(--secondary-color);
+        }
+
+        .scenario-title {
+            color: var(--primary-color);
+            font-size: 1.35em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .scenario-number {
+            background: var(--secondary-color);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85em;
+            font-weight: 700;
+        }
+
+        /* 案例框 */
+        .case-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        .case-box .case-label {
+            color: var(--secondary-color);
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .case-box .consequence {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
+        }
+
+        .consequence-label {
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        /* 图片展示容器 */
+        .image-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .image-box .image-label {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+
+        .image-box img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .image-box .image-caption {
+            color: #666;
+            font-size: 0.85em;
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        /* 分析框 */
+        .analysis-box {
+            background: #e8f6ff;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .analysis-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .analysis-title::before {
+            content: "";
+        }
+
+        /* 制度引用 */
+        .regulation {
+            background: #fff;
+            border: 2px solid var(--secondary-color);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .regulation::before {
+            content: "";
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            background: white;
+            padding: 0 8px;
+        }
+
+        .regulation strong {
+            color: var(--primary-color);
+        }
+
+        /* 要点列表 */
+        .key-points {
+            list-style: none;
+            padding: 0;
+        }
+
+        .key-points li {
+            padding: 12px 0 12px 35px;
+            position: relative;
+            border-bottom: 1px solid #eee;
+        }
+
+        .key-points li:last-child {
+            border-bottom: none;
+        }
+
+        .key-points li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        /* 警告框 */
+        .warning-box {
+            background: #fff5f5;
+            border-left: 5px solid var(--accent-color);
+            padding: 18px 25px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .warning-box strong {
+            color: var(--accent-color);
+        }
+
+        /* 操作建议 */
+        .suggestion-box {
+            background: #e8f8f0;
+            border-left: 5px solid #27ae60;
+            padding: 18px 25px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .suggestion-box strong {
+            color: #1e7e34;
+        }
+
+        /* 总结列表 */
+        .summary-list {
+            display: grid;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .summary-item {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .summary-number {
+            background: rgba(255,255,255,0.2);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .summary-text h4 {
+            margin-bottom: 8px;
+            font-size: 1.15em;
+        }
+
+        .summary-text p {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        /* 结束页 */
+        .ending-slide {
+            text-align: center;
+            padding: 80px 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 16px;
+        }
+
+        .ending-slide h2 {
+            font-size: 2em;
+            margin-bottom: 30px;
+        }
+
+        .ending-slide p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 2;
+        }
+
+        .ending-slide .thanks {
+            font-size: 2.5em;
+            margin-top: 40px;
+        }
+
+        /* 底部导航 */
+        .slide-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 25px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .slide-nav button {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .slide-nav button:hover {
+            background: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .slide-nav button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-counter {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* 话术标记 */
+        .script-tag {
+            display: inline-block;
+            background: var(--secondary-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+        }
+
+        /* 违规性质分析 */
+        .violation-analysis {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px 25px;
+            margin: 15px 0;
+            border: 1px solid #e1e8ed;
+        }
+
+        .violation-analysis h5 {
+            color: var(--accent-color);
+            margin-bottom: 12px;
+            font-size: 1.05em;
+        }
+
+        /* 响应式 */
+        @media (max-width: 900px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 25px 20px;
+            }
+
+            .cover-slide h1 {
+                font-size: 1.6em;
+            }
+
+            .cover-meta {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+
+        /* 打印样式 */
+        @media print {
+            .navbar, .sidebar, .slide-nav, .nav-controls {
+                display: none !important;
+            }
+
+            .main-content {
+                margin: 0;
+                padding: 20px;
+            }
+
+            .slide {
+                display: block !important;
+                page-break-after: always;
+            }
+
+            .progress-bar {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <h1>固定资产全生命周期管理实务培训</h1>
+        <div class="nav-controls">
+            <button class="nav-btn" onclick="toggleSidebar()">☰ 目录</button>
+            <button class="nav-btn" onclick="toggleFullscreen()">⛶ 全屏</button>
+        </div>
+    </nav>
+
+    <!-- 进度条 -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- 侧边导航 -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-item section-header" onclick="goToSlide(0)">封面</div>
+        
+        <div class="sidebar-item section-header" onclick="goToSlide(1)">第一部分：开场与破题</div>
+        
+        <div class="sidebar-item section-header" onclick="goToSlide(2)">第二部分：生命周期之"入口"</div>
+        <div class="sidebar-item scenario" onclick="goToSlide(3)">场景一：被忽视的"小物件"</div>
+        <div class="sidebar-item scenario" onclick="goToSlide(4)">场景二：好心企业的"免费赠送"</div>
+        
+        <div class="sidebar-item section-header" onclick="goToSlide(5)">第三部分：生命周期之"使用"</div>
+        <div class="sidebar-item scenario" onclick="goToSlide(6)">场景三：部门间的"私下流转"</div>
+        <div class="sidebar-item scenario" onclick="goToSlide(7)">场景四：从"专属配发"到"隐形私产"</div>
+        
+        <div class="sidebar-item section-header" onclick="goToSlide(8)">第四部分：生命周期之"变动"</div>
+        <div class="sidebar-item scenario" onclick="goToSlide(9)">场景五：退休后的"幽灵资产"</div>
+        
+        <div class="sidebar-item section-header" onclick="goToSlide(10)">第五部分：生命周期之"出口"</div>
+        <div class="sidebar-item scenario" onclick="goToSlide(11)">场景六：擅自拆卸的"拼凑"行为</div>
+        <div class="sidebar-item scenario" onclick="goToSlide(12)">场景七：以为是垃圾，其实是档案</div>
+        
+        <div class="sidebar-item section-header" onclick="goToSlide(13)">第六部分：总结与行动建议</div>
+        <div class="sidebar-item section-header" onclick="goToSlide(14)">结束</div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="main-content" id="mainContent">
+        
+        <!-- 幻灯片0：封面 -->
+        <section class="slide active" data-slide="0">
+            <div class="cover-slide">
+                <h1>职业风险防控视角下的<br>固定资产全生命周期管理实务</h1>
+                <div class="subtitle">——基于"第一性原理"的合规操作指南</div>
+                <div class="cover-meta">
+                    <div class="cover-meta-item">
+                        <strong>主讲部门</strong>
+                        国有资产管理处
+                    </div>
+                    <div class="cover-meta-item">
+                        <strong>预计时长</strong>
+                        40分钟
+                    </div>
+                    <div class="cover-meta-item">
+                        <strong>培训目标</strong>
+                        理清资产与职业生涯的法律责任边界
+                    </div>
+                </div>
+            </div>
+            <div class="content-card" style="margin-top: 30px;">
+                <h3 style="color: var(--primary-color); margin-bottom: 20px;">培训目标</h3>
+                <p style="font-size: 1.1em; line-height: 2;">
+                    帮助教师理清资产与个人职业生涯的法律责任边界，通过全生命周期的合规操作，配合国资部门做好资产清查与管理，实现<strong>工作流程顺畅</strong>与<strong>个人职业安全</strong>的"双赢"。
+                </p>
+            </div>
+        </section>
+
+        <!-- 幻灯片1：第一部分 开场与破题 -->
+        <section class="slide" data-slide="1">
+            <div class="content-card">
+                <h2 class="section-title">第一部分：开场与破题</h2>
+                <div class="section-time">——从"行政要求"到"职业契约" | 预计时长：5分钟</div>
+                
+                <div class="script-tag">【话术脚本】</div>
+                <p style="font-size: 1.1em; margin-bottom: 25px;">各位领导、各位老师，大家好。</p>
+                
+                <p style="margin-bottom: 20px;">在开启今天的培训之前，我想请大家思考一个本质问题：<strong>作为一线教师，我们为什么要花时间去了解看似繁琐的固定资产管理制度？</strong></p>
+                
+                <p style="margin-bottom: 20px;">如果将其理解为单纯的"配合国资处工作"，那往往会感到负担。但如果我们从<strong>"第一性原理"</strong>——即事物最本质的逻辑来看，固定资产管理对我们每一位老师而言，实际上是一份严肃的<strong>"职业合约"</strong>。</p>
+                
+                <div class="regulation">
+                    <p>根据《天津市市级行政事业单位国有资产使用管理办法》及我院《细则》，每一件领用人在您名下的资产，在法律属性上都是<strong>"国有资产"</strong>。</p>
+                </div>
+                
+                <ul class="key-points" style="margin: 30px 0;">
+                    <li><strong>入账</strong>，是这份合约的生效</li>
+                    <li><strong>使用</strong>，是履行合约的过程</li>
+                    <li><strong>交接与处置</strong>，是解除合约的必经程序</li>
+                </ul>
+                
+                <div class="core-logic">
+                    <strong>今日培训主线：</strong>沿着资产的<strong>"全生命周期"</strong>，结合日常工作中常遇到的<strong>7个典型场景</strong>，解析如何通过合规操作，避免在<strong>年度资产清查</strong>中出现问题，确保我们的职业生涯<strong>"账实相符，进退自如"</strong>。
+                </div>
+            </div>
+        </section>
+
+        <!-- 幻灯片2：第二部分 概述 -->
+        <section class="slide" data-slide="2">
+            <div class="content-card">
+                <h2 class="section-title">第二部分：生命周期之"入口"</h2>
+                <div class="section-time">——资产配置与入账 | 预计时长：10分钟</div>
+                
+                <div class="core-logic">
+                    <strong>核心逻辑：</strong>资产的界定标准并非仅看价格。<strong>"应入未入"</strong>是国资处在资产清查中发现的首要合规风险点。
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 20px;">本部分包含场景：</h3>
+                    <div style="display: grid; gap: 15px;">
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid var(--secondary-color);">
+                            <strong>场景一：</strong>被忽视的"小物件" —— 低价值资产的入账误区
+                        </div>
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid var(--secondary-color);">
+                            <strong>场景二：</strong>好心企业的"免费赠送" —— 捐赠资产的处理规范
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 幻灯片3：场景一 -->
+        <section class="slide" data-slide="3">
+            <div class="scenario-card">
+                <h3 class="scenario-title">
+                    <span class="scenario-number">1</span>
+                    场景一：被忽视的"小物件"
+                </h3>
+                
+                <div class="case-box">
+                    <div class="case-label">📋 案例还原</div>
+                    <p>李老师给教研室采购了一批办公椅，单价180元；同时采购了一批专业图书。李老师认为："椅子单价未到1000元，图书属于易耗品，应该不需要作为固定资产登记。"</p>
+                </div>
+
+                <div class="image-box">
+                    <div class="image-label">案例图解</div>
+                    <img src="images/scene1.png" alt="场景一案例图解">
+                    <div class="image-caption">场景一：被忽视的"小物件"</div>
+                </div>
+                
+                <div class="analysis-box">
+                    <div class="analysis-title">业务解析与制度依据</div>
+                    <p style="margin-bottom: 15px;">这是一个非常普遍的认知误区。如果这些物资未入账，在我们国资处进行<strong>全院资产盘点</strong>时，就会出现"有物无账"的情况，属于典型的资产流失隐患。</p>
+                    
+                    <div class="regulation">
+                        <p>根据<strong>《细则》第三条</strong>，资产入账有明确的"铁律"：</p>
+                    </div>
+                    
+                    <ul class="key-points">
+                        <li><strong>特定类别强制入账：</strong><strong>家具（如桌、椅、柜）和图书资料</strong>，<strong>不论单位价值大小</strong>，全部须作为固定资产管理。这意味着，哪怕是一把几十元的折叠椅，也必须入账。</li>
+                        <li><strong>批量物资标准：</strong>对于单价虽未达到1000元，但耐用期一年以上、单位价值≥200元且<strong>单批次件数≥50件</strong>的大批同类物资，也必须入账。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 幻灯片4：场景二 -->
+        <section class="slide" data-slide="4">
+            <div class="scenario-card">
+                <h3 class="scenario-title">
+                    <span class="scenario-number">2</span>
+                    场景二：好心企业的"免费赠送"
+                </h3>
+                
+                <div class="case-box">
+                    <div class="case-label">📋 案例还原</div>
+                    <p>某合作企业给王老师的实训室赠送了一台发动机模型用于教学。王老师认为这是自己联系来的资源，且没花学校经费，便直接放入实训室使用，未办理入库手续。</p>
+                    <div class="consequence">
+                        <span class="consequence-label">⚠️ 后果：</span>
+                        两年后设备损坏需维修，因系统中查无此设备，无法列支维修费用。
+                    </div>
+                </div>
+
+                <div class="image-box">
+                    <div class="image-label">案例图解</div>
+                    <img src="images/scene2.png" alt="场景二案例图解">
+                    <div class="image-caption">场景二：好心企业的"免费赠送"</div>
+                </div>
+                
+                <div class="analysis-box">
+                    <div class="analysis-title">业务解析与制度依据</div>
+                    
+                    <div class="warning-box">
+                        <strong>所有权归属原则：</strong>无论资金来源是科研经费、捐赠还是财政拨款，只要进入学校，其属性即为国有资产。
+                    </div>
+                    
+                    <div class="regulation">
+                        <p><strong>入账依据：</strong>根据<strong>《细则》第四条</strong>，接受捐赠的固定资产，如无法查清原价，应按照<strong>名义价格1元</strong>入账。</p>
+                    </div>
+                    
+                    <div class="suggestion-box">
+                        <strong>合规要点：</strong>只有完成入账，该资产才能纳入学校的维护保障体系，并在出现损毁时有据可查。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 幻灯片5：第三部分 概述 -->
+        <section class="slide" data-slide="5">
+            <div class="content-card">
+                <h2 class="section-title">第三部分：生命周期之"使用"</h2>
+                <div class="section-time">——权限边界与流转规范 | 预计时长：12分钟</div>
+                
+                <div class="core-logic">
+                    <strong>核心逻辑：</strong>拥有使用权不等于拥有处置权。<strong>"公私不分"</strong>与<strong>"私下流转"</strong>是造成<strong>账实不符</strong>的根源。
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 20px;">本部分包含场景：</h3>
+                    <div style="display: grid; gap: 15px;">
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid var(--secondary-color);">
+                            <strong>场景三：</strong>部门间的"私下流转" —— 资产调拨的规范程序
+                        </div>
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid var(--secondary-color);">
+                            <strong>场景四：</strong>从"专属配发"到"隐形私产" —— 岗位变动时的资产交接
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 幻灯片6：场景三 -->
+        <section class="slide" data-slide="6">
+            <div class="scenario-card">
+                <h3 class="scenario-title">
+                    <span class="scenario-number">3</span>
+                    场景三：部门间的"私下流转"
+                </h3>
+                
+                <div class="case-box">
+                    <div class="case-label">📋 案例还原</div>
+                    <p>机电系有一台闲置投影仪，经管系恰好需要。两位系主任私下商定后，直接将设备搬到了经管系使用。</p>
+                    <div class="consequence">
+                        <span class="consequence-label">⚠️ 后果：</span>
+                        国资处在进行<strong>年度资产核查</strong>时，发现机电系"有账无物"，经管系"有物无账"，双方均被列为盘点异常。
+                    </div>
+                </div>
+
+                <div class="image-box">
+                    <div class="image-label">案例图解</div>
+                    <img src="images/scene3.png" alt="场景三案例图解">
+                    <div class="image-caption">场景三：部门间的"私下流转"</div>
+                </div>
+                
+                <div class="analysis-box">
+                    <div class="analysis-title">业务解析与制度依据</div>
+                    
+                    <p style="margin-bottom: 15px;">资产是绑定在特定部门和责任人名下的。</p>
+                    
+                    <div class="regulation">
+                        <p><strong>合规流程：</strong>根据<strong>《细则》第七条</strong>，资产的内部调拨必须通过国有资产管理处统一调剂，并通过资产管理信息系统办理转移手续。</p>
+                    </div>
+                    
+                    <div class="suggestion-box">
+                        <strong>操作建议：</strong>请各位老师切记，<strong>"实物动，账必动"</strong>。仅仅是口头约定的移交，在制度层面是无效的，一旦设备丢失，原部门仍需承担赔偿责任。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 幻灯片7：场景四 -->
+        <section class="slide" data-slide="7">
+            <div class="scenario-card">
+                <h3 class="scenario-title">
+                    <span class="scenario-number">4</span>
+                    场景四：从"专属配发"到"隐形私产"（重点案例）
+                </h3>
+                
+                <div class="case-box">
+                    <div class="case-label">📋 案例还原</div>
+                    <p>刘老师因工作需要，系里配发了一台高配置笔记本电脑和一台单反相机。因工作性质特殊，这两台设备长期由刘老师个人保管使用，几乎成了他的"专属装备"。</p>
+                    <p style="margin-top: 10px;">后来，刘老师因工作调整，调岗至行政办公室。他认为："这些设备里存的都是我的工作资料，而且一直是我顺手在用的，我去哪它们就该去哪。"</p>
+                    <p style="margin-top: 10px;"><strong>于是，刘老师未向原部门和国资处办理任何资产调拨或移交手续，直接将电脑和相机带到了新的工作岗位继续使用。</strong></p>
+                </div>
+
+                <div class="image-box">
+                    <div class="image-label">案例图解</div>
+                    <img src="images/scene4.png" alt="场景四案例图解">
+                    <div class="image-caption">场景四：从"专属配发"到"隐形私产"</div>
+                </div>
+                
+                <div class="analysis-box">
+                    <div class="analysis-title">业务解析与制度依据</div>
+                    <p>此案例是<strong>资产清查</strong>中导致"盘亏"和"资产去向不明"的典型原因，其核心问题在于<strong>切断了资产管理的责任链条</strong>。</p>
+                </div>
+                
+                <div class="violation-analysis">
+                    <h5>1. 违规性质：侵占与责任断裂</h5>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>业务痛点：</strong>对于原部门而言，刘老师带走设备导致"有账无物"；对于新部门而言，这些设备属于"有物无账"的黑户。一旦设备在此时丢失，两边部门都无法通过系统追溯责任。</li>
+                        <li><strong>定性：</strong>这种"人走物随"但不办手续的行为，实质上是将国有资产的"单位公用属性"异化为了"个人私有属性"。</li>
+                    </ul>
+                </div>
+                
+                <div class="violation-analysis">
+                    <h5>2. 制度依据与合规要求</h5>
+                    <div class="regulation">
+                        <p><strong>校内制度：</strong>根据<strong>《细则》第五条第（四）款第3项</strong>规定："<strong>资产实物管理人调出、退休或调整工作岗位的，须办理资产实物的交接手续</strong>"。</p>
+                    </div>
+                    <div class="regulation">
+                        <p><strong>市级规定：</strong><strong>《市级办法》第十八条</strong>也明确强调："<strong>资产使用人、管理人发生变化的，应当及时办理资产交接手续</strong>"。</p>
+                    </div>
+                    <div class="suggestion-box">
+                        <strong>合规操作：</strong>刘老师正确的做法应当是：先将资产交回原部门，或者在新旧部门与国资处之间通过系统发起<strong>"部门间资产调拨"</strong>流程，经审核同意后，方可将设备带至新岗位。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 幻灯片8：第四部分 概述 -->
+        <section class="slide" data-slide="8">
+            <div class="content-card">
+                <h2 class="section-title">第四部分：生命周期之"变动"</h2>
+                <div class="section-time">——人员交接的责任闭环 | 预计时长：8分钟</div>
+                
+                <div class="core-logic">
+                    <strong>核心逻辑：</strong>人员变动是责任追溯的断点。<strong>"交接不清"</strong>是国资处处理离职/退休手续时最常见的阻碍。
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 20px;">本部分包含场景：</h3>
+                    <div style="display: grid; gap: 15px;">
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid var(--secondary-color);">
+                            <strong>场景五：</strong>退休后的"幽灵资产" —— 离岗前的资产清算
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 幻灯片9：场景五 -->
+        <section class="slide" data-slide="9">
+            <div class="scenario-card">
+                <h3 class="scenario-title">
+                    <span class="scenario-number">5</span>
+                    场景五：退休后的"幽灵资产"
+                </h3>
+                
+                <div class="case-box">
+                    <div class="case-label">📋 案例还原</div>
+                    <p>赵老师光荣退休，办理离校手续时未核对名下资产。三年后，国资处在清理陈年旧账时，发现赵老师名下仍挂着一台多年前领用的照相机，现已下落不明。</p>
+                    <div class="consequence">
+                        <span class="consequence-label">⚠️ 后果：</span>
+                        学校需联系已退休的赵老师追查去向。因无法证明已归还，赵老师面临赔偿责任。
+                    </div>
+                </div>
+
+                <div class="image-box">
+                    <div class="image-label">案例图解</div>
+                    <img src="images/scene5.png" alt="场景五案例图解">
+                    <div class="image-caption">场景五：退休后的"幽灵资产"</div>
+                </div>
+                
+                <div class="analysis-box">
+                    <div class="analysis-title">业务解析与制度依据</div>
+                    
+                    <div class="warning-box">
+                        <strong>职业债务：</strong>在资产管理系统中，未核销的资产就是个人对单位的"债务"。
+                    </div>
+                    
+                    <div class="regulation">
+                        <p><strong>强制交接：</strong><strong>《细则》第五条</strong>明确规定："资产实物管理人调出、退休或调整工作岗位的，<strong>须办理资产实物的交接手续</strong>"。</p>
+                    </div>
+                    
+                    <div class="regulation">
+                        <p><strong>《市级办法》第十三条</strong>也强调"使用人员离职时，所用资产应按规定交回"。</p>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <strong>管理责任：</strong>同时，如果部门未督促交接造成管理混乱，根据<strong>《细则》第十条</strong>，部门负责人需承担领导责任。
+                    </div>
+                    
+                    <div class="suggestion-box">
+                        <strong>建议：</strong>离岗前的最后一道手续，务必确保结清您名下的所有资产信息，这是您职业生涯阶段性清零的"信用凭证"。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 幻灯片10：第五部分 概述 -->
+        <section class="slide" data-slide="10">
+            <div class="content-card">
+                <h2 class="section-title">第五部分：生命周期之"出口"</h2>
+                <div class="section-time">——处置与报废的底线 | 预计时长：8分钟</div>
+                
+                <div class="core-logic">
+                    <strong>核心逻辑：</strong>只有经过审批的核销才是合规的。<strong>"擅自处置"</strong>即使不获利，也是国资处在<strong>资产核销</strong>工作中无法通过的违规行为。
+                </div>
+                
+                <div style="margin-top: 30px;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 20px;">本部分包含场景：</h3>
+                    <div style="display: grid; gap: 15px;">
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid var(--secondary-color);">
+                            <strong>场景六：</strong>擅自拆卸的"拼凑"行为 —— 设备改造的合规边界
+                        </div>
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 4px solid var(--secondary-color);">
+                            <strong>场景七：</strong>以为是垃圾，其实是档案 —— 废旧资产的处置流程
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 幻灯片11：场景六 -->
+        <section class="slide" data-slide="11">
+            <div class="scenario-card">
+                <h3 class="scenario-title">
+                    <span class="scenario-number">6</span>
+                    场景六：擅自拆卸的"拼凑"行为
+                </h3>
+                
+                <div class="case-box">
+                    <div class="case-label">📋 案例还原</div>
+                    <p>实训室两台旧机床均出现故障。周老师为了教学急需，未履行报修程序，擅自将A机床的关键零件拆卸，安装到B机床使用，导致A机床残缺不全。</p>
+                    <div class="consequence">
+                        <span class="consequence-label">⚠️ 后果：</span>
+                        专家鉴定报废时，认定A机床为人为损坏，可能追究周老师责任。
+                    </div>
+                </div>
+
+                <div class="image-box">
+                    <div class="image-label">案例图解</div>
+                    <img src="images/scene6.png" alt="场景六案例图解">
+                    <div class="image-caption">场景六：擅自拆卸的"拼凑"行为</div>
+                </div>
+                
+                <div class="analysis-box">
+                    <div class="analysis-title">业务解析与制度依据</div>
+                    
+                    <div class="regulation">
+                        <p><strong>完整性要求：</strong><strong>《细则》第三条</strong>强调，固定资产在使用过程中应<strong>基本保持原有物质形态</strong>。</p>
+                    </div>
+                    
+                    <div class="warning-box">
+                        <strong>违规界定：</strong>根据<strong>《细则》第十条</strong>，擅自拆卸、处置固定资产造成后果的，属于违规行为。任何技术性的拆改，都应先向国资处报备或履行审批程序。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 幻灯片12：场景七 -->
+        <section class="slide" data-slide="12">
+            <div class="scenario-card">
+                <h3 class="scenario-title">
+                    <span class="scenario-number">7</span>
+                    场景七：以为是垃圾，其实是档案
+                </h3>
+                
+                <div class="case-box">
+                    <div class="case-label">📋 案例还原</div>
+                    <p>年底清整办公室，清理出一堆损坏的键盘、旧主机箱和破损实验台。年轻老师建议："这些东西已经没法用了，堆着占地，不如直接扔到垃圾站或卖给废品回收站。"</p>
+                </div>
+
+                <div class="image-box">
+                    <div class="image-label">案例图解</div>
+                    <img src="images/scene7.png" alt="场景七案例图解">
+                    <div class="image-caption">场景七：以为是垃圾，其实是档案</div>
+                </div>
+                
+                <div class="analysis-box">
+                    <div class="analysis-title">业务解析与制度依据</div>
+                    
+                    <div class="warning-box">
+                        <strong>法律属性：</strong>在财务和国资系统销账之前，废旧设备依然是法律意义上的国有资产。私自丢弃会导致<strong>"盘亏"</strong>，私自变卖则涉及"私分国有资产收益"。
+                    </div>
+                    
+                    <h4 style="color: var(--primary-color); margin: 20px 0 15px;">合规路径：</h4>
+                    
+                    <div class="regulation">
+                        <p><strong>1. 集中报废：</strong>根据<strong>《细则》第九条</strong>，学院一般<strong>每年开展1次</strong>集中报废。</p>
+                    </div>
+                    
+                    <div class="regulation">
+                        <p><strong>2. 收益归属：</strong>报废残值收益有着严格的流向规定。根据<strong>《细则》第九条</strong>，已达年限的报废收益上交财务纳入预算；未达年限的（非正常）报废收益须<strong>上缴市级国库</strong>。</p>
+                    </div>
+                    
+                    <div class="regulation">
+                        <p>根据<strong>《市级办法》第四十二条</strong>，严禁侵占、私分、截留资产使用收入。</p>
+                    </div>
+                    
+                    <div class="suggestion-box">
+                        <strong>合规要点：</strong>只有走完"<strong>申请-鉴定-审批-回收-销账</strong>"的流程，这些"垃圾"才能合规地从您的责任清单中移除。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 幻灯片13：第六部分 总结 -->
+        <section class="slide" data-slide="13">
+            <div class="content-card">
+                <h2 class="section-title">第六部分：总结与行动建议</h2>
+                <div class="section-time">预计时长：2分钟</div>
+                
+                <p style="font-size: 1.1em; margin-bottom: 30px;">各位老师，通过上述全生命周期的案例分析，我们不难发现，严格执行《天津海运职业学院固定资产管理细则》，配合国资部门的<strong>日常登记、盘点和核查</strong>工作，本质上是为了实现<strong>三个"确保"</strong>：</p>
+                
+                <div class="image-box">
+                    <div class="image-label">总结图解</div>
+                    <img src="images/manage5.png" alt="总结与行动建议图解">
+                    <div class="image-caption">三个"确保"核心要点</div>
+                </div>
+                
+                <div class="summary-list">
+                    <div class="summary-item">
+                        <span class="summary-number">1</span>
+                        <div class="summary-text">
+                            <h4>确保界限清晰</h4>
+                            <p>入账不分贵贱，公私泾渭分明，避免无心之失触碰红线。</p>
+                        </div>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-number">2</span>
+                        <div class="summary-text">
+                            <h4>确保程序正义</h4>
+                            <p>在流转、处置等环节，依靠流程和审批单保护自己。</p>
+                        </div>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-number">3</span>
+                        <div class="summary-text">
+                            <h4>确保责任闭环</h4>
+                            <p>通过规范的交接，让每一段职业经历都清清白白。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 幻灯片14：结束页 -->
+        <section class="slide" data-slide="14">
+            <div class="ending-slide">
+                <h2>培训结语</h2>
+                <p>希望大家将资产管理的合规意识融入日常工作，<br>让制度成为保护我们职业安全最坚实的屏障。</p>
+                <div class="thanks">谢谢大家！</div>
+                <div style="margin-top: 50px; opacity: 0.8;">
+                    <p style="font-size: 0.9em;">主讲部门：国有资产管理处</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 底部导航 -->
+        <div class="slide-nav">
+            <button onclick="prevSlide()" id="prevBtn">
+                ← 上一页
+            </button>
+            <span class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">15</span>
+            </span>
+            <button onclick="nextSlide()" id="nextBtn">
+                下一页 →
+            </button>
+        </div>
+    </main>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        const sidebarItems = document.querySelectorAll('.sidebar-item');
+
+        // 初始化
+        document.getElementById('totalSlides').textContent = totalSlides;
+        updateSlide();
+
+        function goToSlide(index) {
+            if (index >= 0 && index < totalSlides) {
+                currentSlide = index;
+                updateSlide();
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        function updateSlide() {
+            // 更新幻灯片显示
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentSlide);
+            });
+
+            // 更新侧边栏高亮
+            sidebarItems.forEach((item, index) => {
+                item.classList.toggle('active', index === currentSlide);
+            });
+
+            // 更新计数器
+            document.getElementById('currentSlide').textContent = currentSlide + 1;
+
+            // 更新按钮状态
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+
+            // 更新进度条
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+
+            // 滚动到顶部
+            window.scrollTo(0, 0);
+
+            // 滚动侧边栏到当前项
+            const activeItem = document.querySelector('.sidebar-item.active');
+            if (activeItem) {
+                activeItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            sidebar.classList.toggle('hidden');
+            mainContent.classList.toggle('full-width');
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // 键盘导航
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowRight':
+                case 'PageDown':
+                case ' ':
+                    e.preventDefault();
+                    nextSlide();
+                    break;
+                case 'ArrowLeft':
+                case 'PageUp':
+                    e.preventDefault();
+                    prevSlide();
+                    break;
+                case 'Home':
+                    e.preventDefault();
+                    goToSlide(0);
+                    break;
+                case 'End':
+                    e.preventDefault();
+                    goToSlide(totalSlides - 1);
+                    break;
+                case 'Escape':
+                    if (document.fullscreenElement) {
+                        document.exitFullscreen();
+                    }
+                    break;
+            }
+        });
+
+        // 触摸滑动支持
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>设备购置计划</title>
+<style>
+    body {
+        font-family: "SimSun", "宋体", serif;
+        background-color: #f4f4f4;
+        padding: 20px;
+        color: #000;
+    }
+    .page-container {
+        background-color: #fff;
+        width: 95%;
+        max-width: 1200px; /* Limit width for large screens */
+        margin: 0 auto;
+        padding: 30px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        overflow-x: auto; /* Enable horizontal scroll for small screens */
+    }
+    h1 {
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 30px;
+        letter-spacing: 2px;
+    }
+    .header-info {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        font-size: 16px;
+    }
+    .header-left {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .header-right {
+        align-self: flex-end;
+    }
+    
+    /* Table Styles */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+        min-width: 1000px; /* Ensure table doesn't get too squashed */
+    }
+    th, td {
+        border: 1px solid #000;
+        padding: 10px 5px;
+        text-align: center;
+        vertical-align: middle;
+        font-size: 14px;
+    }
+    th {
+        font-weight: bold;
+        background-color: #fff;
+    }
+    
+    /* Specific column widths based on content */
+    th:nth-child(1) { width: 40px; } /* 序号 */
+    th:nth-child(7) { width: 50px; } /* 数量 */
+    th:nth-child(8) { width: 50px; } /* 单位 */
+
+    .empty-row td {
+        height: 40px;
+    }
+    .total-row td {
+        font-weight: bold;
+    }
+
+    /* Footer Styles */
+    .footer-info {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 40px;
+        font-size: 16px;
+    }
+    .footer-item {
+        min-width: 150px;
+    }
+</style>
+</head>
+<body>
+
+<div class="page-container">
+    <h1>设备购置计划</h1>
+    
+    <div class="header-info">
+        <div class="header-left">
+            <div>部门名称：</div>
+            <div>编号：</div>
+        </div>
+        <div class="header-right">
+            表格号：TJHY-2-08-7
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>设备名称</th>
+                <th>规格及型号</th>
+                <th>技术要求</th>
+                <th>用途</th>
+                <th>安装地点及尺寸</th>
+                <th>数量</th>
+                <th>单位</th>
+                <th>参考<br>单价</th>
+                <th>小计</th>
+                <th>参考<br>供应商</th>
+                <th>供货时<br>限要求</th>
+                <th>备注</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="empty-row">
+                <td>1</td>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr class="empty-row">
+                <td>2</td>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+            <tr class="empty-row">
+                <td>3</td>
+                <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>			
+            <tr class="total-row">
+                <td colspan="9" style="text-align: center;">合计</td>
+                <td></td> <td></td><td></td><td></td> </tr>
+        </tbody>
+    </table>
+
+    <div class="footer-info">
+        <div class="footer-item">采购部门负责人：</div>
+        <div class="footer-item">需求部门负责人：</div>
+        <div class="footer-item">制表：</div>
+        <div class="footer-item">日期：</div>
+    </div>
+</div>
+
+</body>
+</html>

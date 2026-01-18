@@ -3,97 +3,351 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图片素材清单展示</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>国有资产全生命周期管理培训</title>
     <style>
-        .img-card {
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        html {
-            scroll-behavior: smooth;
+
+        :root {
+            --primary-color: #1a5f7a;
+            --secondary-color: #2c8fb5;
+            --accent-color: #e74c3c;
+            --bg-color: #f5f7fa;
+            --text-color: #2c3e50;
+            --card-bg: #ffffff;
+            --border-color: #e1e8ed;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 顶部导航 */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+
+        .navbar-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .navbar h1 {
+            font-size: 1.8em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .navbar .subtitle {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        /* 主体内容 */
+        .main-content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 30px;
+            width: 100%;
+        }
+
+        /* 封面区域 */
+        .hero-section {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            box-shadow: 0 4px 20px rgba(26, 95, 122, 0.3);
+        }
+
+        .hero-section h2 {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .hero-section .description {
+            font-size: 1.15em;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        .hero-meta {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .hero-meta-item {
+            background: rgba(255,255,255,0.15);
+            padding: 12px 20px;
+            border-radius: 8px;
+        }
+
+        .hero-meta-item strong {
+            display: block;
+            font-size: 0.85em;
+            opacity: 0.8;
+            margin-bottom: 4px;
+        }
+
+        /* 模块导航区域 */
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h3 {
+            font-size: 1.6em;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            color: #666;
+            font-size: 1em;
+        }
+
+        /* 模块卡片网格 */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .module-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 35px 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            border-color: var(--secondary-color);
+        }
+
+        .module-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .module-card:nth-child(1) .module-icon { background: linear-gradient(135deg, #e8f4fc, #d0e8f5); }
+        .module-card:nth-child(2) .module-icon { background: linear-gradient(135deg, #e8f8f0, #c8f0dc); }
+        .module-card:nth-child(3) .module-icon { background: linear-gradient(135deg, #fff3e0, #ffe0b2); }
+        .module-card:nth-child(4) .module-icon { background: linear-gradient(135deg, #fce4ec, #f8bbd9); }
+
+        .module-card h4 {
+            font-size: 1.35em;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+        }
+
+        .module-card p {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .module-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--secondary-color);
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .module-link::after {
+            content: '→';
+            transition: transform 0.3s;
+        }
+
+        .module-card:hover .module-link::after {
+            transform: translateX(5px);
+        }
+
+        /* 底部信息 */
+        .footer {
+            background: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 25px 30px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .footer .org-name {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 40px 25px;
+            }
+
+            .hero-section h2 {
+                font-size: 1.6em;
+            }
+
+            .hero-meta {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .main-content {
+                padding: 30px 20px;
+            }
+
+            .module-card {
+                padding: 25px 20px;
+            }
+        }
+
+        /* 打印样式 */
+        @media print {
+            .module-card {
+                break-inside: avoid;
+            }
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
-
+<body>
     <!-- 顶部导航 -->
-    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
-        <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tight text-slate-800">图片资源预览</h1>
-            <span id="counter" class="text-sm font-medium px-3 py-1 bg-slate-100 rounded-full text-slate-500">
-                正在统计...
-            </span>
+    <nav class="navbar">
+        <div class="navbar-content">
+            <h1>天津海运职业学院</h1>
+            <div class="subtitle">国有资产全生命周期管理培训平台</div>
         </div>
-    </header>
+    </nav>
 
     <!-- 主体内容 -->
-    <main class="max-w-4xl mx-auto px-6 py-12">
-        <div id="image-list" class="space-y-16">
-            <!-- 图片将在这里动态生成 -->
+    <main class="main-content">
+        <!-- 封面区域 -->
+        <section class="hero-section">
+            <h2>国有资产全生命周期管理<br>实务培训</h2>
+            <p class="description">基于"第一性原理"的合规操作指南，帮助教职员工理清资产管理的法律责任边界，实现工作流程顺畅与职业安全的"双赢"。</p>
+            <div class="hero-meta">
+                <div class="hero-meta-item">
+                    <strong>主办部门</strong>
+                    国有资产管理处
+                </div>
+                <div class="hero-meta-item">
+                    <strong>培训内容</strong>
+                    4大核心模块
+                </div>
+                <div class="hero-meta-item">
+                    <strong>培训目标</strong>
+                    账实相符 · 合规操作
+                </div>
+            </div>
+        </section>
+
+        <!-- 模块导航 -->
+        <section class="section-title">
+            <h3>选择培训模块</h3>
+            <p>请点击下方卡片进入对应的培训内容</p>
+        </section>
+
+        <div class="modules-grid">
+            <!-- 资产管理模块 -->
+            <a href="ManageGuide/manage.html" class="module-card">
+                <div class="module-icon">📋</div>
+                <h4>资产管理</h4>
+                <p>全面了解固定资产全生命周期管理的核心要点，包括资产入账、使用规范、调拨交接及处置报废等7个典型场景的合规操作指南。</p>
+                <span class="module-link">进入学习</span>
+            </a>
+
+            <!-- 资产采购模块 -->
+            <a href="PurchaseGuide/PurchaseProcess.html" class="module-card">
+                <div class="module-icon">🛒</div>
+                <h4>资产采购</h4>
+                <p>掌握设备采购的规范流程，了解采购计划编制、申报审批、招标采购等关键环节，确保采购过程合规透明。</p>
+                <span class="module-link">进入学习</span>
+            </a>
+
+            <!-- 资产系统模块 -->
+            <a href="SystemGuide/AssetEntry.html" class="module-card">
+                <div class="module-icon">💻</div>
+                <h4>资产系统</h4>
+                <p>熟悉资产管理信息系统的操作方法，学习资产卡片填写、系统登记、变更申请等日常操作规范与技巧。</p>
+                <span class="module-link">进入学习</span>
+            </a>
+
+            <!-- 资产维护模块 -->
+            <a href="RepairGuide/repair.html" class="module-card">
+                <div class="module-icon">🔧</div>
+                <h4>资产维护</h4>
+                <p>了解固定资产的日常维护保养要求，学习设备报修流程、维护记录管理，确保资产使用安全与价值保全。</p>
+                <span class="module-link">进入学习</span>
+            </a>
         </div>
     </main>
 
-    <!-- 回到顶部 -->
-    <button onclick="window.scrollTo(0,0)" class="fixed bottom-8 right-8 p-3 bg-white border border-slate-200 rounded-full shadow-lg hover:bg-slate-50 transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
-    </button>
-
-    <script>
-        // 定义图片序号
-        const imageFiles = ["images/repair1.png", "images/repair2.png", "images/repair3.png", "images/repair4.png", "images/repair5.png", "images/repair6.png", "images/repair7.png", "images/repair8.png", "images/repair13.png","images/repair10.png", "images/repair12.png"];
-        
-        const container = document.getElementById('image-list');
-        const counter = document.getElementById('counter');
-        
-        window.onload = function() {
-            counter.innerText = "共 " + imageFiles.length + " 张图片";
-
-            imageFiles.forEach(function(fileName) {
-                const id = fileName.split('.')[0];
-                
-                const section = document.createElement('section');
-                section.className = "flex flex-col space-y-4";
-                
-                // 顶部序号线条
-                const headerDiv = document.createElement('div');
-                headerDiv.className = "flex items-center space-x-3 opacity-60";
-                headerDiv.innerHTML = '<span class="text-xs font-mono font-bold bg-slate-200 px-2 py-1 rounded">#' + id + '</span><div class="h-px flex-1 bg-slate-200"></div>';
-                
-                // 卡片容器
-                const cardDiv = document.createElement('div');
-                cardDiv.className = "img-card bg-white rounded-xl overflow-hidden border border-slate-100 transition-all hover:border-blue-200";
-                
-                // 文件名标签
-                const nameTag = document.createElement('div');
-                nameTag.className = "bg-slate-50 p-2 text-center text-xs text-slate-400 font-mono border-b border-slate-50";
-                nameTag.innerText = fileName;
-                
-                // 图片包装器
-                const imgWrapper = document.createElement('div');
-                imgWrapper.className = "relative group min-h-[100px] flex items-center justify-center bg-slate-50";
-                
-                const img = document.createElement('img');
-                img.src = fileName;
-                img.alt = "Image " + id;
-                img.className = "w-full h-auto block";
-                img.loading = "lazy";
-                
-                // 错误处理逻辑：使用 JavaScript 事件监听而非 inline 属性
-                img.onerror = function() {
-                    imgWrapper.innerHTML = '<div class="p-12 text-center text-slate-300 italic">图片加载失败: ' + fileName + '</div>';
-                };
-                
-                imgWrapper.appendChild(img);
-                cardDiv.appendChild(nameTag);
-                cardDiv.appendChild(imgWrapper);
-                
-                section.appendChild(headerDiv);
-                section.appendChild(cardDiv);
-                
-                container.appendChild(section);
-            });
-        };
-    </script>
-
+    <!-- 底部信息 -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p><span class="org-name">天津海运职业学院 · 国有资产管理处</span></p>
+            <p style="margin-top: 8px; opacity: 0.8;">职业风险防控视角下的固定资产管理培训</p>
+        </div>
+    </footer>
 </body>
 </html>
