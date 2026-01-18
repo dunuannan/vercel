@@ -28,9 +28,36 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+        .home-btn {
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            z-index: 999;
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #1a5f7a;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .home-btn:hover {
+            background: #1a5f7a;
+            color: white;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
+
+    <a href="../index.html" class="home-btn">← 返回首页</a>
 
     <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
         <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">

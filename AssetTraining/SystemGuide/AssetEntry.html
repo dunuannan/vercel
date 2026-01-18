@@ -9,10 +9,35 @@
     /* 全局样式设置 */
     body {
         font-family: 'Microsoft YaHei', Arial, sans-serif;
-        background-color: #f0f2f5; /* 页面背景色 */
+        background-color: #f0f2f5;
         margin: 0;
         padding: 20px;
         color: #333;
+    }
+    .home-btn {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 999;
+        background: #fff;
+        border: 1px solid #e8e8e8;
+        color: #1a5f7a;
+        padding: 8px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 500;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: all 0.3s;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .home-btn:hover {
+        background: #1a5f7a;
+        color: white;
+        transform: translateY(-2px);
     }
     .container {
         background-color: #fff; /* 卡片背景色 */
@@ -305,6 +330,8 @@
 </style>
 </head>
 <body>
+
+<a href="../index.html" class="home-btn">← 返回首页</a>
 
 <div class="container">
     <h1>天津海运职业学院设备资产卡片</h1>
