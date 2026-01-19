@@ -41,6 +41,84 @@
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-container {
+            background: white;
+            width: 90%;
+            max-width: 1000px;
+            height: 85vh;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            color: white;
+        }
+        .modal-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .modal-close {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .modal-close:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .modal-body {
+            flex: 1;
+            overflow: hidden;
+        }
+        .modal-body iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Link Styles */
+        .doc-link {
+            color: #2563eb;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .doc-link:hover {
+            color: #1d4ed8;
+        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen text-slate-800">
@@ -79,7 +157,7 @@
                 <div class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-blue-500 relative transition-transform hover:-translate-y-1 duration-300">
                     <span class="absolute top-4 right-4 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">1天</span>
                     <h3 class="mb-2 font-bold text-slate-800 text-lg">提交需求论证申请</h3>
-                    <p class="text-sm text-slate-600 mb-1"><i class="fas fa-file-alt mr-1 text-slate-400"></i> 关键文件：项目需求书</p>
+                    <p class="text-sm text-slate-600 mb-1"><i class="fas fa-file-alt mr-1 text-slate-400"></i> 关键文件：<span class="doc-link" onclick="openModal('RD.html', '项目需求书')">项目需求书</span></p>
                     <p class="text-sm text-slate-600 mb-2"><i class="fas fa-book-open mr-1 text-slate-400"></i> 参考文档：采购需求论证项目清单</p>
                     <p class="text-xs text-slate-400 bg-slate-50 p-2 rounded">依据需求书判定是否需要论证及论证方式。</p>
                 </div>
@@ -108,8 +186,8 @@
                     <span class="absolute top-4 right-4 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">2-3天</span>
                     <h3 class="mb-2 font-bold text-slate-800 text-lg">提交用款审批</h3>
                     <div class="space-y-1 text-sm text-slate-600 mb-2">
-                        <p><i class="fas fa-file-contract mr-1 text-slate-400"></i> 需求书、购置计划表</p>
-                        <p><i class="fas fa-file-signature mr-1 text-slate-400"></i> 调研报告 <span class="text-red-500 text-xs">(需三方会签)</span></p>
+                        <p><i class="fas fa-file-contract mr-1 text-slate-400"></i> <span class="doc-link" onclick="openModal('RD.html', '需求书')">需求书</span>、<span class="doc-link" onclick="openModal('PurchasePlan.html', '购置计划表')">购置计划表</span></p>
+                        <p><i class="fas fa-file-signature mr-1 text-slate-400"></i> <span class="doc-link" onclick="openModal('ResearchReport.html', '调研报告')">调研报告</span> <span class="text-red-500 text-xs">(需三方会签)</span></p>
                         <p><i class="fas fa-images mr-1 text-slate-400"></i> 询价截图 (自采项目)</p>
                     </div>
                 </div>
@@ -274,9 +352,50 @@
         </div>
     </main>
 
-    <footer class="text-center py-6 text-slate-400 text-sm">
+<footer class="text-center py-6 text-slate-400 text-sm">
         <p>流程图基于用户口述与上传资料整理生成</p>
     </footer>
+
+    <!-- Modal -->
+    <div id="docModal" class="modal-overlay" onclick="closeModalOnOverlay(event)">
+        <div class="modal-container">
+            <div class="modal-header">
+                <span class="modal-title" id="modalTitle">文档预览</span>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <iframe id="modalIframe" src=""></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal(url, title) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalIframe').src = url;
+            document.getElementById('docModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal() {
+            document.getElementById('docModal').classList.remove('active');
+            document.getElementById('modalIframe').src = '';
+            document.body.style.overflow = '';
+        }
+        
+        function closeModalOnOverlay(event) {
+            if (event.target === document.getElementById('docModal')) {
+                closeModal();
+            }
+        }
+        
+        // ESC 键关闭弹窗
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
 
 </body>
 </html>
