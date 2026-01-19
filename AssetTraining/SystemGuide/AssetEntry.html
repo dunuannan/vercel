@@ -9,35 +9,10 @@
     /* 全局样式设置 */
     body {
         font-family: 'Microsoft YaHei', Arial, sans-serif;
-        background-color: #f0f2f5;
+        background-color: #f0f2f5; /* 页面背景色 */
         margin: 0;
         padding: 20px;
         color: #333;
-    }
-    .home-btn {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        z-index: 999;
-        background: #fff;
-        border: 1px solid #e8e8e8;
-        color: #1a5f7a;
-        padding: 8px 14px;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 13px;
-        font-weight: 500;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        transition: all 0.3s;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-    .home-btn:hover {
-        background: #1a5f7a;
-        color: white;
-        transform: translateY(-2px);
     }
     .container {
         background-color: #fff; /* 卡片背景色 */
@@ -124,19 +99,17 @@
 		position: absolute;
 		top: 100%;
 		left: 125px; /* 根据 label 宽度调整 */
-		z-index: 10;
-		/* 修改背景色为黄色，这里使用了淡黄色 #ffffcc，您也可以用纯黄 #ffff00 */
+		z-index: 9999; /* 提高层级确保显示在最上层 */
 		background-color: #ffffcc; 
-		/* 可选：为了更好看，可以将边框也改为深黄色，或者保持原样 */
 		border: 1px solid #e8e8e8; 
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 		padding: 10px;
 		border-radius: 4px;
 		width: 200px;
 		font-size: 16px;
-		/* 修改字体颜色为红色 */
 		color: #ff0000; 
 		line-height: 1.5;
+        pointer-events: none; /* 防止tooltip遮挡鼠标事件 */
     }
     .help-tooltip::before {
         content: '';
@@ -145,13 +118,11 @@
 		left: 10px;
 		width: 8px;
 		height: 8px;
-		/* 修改箭头背景色为相同的黄色，以覆盖边框线 */
 		background-color: #ffffcc; 
 		border-top: 1px solid #e8e8e8;
 		border-left: 1px solid #e8e8e8;
 		transform: rotate(45deg);
     }
-
 
     /* 输入框容器，用于定位图标 */
     .form-input-container {
@@ -302,7 +273,6 @@
     .attachment-name {
         font-size: 14px;
         color: #1890ff; /* 蓝色链接色 */
-		
 		position: relative; /* 增加相对定位，作为 Tooltip 的定位基准 */
         display: flex;      /* 使用 flex 布局使文本和问号图标水平居中对齐 */
         align-items: center;
@@ -311,27 +281,23 @@
 	
 	/* --- 新增：针对附件区域的 tooltip 样式覆盖 (使其显示在上方居中) --- */
     .attachment-name .help-tooltip {
-        top: auto;          /* 取消原有的 top 定位 */
-        bottom: 130%;       /* 将 tooltip 放置在文本上方，增加一点距离 */
-        left: 50%;          /* 水平居中基准 */
-        transform: translateX(-50%); /* 配合 left: 50% 实现精确居中 */
-        width: 160px;       /* 稍微调整宽度以适应小区域 */
-        /* 颜色和背景色将继承全局 .help-tooltip 的黄色/红色设置 */
+        top: auto;          
+        bottom: 130%;       
+        left: 50%;          
+        transform: translateX(-50%); 
+        width: 160px;       
     }
 
     /* --- 新增：调整附件区域 tooltip 的箭头位置和方向 (指向下方) --- */
     .attachment-name .help-tooltip::before {
-        top: auto;          /* 取消原有 top */
-        bottom: -5px;       /* 放置在 tooltip 盒子底部 */
-        left: 50%;          /* 水平居中 */
-        /* 旋转箭头使其指向下方 (原45度 + 180度 = 225度)，并修正水平位置 */
+        top: auto;          
+        bottom: -5px;       
+        left: 50%;          
         transform: translateX(-50%) rotate(225deg);
     }
 </style>
 </head>
 <body>
-
-<a href="../index.html" class="home-btn">← 返回首页</a>
 
 <div class="container">
     <h1>天津海运职业学院设备资产卡片</h1>
@@ -341,12 +307,12 @@
         <div class="form-group colspan-2">
             <label class="form-label label-red">
                 资产编号
-                <span class="help-icon" data-help="请输入唯一的资产编号。"><i class="far fa-question-circle"></i></span>
+                <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
             <div class="form-input-container">
                 <input type="text" class="form-input" value="">
             </div>
-            <div class="help-tooltip">请输入唯一的资产编号。</div>
+            <div class="help-tooltip"></div>
         </div>
         <div class="form-group colspan-2">
             <label class="form-label label-red">
@@ -365,14 +331,14 @@
         <div class="form-group">
             <label class="form-label label-red">
                 教育分类号
-                <span class="help-icon" data-help="请参考最新的教育分类标准进行填写。"><i class="far fa-question-circle"></i></span>
+                <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
             <div class="form-input-container">
                 <input type="text" class="form-input">
                 <i class="fas fa-times input-icon" style="right: 30px;"></i>
                 <i class="fas fa-pencil-alt input-icon"></i>
             </div>
-             <div class="help-tooltip">请参考最新的教育分类标准进行填写。</div>
+             <div class="help-tooltip"></div>
         </div>
         <div class="form-group">
             <label class="form-label label-red">
@@ -385,13 +351,11 @@
         <div class="form-group">
             <label class="form-label">
                 国标2022大类
-                <span class="help-icon" data-help="根据国标2022自动生成，无需填写。"><i class="far fa-question-circle"></i></span>
+                <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
             <input type="text" class="form-input" disabled>
-            <div class="help-tooltip">根据国标2022自动生成，无需填写。</div>
+            <div class="help-tooltip"></div>
         </div>
-
-
 
         <div class="form-group">
             <label class="form-label label-red">
@@ -404,12 +368,12 @@
         <div class="form-group">
             <label class="form-label label-red">
                 使用方向
-                <span class="help-icon" data-help="选择资产的主要使用方向。"><i class="far fa-question-circle"></i></span>
+                <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
             <select class="form-input">
                 <option value="1 - 教学" selected>1 - 教学</option>
             </select>
-            <div class="help-tooltip">选择资产的主要使用方向。</div>
+            <div class="help-tooltip"></div>
         </div>
         <div class="form-group">
             <label class="form-label label-red">
@@ -449,10 +413,10 @@
         <div class="form-group">
             <label class="form-label label-red">
                 单价
-                <span class="help-icon" data-help="请输入资产的单价，单位为元。"><i class="far fa-question-circle"></i></span>
+                <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
             <input type="number" class="form-input">
-            <div class="help-tooltip">请输入资产的单价，单位为元。</div>
+            <div class="help-tooltip"></div>
         </div>
         <div class="form-group">
             <label class="form-label label-red">
@@ -466,10 +430,10 @@
         <div class="form-group">
             <label class="form-label">
                 总金额
-                <span class="help-icon" data-help="总金额 = 单价 * 数量，自动计算。"><i class="far fa-question-circle"></i></span>
+                <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
             <input type="number" class="form-input" value="0" disabled>
-            <div class="help-tooltip">总金额 = 单价 * 数量，自动计算。</div>
+            <div class="help-tooltip"></div>
         </div>
         <div class="form-group">
             <label class="form-label">
@@ -533,12 +497,12 @@
         <div class="form-group">
             <label class="form-label">
                 录入人
-                <span class="help-icon" data-help="系统自动记录当前登录用户。"><i class="far fa-question-circle"></i></span>
+                <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
             <select class="form-input">
                 <option value="张三" selected>张三</option>
             </select>
-            <div class="help-tooltip">系统自动记录当前登录用户。</div>
+            <div class="help-tooltip"></div>
         </div>
 
         <div class="form-group">
@@ -580,7 +544,8 @@
             </div>
             <div class="help-tooltip"></div>
         </div>
-
+        
+        <!-- 补充剩余未展示的表单项（保持结构完整性） -->
         <div class="form-group">
             <label class="form-label">
                 生产厂家
@@ -592,93 +557,74 @@
             </div>
             <div class="help-tooltip"></div>
         </div>
-    </div> <div class="form-grid">
-        
-        <div class="form-group colspan-2">
+        <div class="form-group">
             <label class="form-label">
                 技术指标
-                <span class="help-icon" data-help="请详细描述资产的主要技术参数和性能指标。"><i class="far fa-question-circle"></i></span>
+                <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
-            <input type="text" class="form-input">
-            <div class="help-tooltip">请详细描述资产的主要技术参数和性能指标。</div>
+            <textarea class="form-input"></textarea>
+            <div class="help-tooltip"></div>
         </div>
-        <div class="form-group colspan-2">
+        <div class="form-group">
             <label class="form-label label-red">
                 使用人(电脑类必填)
-                <span class="help-icon" data-help="如果是电脑类资产，请务必选择具体的使用人。"><i class="far fa-question-circle"></i></span>
-            </label>
-            <select class="form-input">
-                <option value=""></option>
-            </select>
-            <div class="help-tooltip">如果是电脑类资产，请务必选择具体的使用人。</div>
-        </div>
-
-        <div class="form-group colspan-2">
-            <label class="form-label label-red">
-                用途及应用范围
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
             <input type="text" class="form-input">
             <div class="help-tooltip"></div>
         </div>
-        <div class="form-group colspan-2">
+        <div class="form-group">
+            <label class="form-label">
+                用途及应用范围
+                <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
+            </label>
+            <textarea class="form-input"></textarea>
+            <div class="help-tooltip"></div>
+        </div>
+        <div class="form-group">
             <label class="form-label label-red">
                 计量单位
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
-            <select class="form-input">
-                <option value=""></option>
-            </select>
+            <input type="text" class="form-input">
             <div class="help-tooltip"></div>
         </div>
-
-        <div class="form-group colspan-4">
-            <label class="form-label label-red">
+        <div class="form-group">
+            <label class="form-label">
                 是否为实训室设备
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
             <select class="form-input">
-                <option value=""></option>
+                <option value="否" selected>否</option>
+                <option value="是">是</option>
             </select>
             <div class="help-tooltip"></div>
         </div>
-
-        <div class="form-group colspan-2">
+        <div class="form-group">
             <label class="form-label">
                 面向专业
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
-            <div class="form-input-container">
-                <input type="text" class="form-input">
-                <i class="fas fa-pencil-alt input-icon"></i>
-            </div>
+            <input type="text" class="form-input">
             <div class="help-tooltip"></div>
         </div>
-        <div class="form-group colspan-2">
+        <div class="form-group">
             <label class="form-label">
                 所在实训室名称
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
-            <div class="form-input-container">
-                <input type="text" class="form-input">
-                <i class="fas fa-pencil-alt input-icon"></i>
-            </div>
+            <input type="text" class="form-input">
             <div class="help-tooltip"></div>
         </div>
-
-        <div class="form-group colspan-2">
+        <div class="form-group">
             <label class="form-label">
                 国标分类号
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
-            <div class="form-input-container">
-                <input type="text" class="form-input">
-                <i class="fas fa-times input-icon" style="right: 30px;"></i>
-                <i class="fas fa-pencil-alt input-icon"></i>
-            </div>
+            <input type="text" class="form-input" disabled>
             <div class="help-tooltip"></div>
         </div>
-        <div class="form-group colspan-2">
+        <div class="form-group">
             <label class="form-label">
                 国标大类
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
@@ -686,8 +632,7 @@
             <input type="text" class="form-input" disabled>
             <div class="help-tooltip"></div>
         </div>
-
-        <div class="form-group colspan-4">
+        <div class="form-group">
             <label class="form-label">
                 备注
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
@@ -695,33 +640,25 @@
             <textarea class="form-input"></textarea>
             <div class="help-tooltip"></div>
         </div>
-    </div>
-
-    <div class="section-title">使用信息</div>
-    <div class="form-grid">
-        <div class="form-group colspan-2">
+        <div class="form-group">
             <label class="form-label label-red">
                 使用单位
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
             <select class="form-input">
-                <option value="国有资产管理处" selected>国有资产管理处</option>
+                <option value=""></option>
             </select>
             <div class="help-tooltip"></div>
         </div>
-        <div class="form-group colspan-2">
+        <div class="form-group">
             <label class="form-label">
                 出厂编号
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
-            <div class="form-input-container">
-                <input type="text" class="form-input">
-                <i class="fas fa-pencil-alt input-icon"></i>
-            </div>
+            <input type="text" class="form-input">
             <div class="help-tooltip"></div>
         </div>
-
-        <div class="form-group colspan-2">
+        <div class="form-group">
             <label class="form-label">
                 管理人
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
@@ -731,19 +668,17 @@
             </select>
             <div class="help-tooltip"></div>
         </div>
-        <div class="form-group colspan-2">
-            <label class="form-label label-red">
+        <div class="form-group">
+            <label class="form-label">
                 领用人
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
-            <div class="form-input-container">
-                <input type="text" class="form-input">
-                <i class="fas fa-pencil-alt input-icon"></i>
-            </div>
+            <select class="form-input">
+                <option value=""></option>
+            </select>
             <div class="help-tooltip"></div>
         </div>
-
-        <div class="form-group colspan-2">
+        <div class="form-group">
             <label class="form-label">
                 领用日期
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
@@ -753,33 +688,25 @@
             </div>
             <div class="help-tooltip"></div>
         </div>
-        <div class="form-group colspan-2">
+        <div class="form-group">
             <label class="form-label label-red">
                 存放地点
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
-            <div class="form-input-container">
-                <input type="text" class="form-input">
-                <i class="fas fa-pencil-alt input-icon"></i>
-            </div>
+            <input type="text" class="form-input">
             <div class="help-tooltip"></div>
         </div>
-
-        <div class="form-group colspan-4">
-            <label class="form-label label-red">
+        <div class="form-group">
+            <label class="form-label">
                 设备用途
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
             <select class="form-input">
-                <option value="教学" selected>教学</option>
+                <option value=""></option>
             </select>
             <div class="help-tooltip"></div>
         </div>
-    </div>
-
-    <div class="section-title">采购信息</div>
-    <div class="form-grid">
-        <div class="form-group colspan-2">
+        <div class="form-group">
             <label class="form-label">
                 采购组织形式
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
@@ -789,19 +716,18 @@
             </select>
             <div class="help-tooltip"></div>
         </div>
-        <div class="form-group colspan-2">
-            <label class="form-label label-red">
+        <div class="form-group">
+            <label class="form-label">
                 价值类型
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
             <select class="form-input">
-                <option value="01 - 原值" selected>01 - 原值</option>
+                <option value=""></option>
             </select>
             <div class="help-tooltip"></div>
         </div>
-
-        <div class="form-group colspan-2">
-            <label class="form-label label-red">
+        <div class="form-group">
+            <label class="form-label">
                 资金来源
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
@@ -810,7 +736,7 @@
             </select>
             <div class="help-tooltip"></div>
         </div>
-        <div class="form-group colspan-2">
+        <div class="form-group">
             <label class="form-label">
                 采购编号
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
@@ -818,192 +744,322 @@
             <input type="text" class="form-input">
             <div class="help-tooltip"></div>
         </div>
-
-        <div class="form-group colspan-2">
-            <label class="form-label label-red">
+        <div class="form-group">
+            <label class="form-label">
                 财政拨款
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
             <input type="number" class="form-input" value="0">
             <div class="help-tooltip"></div>
         </div>
-        <div class="form-group colspan-2">
-            <label class="form-label label-red">
+        <div class="form-group">
+            <label class="form-label">
                 非财政拨款
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
             <input type="number" class="form-input" value="0">
             <div class="help-tooltip"></div>
         </div>
-    </div>
-
-    <div class="section-title">折旧信息</div>
-    <div class="form-grid">
-        <div class="form-group colspan-4">
-            <label class="form-label label-red">
+        <div class="form-group">
+            <label class="form-label">
                 使用年限(月)
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
-            <div class="form-input-container">
-                <input type="number" class="form-input">
-                <i class="fas fa-times input-icon" style="right: 30px;"></i>
-                <i class="fas fa-pencil-alt input-icon"></i>
-            </div>
+            <input type="number" class="form-input">
             <div class="help-tooltip"></div>
         </div>
-        <div class="form-group colspan-2">
-            <label class="form-label label-red">
+        <div class="form-group">
+            <label class="form-label">
                 折旧状态
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
             <select class="form-input">
-                <option value="01 - 提折旧" selected>01 - 提折旧</option>
+                <option value=""></option>
             </select>
             <div class="help-tooltip"></div>
         </div>
-        <div class="form-group colspan-2">
+        <div class="form-group">
             <label class="form-label">
                 折旧方法
                 <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
             </label>
             <select class="form-input">
-                <option value="02 - 年限平均法（直线法）" selected>02 - 年限平均法（直线法）</option>
+                <option value=""></option>
             </select>
             <div class="help-tooltip"></div>
         </div>
     </div>
 
+    <!-- 附件区域 -->
     <div class="attachment-section">
         <div class="attachment-header">
             <div class="section-title">明细附件</div>
-            <button class="upload-btn"><i class="fas fa-qrcode"></i> 扫码上传</button>
+            <button class="upload-btn"><i class="fas fa-upload"></i> 上传附件</button>
         </div>
         <div class="attachment-grid">
             <div class="attachment-item">
                 <div class="attachment-placeholder"></div>
                 <div class="attachment-name">
                     发票照片
-                    <span class="help-icon" data-help="请上传清晰的资产购买发票照片。"><i class="far fa-question-circle"></i></span>
-                    <div class="help-tooltip">请上传清晰的资产购买发票照片。</div>
+                    <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
+                    <div class="help-tooltip"></div>
                 </div>
             </div>
             <div class="attachment-item">
                 <div class="attachment-placeholder"></div>
                 <div class="attachment-name">
                     合同照片
-                    <span class="help-icon" data-help="请上传采购合同的关键页照片，包含标的、金额、盖章等信息。"><i class="far fa-question-circle"></i></span>
-                    <div class="help-tooltip">请上传采购合同的关键页照片，包含标的、金额、盖章等信息。</div>
-                </div>
-			</div>
-            <div class="attachment-item">
-                <div class="attachment-placeholder"></div>
-                <div class="attachment-name">
-                    实物照片
-                    <span class="help-icon" data-help="请上传资产的实物全景照片，需能看清设备全貌。"><i class="far fa-question-circle"></i></span>
-                    <div class="help-tooltip">请上传资产的实物全景照片，需能看清设备全貌。</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="attachment-section">
-        <div class="section-title">项目支撑材料</div>
-        <div class="attachment-grid">
-            <div class="attachment-item">
-                <div class="attachment-placeholder"></div>
-                <div class="attachment-name">
-                    合同文件
-                    <span class="help-icon" data-help="请上传完整的采购合同电子版文件。"><i class="far fa-question-circle"></i></span>
-                    <div class="help-tooltip">请上传完整的采购合同电子版文件。</div>
-                </div>
-            </div>
-            <div class="attachment-item">
-                <div class="attachment-placeholder"></div>
-                <div class="attachment-name">
-                    发票照片
-                    <span class="help-icon" data-help="请上传清晰的发票照片作为支撑材料。"><i class="far fa-question-circle"></i></span>
-                    <div class="help-tooltip">请上传清晰的发票照片作为支撑材料。</div>
+                    <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
+                    <div class="help-tooltip"></div>
                 </div>
             </div>
             <div class="attachment-item">
                 <div class="attachment-placeholder"></div>
                 <div class="attachment-name">
                     实物照片
-                    <span class="help-icon" data-help="请上传资产的多角度实物照片。"><i class="far fa-question-circle"></i></span>
-                    <div class="help-tooltip">请上传资产的多角度实物照片。</div>
-                </div>
-            </div>
-            <div class="attachment-item">
-                <div class="attachment-placeholder"></div>
-                <div class="attachment-name">
-                    条码照片
-                    <span class="help-icon" data-help="请上传粘贴在资产上的条形码标签照片，需清晰可读。"><i class="far fa-question-circle"></i></span>
-                    <div class="help-tooltip">请上传粘贴在资产上的条形码标签照片，需清晰可读。</div>
-                </div>
-            </div>
-            <div class="attachment-item">
-                <div class="attachment-placeholder"></div>
-                <div class="attachment-name">
-                    质保照片
-                    <span class="help-icon" data-help="请上传产品质量保证书或保修卡的照片。"><i class="far fa-question-circle"></i></span>
-                    <div class="help-tooltip">请上传产品质量保证书或保修卡的照片。</div>
+                    <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
+                    <div class="help-tooltip"></div>
                 </div>
             </div>
             <div class="attachment-item">
                 <div class="attachment-placeholder"></div>
                 <div class="attachment-name">
                     其他资料
-                    <span class="help-icon" data-help="请上传其他相关的支撑性材料照片或文件。"><i class="far fa-question-circle"></i></span>
-                    <div class="help-tooltip">请上传其他相关的支撑性材料照片或文件。</div>
+                    <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
+                    <div class="help-tooltip"></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="attachment-section">
+        <div class="attachment-header">
+            <div class="section-title">项目支撑材料</div>
+            <button class="upload-btn"><i class="fas fa-upload"></i> 上传附件</button>
+        </div>
+        <div class="attachment-grid">
+            <div class="attachment-item">
+                <div class="attachment-placeholder"></div>
+                <div class="attachment-name">
+                    合同文件
+                    <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
+                    <div class="help-tooltip"></div>
+                </div>
+            </div>
+            <div class="attachment-item">
+                <div class="attachment-placeholder"></div>
+                <div class="attachment-name">
+                    发票照片
+                    <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
+                    <div class="help-tooltip"></div>
+                </div>
+            </div>
+            <div class="attachment-item">
+                <div class="attachment-placeholder"></div>
+                <div class="attachment-name">
+                    实物照片
+                    <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
+                    <div class="help-tooltip"></div>
+                </div>
+            </div>
+            <div class="attachment-item">
+                <div class="attachment-placeholder"></div>
+                <div class="attachment-name">
+                    条码照片
+                    <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
+                    <div class="help-tooltip"></div>
+                </div>
+            </div>
+            <div class="attachment-item">
+                <div class="attachment-placeholder"></div>
+                <div class="attachment-name">
+                    质保照片
+                    <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
+                    <div class="help-tooltip"></div>
+                </div>
+            </div>
+            <div class="attachment-item">
+                <div class="attachment-placeholder"></div>
+                <div class="attachment-name">
+                    其他资料
+                    <span class="help-icon" data-help=""><i class="far fa-question-circle"></i></span>
+                    <div class="help-tooltip"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
+<!-- JSON数据绑定 + tooltip交互逻辑 -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+// 1. 定义所有表单字段的提示信息JSON数据（所有是否有说明改为true）
+const formFieldHelpInfos =[
+    { "标题": "资产编号", "是否有说明": true, "说明文字": "系统自动生成，无需手动填写。" },
+    { "标题": "国标2022", "是否有说明": true, "说明文字": "根据合同清单对应教育分类编码填写，需与实际验收货物匹配。" },
+    { "标题": "教育分类号", "是否有说明": true, "说明文字": "请参考最新的教育分类标准进行填写。" },
+    { "标题": "资产名称", "是否有说明": true, "说明文字": "按合同清单准确填写资产全称，若合同为采购货物类描述，需按实际验收货物填写。" },
+    { "标题": "国标2022大类", "是否有说明": true, "说明文字": "根据国标2022自动生成，无需填写。" },
+    { "标题": "发票号", "是否有说明": true, "说明文字": "填写资产购买的实际票据号。" },
+    { "标题": "使用方向", "是否有说明": true, "说明文字": "下拉选择资产主要使用方向（如“教学”），需与设备用途保持一致。" },
+    { "标题": "取得方式", "是否有说明": true, "说明文字": "下拉选择“新购”“接受捐赠”“自建”等类型。" },
+    { "标题": "品牌", "是否有说明": true, "说明文字": "按合同资产清单精准填写，确保与实物一致。" },
+    { "标题": "型号", "是否有说明": true, "说明文字": "按合同资产清单精准填写，确保与实物一致。" },
+    { "标题": "规格", "是否有说明": true, "说明文字": "按合同资产清单精准填写，确保与实物一致。" },
+    { "标题": "单价", "是否有说明": true, "说明文字": "如实填写采购单价，单位为元，需满足单价×数量=总金额。" },
+    { "标题": "数量", "是否有说明": true, "说明文字": "如实填写采购数量，需满足单价×数量=总金额。" },
+    { "标题": "总金额", "是否有说明": true, "说明文字": "总金额=单价×数量，系统自动计算，无需手动填写。" },
+    { "标题": "现状", "是否有说明": true, "说明文字": "保持系统默认设置，无需修改。" },
+    { "标题": "国别", "是否有说明": true, "说明文字": "保持系统默认设置，无需修改。" },
+    { "标题": "购置日期", "是否有说明": true, "说明文字": "填写资产实际购置的日期。" },
+    { "标题": "资产来源", "是否有说明": true, "说明文字": "按资产实际来源情况填写。" },
+    { "标题": "经费来源", "是否有说明": true, "说明文字": "按项目经费实际来源填写（如“财政拨款”“非财政拨款”）。" },
+    { "标题": "英文名称", "是否有说明": true, "说明文字": "选填项，根据实际情况填写资产英文名称。" },
+    { "标题": "录入人", "是否有说明": true, "说明文字": "系统自动记录当前登录用户，无需手动填写。" },
+    { "标题": "录入时间", "是否有说明": true, "说明文字": "系统自动生成，无需手动填写。" },
+    { "标题": "出厂日期", "是否有说明": true, "说明文字": "无需填写。" },
+    { "标题": "保修截止日期", "是否有说明": true, "说明文字": "根据资产保修凭证如实填写。" },
+    { "标题": "销售商", "是否有说明": true, "说明文字": "填写资产销售商的全称。" },
+    { "标题": "生产厂家", "是否有说明": true, "说明文字": "无需填写。" },
+    { "标题": "技术指标", "是否有说明": true, "说明文字": "请详细描述资产的主要技术参数和性能指标。" },
+    { "标题": "使用人(电脑类必填)", "是否有说明": true, "说明文字": "仅电脑类资产需填写，填写实际使用该资产的老师姓名。" },
+    { "标题": "用途及应用范围", "是否有说明": true, "说明文字": "填写资产的具体用途及适用场景，需与使用方向一致。" },
+    { "标题": "计量单位", "是否有说明": true, "说明文字": "选择对应计量单位（如“台”“套”），需与资产实际匹配。" },
+    { "标题": "是否为实训室设备", "是否有说明": true, "说明文字": "如实填写，教学类资产若用于实训室则选“是”。" },
+    { "标题": "面向专业", "是否有说明": true, "说明文字": "教学资产需填写对应授课专业，非教学资产可不填。" },
+    { "标题": "所在实训室名称", "是否有说明": true, "说明文字": "实训室设备需选择对应实训室名称，非实训室设备可不填。" },
+    { "标题": "国标分类号", "是否有说明": true, "说明文字": "无需填写。" },
+    { "标题": "国标大类", "是否有说明": true, "说明文字": "无需填写。" },
+    { "标题": "备注", "是否有说明": true, "说明文字": "填写补充说明信息，如资产特殊配置、使用限制等。" },
+    { "标题": "使用单位", "是否有说明": true, "说明文字": "默认为本部门单位，无需改动。" },
+    { "标题": "出厂编号", "是否有说明": true, "说明文字": "无需填写，保持为空。" },
+    { "标题": "管理人", "是否有说明": true, "说明文字": "填写部门资产管理员姓名。" },
+    { "标题": "领用人", "是否有说明": true, "说明文字": "填写资产领用老师姓名。" },
+    { "标题": "领用日期", "是否有说明": true, "说明文字": "选填项，填写资产实际领用的时间。" },
+    { "标题": "存放地点", "是否有说明": true, "说明文字": "选择资产实际放置的具体位置，确保准确可查。" },
+    { "标题": "设备用途", "是否有说明": true, "说明文字": "与使用方向保持一致，填写设备的核心用途。" },
+    { "标题": "采购组织形式", "是否有说明": true, "说明文字": "与项目信息中的采购组织形式一致；集采目录内选“集中采购机构采购”，目录外电子商城采购或委托社会招标选“分散采购”，教委统一购买选“部门集中采购”。" },
+    { "标题": "价值类型", "是否有说明": true, "说明文字": "选择“历史成本”。" },
+    { "标题": "资金来源", "是否有说明": true, "说明文字": "填写经费来源（如“财政拨款”“非财政拨款”），与项目经费来源一致。" },
+    { "标题": "采购编号", "是否有说明": true, "说明文字": "无需填写。" },
+    { "标题": "财政拨款", "是否有说明": true, "说明文字": "按实际经费构成填写财政拨款金额，无则填0。" },
+    { "标题": "非财政拨款", "是否有说明": true, "说明文字": "按实际经费构成填写非财政拨款金额，无则填0。" },
+    { "标题": "使用年限(月)", "是否有说明": true, "说明文字": "保持系统默认设置，无需修改。" },
+    { "标题": "折旧状态", "是否有说明": true, "说明文字": "默认“提折旧”，无需修改。" },
+    { "标题": "折旧方法", "是否有说明": true, "说明文字": "默认“年限平均法（摊销）”，无需修改。" },
+    { "标题": "发票照片", "是否有说明": true, "说明文字": "请上传清晰的资产购买发票照片，确保信息完整可读。" },
+    { "标题": "合同照片", "是否有说明": true, "说明文字": "请上传采购合同的关键页照片，包含标的、金额、盖章等核心信息。" },
+    { "标题": "实物照片", "是否有说明": true, "说明文字": "必须上传资产的实物全景照片，需能看清设备全貌及关键标识。" },
+    { "标题": "其他资料", "是否有说明": true, "说明文字": "请上传其他相关支撑性材料照片或文件（如验收报告等）。" },
+    { "标题": "合同文件", "是否有说明": true, "说明文字": "请上传完整的采购合同电子版文件，确保内容清晰完整。" },
+    { "标题": "条码照片", "是否有说明": true, "说明文字": "请上传粘贴在资产上的条形码标签照片，需清晰可读。" },
+    { "标题": "质保照片", "是否有说明": true, "说明文字": "请上传产品质量保证书或保修卡的照片，确保关键信息清晰。" }
+];
 
-        // --- 帮助提示逻辑 ---
-        const helpIcons = document.querySelectorAll('.help-icon');
-
-        // 初始化图标状态：如果没有帮助信息，则设置灰色样式
-        helpIcons.forEach(icon => {
-            const helpText = icon.getAttribute('data-help');
-            if (!helpText || helpText.trim() === '') {
-                icon.classList.add('help-icon-disabled');
+// 2. 页面加载完成后执行绑定逻辑
+document.addEventListener('DOMContentLoaded', function() {
+    // ========== 优化文本提取函数 ==========
+    function getPureTitleText(element) {
+        const clone = element.cloneNode(true);
+        const childNodes = clone.childNodes;
+        for (let i = childNodes.length - 1; i >= 0; i--) {
+            if (childNodes[i].nodeType !== 3) {
+                clone.removeChild(childNodes[i]);
             }
-        });
+        }
+        return clone.textContent.replace(/\s+/g, ' ').trim();
+    }
 
-        // 点击图标显示/隐藏 Tooltip
-        document.addEventListener('click', function(e) {
-            let targetIcon = e.target.closest('.help-icon');
-            
-            // 如果点击的是已禁用的图标，不做任何操作
-            if (targetIcon && targetIcon.classList.contains('help-icon-disabled')) {
-                return;
-            }
+    // ========== 处理表单区域的提示 ==========
+    const formGroups = document.querySelectorAll('.form-group');
+    formGroups.forEach(group => {
+        const labelElement = group.querySelector('.form-label');
+        if (!labelElement) return;
+        
+        const titleText = getPureTitleText(labelElement);
+        const matchedField = formFieldHelpInfos.find(item => item.标题 === titleText);
+        if (!matchedField) return;
 
-            // 关闭所有已打开的 Tooltip
-            document.querySelectorAll('.help-tooltip').forEach(tooltip => {
-                if (targetIcon && tooltip === targetIcon.closest('.form-group, .attachment-name').querySelector('.help-tooltip')) {
-                    // 如果点击的是当前图标对应的 tooltip，则不做操作，留给后面 toggle
-                    return;
-                }
+        const helpIcon = group.querySelector('.help-icon');
+        const tooltip = group.querySelector('.help-tooltip');
+        
+        if (helpIcon) {
+            helpIcon.setAttribute('data-help', matchedField.说明文字);
+            // 全部改为true后，移除disabled样式
+            helpIcon.classList.remove('help-icon-disabled');
+        }
+        if (tooltip) {
+            tooltip.textContent = matchedField.说明文字;
+        }
+    });
+
+    // ========== 单独处理附件区域的提示 ==========
+    const attachmentNames = document.querySelectorAll('.attachment-name');
+    attachmentNames.forEach(nameElement => {
+        const titleText = getPureTitleText(nameElement);
+        const matchedField = formFieldHelpInfos.find(item => item.标题 === titleText);
+        if (!matchedField) return;
+
+        const helpIcon = nameElement.querySelector('.help-icon');
+        const tooltip = nameElement.querySelector('.help-tooltip');
+        
+        if (helpIcon) {
+            helpIcon.setAttribute('data-help', matchedField.说明文字);
+            helpIcon.classList.remove('help-icon-disabled');
+        }
+        if (tooltip) {
+            tooltip.textContent = matchedField.说明文字;
+        }
+    });
+
+    // ========== 重新绑定tooltip显示/隐藏事件 ==========
+    const allHelpIcons = document.querySelectorAll('.help-icon');
+    allHelpIcons.forEach(icon => {
+        // 强制移除disabled样式，确保所有图标都可交互
+        icon.classList.remove('help-icon-disabled');
+        
+        // 精准查找对应的tooltip
+        let tooltip = icon.closest('.form-group, .attachment-name').querySelector('.help-tooltip');
+        
+        if (tooltip) {
+            // 鼠标悬浮显示
+            icon.addEventListener('mouseenter', () => {
+                tooltip.style.display = 'block';
+            });
+            // 鼠标离开隐藏
+            icon.addEventListener('mouseleave', () => {
                 tooltip.style.display = 'none';
             });
+            // 兼容点击事件（备用）
+            icon.addEventListener('click', (e) => {
+                e.stopPropagation();
+                tooltip.style.display = tooltip.style.display === 'block' ? 'none' : 'block';
+            });
+        }
+    });
 
-            // 如果点击的是启用状态的图标，则切换其 Tooltip 的显示状态
-            if (targetIcon) {
-                const tooltip = targetIcon.closest('.form-group, .attachment-name').querySelector('.help-tooltip');
-                if (tooltip) {
-                    tooltip.style.display = tooltip.style.display === 'block' ? 'none' : 'block';
-                }
-            }
+    // 点击页面其他区域关闭tooltip
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.help-tooltip').forEach(tooltip => {
+            tooltip.style.display = 'none';
         });
     });
-</script>
 
+    // 4. 总金额自动计算逻辑
+    const priceInput = document.querySelectorAll('input[type="number"].form-input')[0];
+    const countInput = document.querySelectorAll('input[type="number"].form-input')[1];
+    const totalInput = document.querySelector('input[type="number"].form-input[disabled]');
+    if (priceInput && countInput && totalInput) {
+        const calculateTotal = () => {
+            const price = parseFloat(priceInput.value) || 0;
+            const count = parseFloat(countInput.value) || 0;
+            totalInput.value = (price * count).toFixed(2);
+        };
+        priceInput.addEventListener('input', calculateTotal);
+        countInput.addEventListener('input', calculateTotal);
+    }
+
+    
+});
+</script>
 </body>
 </html>
