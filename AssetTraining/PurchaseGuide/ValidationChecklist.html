@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>采购需求论证项目清单</title>
+    <style>
+        body {
+            font-family: "SimSun", "宋体", "Times New Roman", serif;
+            margin: 20px;
+            color: #000;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 8px 5px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            font-weight: bold;
+            background-color: #fff; /* Keep header white as in image */
+        }
+
+        /* Utility classes */
+        .bg-yellow {
+            background-color: #ffc000;
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
+        .font-bold {
+            font-weight: bold;
+        }
+
+        /* Column width adjustments for better replication */
+        col:nth-child(1) { width: 3%; } /* 序号1 */
+        col:nth-child(2) { width: 6%; } /* 大类 */
+        col:nth-child(3) { width: 7%; } /* 小类 */
+        col:nth-child(4) { width: 3%; } /* 序号2 */
+        col:nth-child(5) { width: 16%; } /* 项目名称 */
+        col:nth-child(6) { width: 12%; } /* 论证范围 */
+        col:nth-child(7) { width: 7%; } /* 校内/外 */
+        col:nth-child(8) { width: 7%; } /* 人数 */
+        col:nth-child(9) { width: 11%; } /* 专家要求 */
+        col:nth-child(10) { width: 28%; } /* 备注 */
+
+    </style>
+</head>
+<body>
+
+    <h1>采购需求论证项目清单</h1>
+
+    <table>
+        <colgroup>
+            <col><col><col><col><col><col><col><col><col><col>
+        </colgroup>
+        <thead>
+            <tr>
+                <th colspan="2">类 别</th>
+                <th colspan="3">项 目</th>
+                <th>论证范围</th>
+                <th colspan="3">论证专家组成</th>
+                <th>备 注</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td rowspan="5">1</td>
+                <td rowspan="5">货物类</td>
+                <td rowspan="3">专用设备</td>
+                <td rowspan="2">1</td>
+                <td rowspan="2" class="text-left">教学、实训设备（贵重仪器设备）</td>
+                <td>10万元（含）-40万元</td>
+                <td>校内或校外</td>
+                <td>3人及以上</td>
+                <td rowspan="2" class="text-left">同行和相关领域副高级及以上职称</td>
+                <td rowspan="2" class="text-left">参照《市教委关于印发天津市普通高等学校实验仪器设备管理办法（试行）的通知》（津教委办〔2016〕100号）</td>
+            </tr>
+            <tr>
+                <td class="bg-yellow">40万元（含）以上</td>
+                <td class="bg-yellow">校外</td>
+                <td class="bg-yellow">5人及以上</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td class="text-left">其他专用设备（信息化建设、校园安全、后勤保障等）</td>
+                <td>20万元及以上</td>
+                <td>校内或校外</td>
+                <td>3人</td>
+                <td rowspan="9" class="text-left">校外：同行和相关领域副高级及以上职称；<br>校内：相关领域中级及以上职称</td>
+                <td class="text-left">需求标准明确、统一的适用型设备进行校内论证；涉及专业性强、技术复杂的设备，必要时邀请校外专家参与论证。</td>
+            </tr>
+            <tr>
+                <td>通用设备</td>
+                <td>3</td>
+                <td>办公设备、办公家具</td>
+                <td rowspan="2">一般无需论证，但预算50万元及以上项目进行校内需求论证。</td>
+                <td rowspan="2">校内</td>
+                <td rowspan="2">3人</td>
+                <td class="text-left">参照《天津市财政局关于印发天津市市级行政事业单位通用办公设备家具配置标准规定的通知》<br>（津财资〔2022〕20号）</td>
+            </tr>
+            <tr>
+                <td>图 书</td>
+                <td>4</td>
+                <td>馆藏图书</td>
+                <td class="text-left">参照《普通高等学校基本办学条件指标（试行）》</td>
+            </tr>
+            <tr>
+                <td rowspan="5">2</td>
+                <td rowspan="5">服务类</td>
+                <td>教工工服</td>
+                <td>5</td>
+                <td>教工工服</td>
+                <td class="bg-yellow">20万元及以上</td>
+                <td class="bg-yellow">校外</td>
+                <td class="bg-yellow">3人</td>
+                <td>专业性强、技术较复杂</td>
+            </tr>
+            <tr>
+                <td>教学专业服务</td>
+                <td>6</td>
+                <td>专业课程资源建设、精品课程建设等</td>
+                <td>20万元及以上</td>
+                <td>校内或校外</td>
+                <td>3人</td>
+                <td class="text-left">需求标准明确、统一的项目进行校内论证；涉及专业性强、技术复杂的项目，必要时邀请校外专家参与论证；双高、创优赋能、科教兴等重点项目应组织校外专家论证。</td>
+            </tr>
+            <tr>
+                <td>通用日常运行服务</td>
+                <td>7</td>
+                <td class="text-left">物业、保安、绿化、综合维修、互联网、体检、消防维保、空调维保、审计、造价、监理、咨询、教工食堂、水上运维、数据资源等</td>
+                <td class="text-left">一般无需论证，但预算50万元（含）至100万元（不含）项目进行校内需求论证，100万元以上项目进行校外专家论证</td>
+                <td>校内或校外</td>
+                <td>3人</td>
+                <td>适用服务类，需求标准统一的50万元以下项目一般无需论证</td>
+            </tr>
+            <tr>
+                <td rowspan="2">第三方支付服务</td>
+                <td>8</td>
+                <td>学生校服、床上用品、军训服等</td>
+                <td class="bg-yellow">20万元及以上</td>
+                <td class="bg-yellow">校外</td>
+                <td class="bg-yellow">3人</td>
+                <td class="text-left">参照政府采购相关要求，民生项目、关注度较高；服装、床品类项目专业性较强、技术较复杂</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>学生教材、体检、食堂、食材、超市等</td>
+                <td>20万元及以上</td>
+<td>校内</td>
+                <td>3人</td>
+                <td class="text-left">参照政府采购相关要求，民生项目、关注度较高；有相关政策要求的，按照相关要求进行论证。</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>工程类</td>
+                <td>建设工程</td>
+                <td>10</td>
+                <td>校舍改造、屋面防水、烟道改造等</td>
+                <td class="bg-yellow">20万元及以上</td>
+                <td class="bg-yellow">校外</td>
+<td class="bg-yellow">3人</td>
+                <td>工程类建设项目专业性强、技术较复杂</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
