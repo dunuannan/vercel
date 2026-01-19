@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>采购项目确认书</title>
+    <style>
+        /* 设置整体页面背景和字体 */
+        body {
+            background-color: #e9e9e9; /* 深灰色背景衬托纸张 */
+            display: flex;
+            justify-content: center;
+            padding: 30px 0;
+            font-family: "SimSun", "宋体", serif; /* 使用宋体风格，符合公文规范 */
+            margin: 0;
+        }
+
+        /* 模拟纸张容器 */
+        .document-container {
+            background-color: #ffffff;
+            width: 800px; /* 固定宽度模拟文档 */
+            padding: 60px 80px; /* 内边距模拟页边距 */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* 添加轻微阴影增加立体感 */
+            color: #333;
+            line-height: 1.8; /* 设置行高提升可读性 */
+            font-size: 18px; /* 正文字号 */
+            box-sizing: border-box;
+        }
+
+        /* 标题样式 */
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 50px;
+            margin-top: 0;
+        }
+
+        /* 通用段落样式 */
+        p {
+            margin-bottom: 20px;
+            text-align: justify; /* 两端对齐 */
+        }
+
+        /* 模拟填空下划线的样式 */
+        .underline-field {
+            display: inline-block;
+            border-bottom: 1px solid #000;
+            vertical-align: bottom; /*让下划线与文字基线对齐 */
+            margin: 0 5px;
+        }
+        /* 不同长度的下划线 */
+        .field-long { width: 480px; }
+        .field-medium { width: 260px; }
+        .field-short { width: 150px; }
+
+        /* 有序列表样式 */
+        ol {
+            padding-left: 2em;
+            margin-bottom: 60px;
+        }
+        ol li {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        /* 底部签名区域样式 */
+        .footer-section {
+            margin-top: 60px;
+        }
+
+        .signature-line {
+            margin-bottom: 40px; /* 签名行之间的间距 */
+        }
+
+        /* 用于同一行左右分布的容器（负责人签字和公章） */
+        .flex-row-between {
+            display: flex;
+            justify-content: space-between;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="document-container">
+        <h1>采购项目确认书</h1>
+
+        <div>
+            需求部门名称：<span class="underline-field field-long"></span>
+        </div>
+
+        <p>
+            为更好地开展<span class="underline-field field-medium"></span>项目(项目编号：<span class="underline-field field-short"></span>) 的采购工作，加强内控和需求管理，现需对以下事宜进行确认：
+        </p>
+
+        <ol>
+            <li>采购文件已认真审阅，需求部门完全理解并同意该文件的内容，对该文件在制订过程中所进行的全部修改表示同意和认可。并认真核对了技术参数、评分因素等内容，确认准确无误。</li>
+            <li>采购文件已发给需求部门进行核实确认。为维护学院利益，对采购文件内容必须予以保密，禁止外传。因泄漏标底等内容造成的后果将承担相应责任。</li>
+            <li>自采购项目成交并发布公告之日起 25 日内，须完成采购合同签订工作，并在合同签订之日起 1 个工作日内完成向国有资产管理处备案工作。</li>
+        </ol>
+
+        <div class="footer-section">
+            <div class="signature-line">
+                需求部门经办人签字：
+            </div>
+
+            <div class="signature-line flex-row-between">
+                <div>需求部门负责人签字：</div>
+                <div>（加盖部门公章）：</div>
+            </div>
+
+            <div class="signature-line">
+                确认时间：
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
