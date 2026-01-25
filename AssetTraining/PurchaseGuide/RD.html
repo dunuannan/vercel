@@ -3,99 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>项目需求书</title>
+    <title>项目需求书（带批注）</title>
     <style>
+        :root {
+            --primary-color: #1a5f7a;
+            --secondary-color: #2c8fb5;
+            --accent-color: #e74c3c;
+            --bg-color: #f5f7fa;
+            --text-color: #2c3e50;
+            --card-bg: #ffffff;
+            --border-color: #e1e8ed;
+        }
+
+        /* Page base styling aligned to the base template */
         body {
             font-family: "SimSun", "宋体", serif;
-            line-height: 1.5;
-            color: #000;
             background-color: #f4f4f4;
+            margin: 0;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            color: #000;
         }
-        .document-container {
-            max-width: 800px;
-            margin: 0 auto;
+
+        .container {
             background-color: #fff;
-            padding: 40px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 794px; /* A4 width at ~96dpi */
+            padding: 60px 80px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
         }
+
+        /* Title styles */
         h1 {
+            font-size: 28px;
+            font-weight: bold;
             text-align: center;
-            font-size: 24px;
             margin-bottom: 40px;
         }
+
         h2 {
-            font-size: 18px;
+            font-size: 20px;
+            font-weight: bold;
             margin-top: 30px;
             margin-bottom: 15px;
         }
-        ol {
-            padding-left: 30px;
+
+        /* Body text and lists */
+        p, li {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 10px;
         }
+
+        ol {
+            padding-left: 2em;
+            margin-top: 0;
+        }
+
+        /* Table styles */
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 30px;
         }
+
         th, td {
             border: 1px solid #000;
             padding: 8px;
             text-align: left;
             vertical-align: top;
+            font-size: 14px;
         }
+
         th {
             font-weight: bold;
             text-align: center;
+            background-color: #f9f9f9;
         }
+
         .qualification-table th:first-child {
             width: 50px;
         }
+
         .technical-table th:nth-child(1) {
             width: 50px;
         }
+
         .technical-table th:nth-child(2) {
-            width: 150px;
+            width: 120px;
         }
+
         .technical-table th:nth-child(3) {
-            width: 80px;
+            width: 60px;
         }
+
+        /* Keep empty cells from collapsing */
+        .technical-table td {
+            height: 30px;
+        }
+
+        /* Signature section */
         .signatures {
             margin-top: 50px;
         }
+
         .signatures p {
             margin-bottom: 20px;
+            font-size: 16px;
         }
+
         .underline {
             display: inline-block;
             border-bottom: 1px solid #000;
         }
+
         .line-title {
             width: 200px;
         }
+
         .line-long {
-            width: 300px;
+            width: 280px;
         }
+
         .line-short {
             width: 150px;
         }
-        /* Keep empty cells from collapsing */
-        .technical-table td {
-            height: 30px;
+
+        /* Annotations aligned to the right */
+        .has-annotation {
+            position: relative;
+        }
+
+        .annotation {
+            position: absolute;
+            right: -300px;
+            top: 0;
+            width: 260px;
+            background-color: #fff3e0;
+            border: 1px solid #ff9800;
+            color: #e65100;
+            padding: 10px 12px;
+            font-size: 13px;
+            line-height: 1.5;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            text-align: left;
+            font-weight: normal;
+            z-index: 10;
+        }
+
+        .annotation::before {
+            content: '';
+            position: absolute;
+            top: var(--line-top, 50%);
+            transform: translateY(-50%);
+            right: 100%;
+            width: var(--line-width, 110px);
+            height: 1px;
+            border-radius: 2px;
+            background-color: #ff9800;
+        }
+
+        .annotation::after {
+            content: '';
+            position: absolute;
+            top: var(--line-top, 50%);
+            transform: translateY(-50%);
+            right: calc(100% + var(--line-width, 110px));
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #ff9800;
+        }
+
+        /* Colored section titles matching the image */
+        .section-title-colored {
+            color: #d35400;
+        }
+
+        @media print {
+            .annotation {
+                display: none;
+            }
+            body {
+                background-color: #fff;
+            }
+            .container {
+                box-shadow: none;
+                padding: 0;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 1100px) {
+            body {
+                padding: 12px;
+            }
+            .container {
+                padding: 30px 20px;
+                box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+            }
+            .annotation {
+                position: relative;
+                right: auto;
+                width: 100%;
+                margin-top: 12px;
+                margin-bottom: 12px;
+            }
+            .annotation::before,
+            .annotation::after {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="document-container">
-    <h1><span class="underline line-title"></span>项目需求书</h1>
+<div class="container">
+    <h1 class="has-annotation">
+        <span class="underline line-title"></span>项目需求书
+        <div class="annotation" style="top: -10px; --line-top: 50%; --line-width: 100px;">
+            <strong>批注 [1]:</strong> 项目名称要准确且与相关采购委托材料保持一致
+        </div>
+    </h1>
 
-    <h2>一、项目概况总述</h2>
-    <ol>
+    <h2 class="has-annotation">一、项目概况总述</h2>
+    <ol class="has-annotation">
         <li>简介</li>
         <li>预算</li>
         <li>服务期限（如为货物类则填写到货期）</li>
         <li>支付方式</li>
         <li>服务要求</li>
+        <div class="annotation" style="top: -30px; --line-top: 50%; --line-width: 90px;">
+            <strong>批注 [2]:</strong> 标注"采购方式"、项目类型（货物类、服务类、工程类）、50万及以上项目要标注 是否响应"中小企业扶持政策" 如：该项目专门面向 XX企业
+        </div>
     </ol>
 
     <h2>二、供应商资格要求</h2>
@@ -130,7 +273,11 @@
         </tbody>
     </table>
 
-    <h2>三、项目技术需求（如有实质性技术要求，请加★）</h2>
+    <h2 class="has-annotation">三、项目技术需求（如有实质性技术要求，请加★）
+        <div class="annotation" style="top: -5px; --line-top: 50%; --line-width: 70px;">
+            <strong>批注 [3]:</strong> ★实质性条款 应标注在（需求条款栏内），▲核心产品应标注在 内容名称栏内
+        </div>
+    </h2>
     <table class="technical-table">
         <thead>
             <tr>
@@ -162,10 +309,13 @@
         </tbody>
     </table>
 
-    <div class="signatures">
+    <div class="signatures has-annotation">
         <p>项目需求（委托）部门（盖章）：<span class="underline line-long"></span></p>
         <p>项目需求（委托）部门负责人签字：<span class="underline line-long"></span></p>
         <p>申请日期：<span class="underline line-short"></span></p>
+        <div class="annotation" style="top: 20px; --line-top: 50%; --line-width: 60px;">
+            <strong>批注 [4]:</strong> 以下签字盖章处由线上事前审批流程代替，可不填
+        </div>
     </div>
 </div>
 
