@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +9,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap');
-        body { font-family: 'Noto Sans SC', sans-serif; }
-        
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+
         .home-btn {
             position: fixed;
             top: 80px;
@@ -23,25 +27,38 @@
             cursor: pointer;
             font-size: 13px;
             font-weight: 500;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             transition: all 0.3s;
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 6px;
         }
+
         .home-btn:hover {
             background: #1a5f7a;
             color: white;
             transform: translateY(-2px);
         }
-        
+
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
         /* Modal Styles */
         .modal-overlay {
             position: fixed;
@@ -56,9 +73,11 @@
             align-items: center;
             backdrop-filter: blur(4px);
         }
+
         .modal-overlay.active {
             display: flex;
         }
+
         .modal-container {
             background: white;
             width: 90%;
@@ -70,6 +89,7 @@
             flex-direction: column;
             overflow: hidden;
         }
+
         .modal-header {
             display: flex;
             justify-content: space-between;
@@ -78,12 +98,14 @@
             background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
             color: white;
         }
+
         .modal-title {
             font-weight: 600;
             font-size: 1.1rem;
         }
+
         .modal-close {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border: none;
             color: white;
             width: 32px;
@@ -96,19 +118,22 @@
             justify-content: center;
             transition: background 0.2s;
         }
+
         .modal-close:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
         }
+
         .modal-body {
             flex: 1;
             overflow: hidden;
         }
+
         .modal-body iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
-        
+
         /* Link Styles */
         .doc-link {
             color: #2563eb;
@@ -116,11 +141,13 @@
             cursor: pointer;
             transition: color 0.2s;
         }
+
         .doc-link:hover {
             color: #1d4ed8;
         }
     </style>
 </head>
+
 <body class="bg-slate-50 min-h-screen text-slate-800">
 
     <a href="../index.html" class="home-btn">← 返回首页</a>
@@ -129,7 +156,8 @@
     <header class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
             <div>
-                <h1 class="text-xl font-bold text-slate-900"><i class="fas fa-stream text-blue-600 mr-2"></i>采购工作全流程</h1>
+                <h1 class="text-xl font-bold text-slate-900"><i class="fas fa-stream text-blue-600 mr-2"></i>采购工作全流程
+                </h1>
                 <p class="text-xs text-slate-500 mt-1">共 15 个标准步骤</p>
             </div>
             <!-- Legend -->
@@ -144,36 +172,55 @@
     <!-- Timeline Container -->
     <main class="max-w-4xl mx-auto px-4 py-12">
         <div class="relative wrap overflow-hidden p-0 sm:p-10 h-full">
-            
+
             <!-- Center Vertical Line -->
-            <div class="border-2-2 absolute border-opacity-20 border-slate-400 h-full border left-4 sm:left-1/2" style="border-radius: 1%;"></div>
+            <div class="border-2-2 absolute border-opacity-20 border-slate-400 h-full border left-4 sm:left-1/2"
+                style="border-radius: 1%;"></div>
 
             <!-- Step 01: 需求部门 -->
-            <div class="mb-8 flex justify-between items-center w-full right-timeline group sm:flex-row flex-col sm:mb-8">
+            <div
+                class="mb-8 flex justify-between items-center w-full right-timeline group sm:flex-row flex-col sm:mb-8">
                 <div class="order-1 sm:w-5/12"></div>
-                <div class="z-20 flex items-center order-1 bg-blue-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
+                <div
+                    class="z-20 flex items-center order-1 bg-blue-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
                     <span class="text-white font-bold text-xs">01</span>
                 </div>
-                <div class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-blue-500 relative transition-transform hover:-translate-y-1 duration-300">
-                    <span class="absolute top-4 right-4 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">1天</span>
+                <div
+                    class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-blue-500 relative transition-transform hover:-translate-y-1 duration-300">
+                    <span
+                        class="absolute top-4 right-4 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">1天</span>
                     <h3 class="mb-2 font-bold text-slate-800 text-lg">提交需求论证申请</h3>
-                    <p class="text-sm text-slate-600 mb-1"><i class="fas fa-file-alt mr-1 text-slate-400"></i> 关键文件：<span class="doc-link" onclick="openModal('RD.html', '项目需求书')">项目需求书</span></p>
-                    <p class="text-sm text-slate-600 mb-2"><i class="fas fa-book-open mr-1 text-slate-400"></i> 参考文档：<span class="doc-link" onclick="openModal('ValidationChecklist.html', '采购需求论证项目清单')">采购需求论证项目清单</span></p>
+                    <p class="text-sm text-slate-600 mb-1"><i class="fas fa-file-alt mr-1 text-slate-400"></i>
+                        关键文件：<span class="doc-link" onclick="openModal('RD.html', '项目需求书')">项目需求书</span></p>
+                    <p class="text-sm text-slate-600 mb-2"><i class="fas fa-book-open mr-1 text-slate-400"></i>
+                        参考文档：<span class="doc-link"
+                            onclick="openModal('ValidationChecklist.html', '采购需求论证项目清单')">采购需求论证项目清单</span></p>
                     <p class="text-xs text-slate-400 bg-slate-50 p-2 rounded mb-3">依据需求书判定是否需要论证及论证方式。</p>
 
                     <!-- 关键提示：中小微企业 -->
-                    <div class="bg-amber-50 border-l-4 border-amber-400 rounded-r-lg p-3 shadow-sm mt-3 transition-transform hover:-translate-y-0.5 duration-300">
+                    <div
+                        class="bg-amber-50 border-l-4 border-amber-400 rounded-r-lg p-3 shadow-sm mt-3 transition-transform hover:-translate-y-0.5 duration-300">
                         <div class="flex items-center gap-1.5 mb-2">
                             <i class="fas fa-lightbulb text-amber-500"></i>
                             <span class="text-sm font-bold text-amber-800">关键提示：预留中小企业份额</span>
                         </div>
                         <div class="text-[11px] text-amber-800 space-y-1.5">
-                            <p>• <strong>200万元以下货物/服务、400万元以下工程</strong>，适宜由中小企业提供的，<span class="text-red-600 font-bold">应当全部预留；</span></p>
-                            <p>• <strong>200万元以上货物/服务、400万元以上工程</strong>，适宜由中小企业提供的，鼓励预留该部分采购项目预算总额的 <strong class="bg-amber-200 px-1 rounded">40%以上</strong> 专门面向中小企业采购，其中预留给小微企业比例 <strong class="bg-amber-200 px-1 rounded">不低于70%</strong>。</p>
+                            <p>• <strong>200万元以下货物/服务、400万元以下工程</strong>，适宜由中小企业提供的，<span
+                                    class="text-red-600 font-bold">应当全部预留；</span></p>
+                            <p>• <strong>200万元以上货物/服务、400万元以上工程</strong>，适宜由中小企业提供的，鼓励预留该部分采购项目预算总额的 <strong
+                                    class="bg-amber-200 px-1 rounded">40%以上</strong> 专门面向中小企业采购，其中预留给小微企业比例 <strong
+                                    class="bg-amber-200 px-1 rounded">不低于70%</strong>。</p>
                         </div>
-                        <div class="mt-2 text-[11px] font-bold text-red-600 bg-white p-2 rounded border border-red-100 flex items-start gap-1.5">
-                            <i class="fas fa-exclamation-triangle mt-0.5 text-red-500"></i> 
+                        <div
+                            class="mt-2 text-[11px] font-bold text-red-600 bg-white p-2 rounded border border-red-100 flex items-start gap-1.5">
+                            <i class="fas fa-exclamation-triangle mt-0.5 text-red-500"></i>
                             <span>尤其是200万元以上的货物和服务项目、400万元以上的工程项目，能面向小微的必须面向！</span>
+                        </div>
+                        <div class="mt-2 text-right">
+                            <a href="https://www.gov.cn/gongbao/content/2012/content_2041870.htm" target="_blank"
+                                class="text-[11px] text-blue-600 hover:text-blue-800 underline transition-colors">
+                                <i class="fas fa-external-link-alt mr-1"></i>中小企业划型标准规定
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -182,28 +229,39 @@
             <!-- Step 02: 国资处 -->
             <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline group sm:mb-8">
                 <div class="order-1 sm:w-5/12"></div>
-                <div class="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
+                <div
+                    class="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
                     <span class="text-white font-bold text-xs">02</span>
                 </div>
-                <div class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-orange-500 relative transition-transform hover:-translate-y-1 duration-300">
-                     <span class="absolute top-4 right-4 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">2-5天</span>
+                <div
+                    class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-orange-500 relative transition-transform hover:-translate-y-1 duration-300">
+                    <span
+                        class="absolute top-4 right-4 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">2-5天</span>
                     <h3 class="mb-2 font-bold text-slate-800 text-lg">安排论证及费用计划</h3>
                     <p class="text-xs text-slate-400 bg-slate-50 p-2 rounded">通常安排同类项目一起进行论证。</p>
                 </div>
             </div>
 
             <!-- Step 03: 需求部门 -->
-            <div class="mb-8 flex justify-between items-center w-full right-timeline group sm:flex-row flex-col sm:mb-8">
+            <div
+                class="mb-8 flex justify-between items-center w-full right-timeline group sm:flex-row flex-col sm:mb-8">
                 <div class="order-1 sm:w-5/12"></div>
-                <div class="z-20 flex items-center order-1 bg-blue-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
+                <div
+                    class="z-20 flex items-center order-1 bg-blue-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
                     <span class="text-white font-bold text-xs">03</span>
                 </div>
-                <div class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-blue-500 relative transition-transform hover:-translate-y-1 duration-300">
-                    <span class="absolute top-4 right-4 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">2-3天</span>
+                <div
+                    class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-blue-500 relative transition-transform hover:-translate-y-1 duration-300">
+                    <span
+                        class="absolute top-4 right-4 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">2-3天</span>
                     <h3 class="mb-2 font-bold text-slate-800 text-lg">提交用款审批</h3>
                     <div class="space-y-1 text-sm text-slate-600 mb-2">
-                        <p><i class="fas fa-file-contract mr-1 text-slate-400"></i> <span class="doc-link" onclick="openModal('RD.html', '需求书')">需求书</span>、<span class="doc-link" onclick="openModal('PurchasePlan.html', '购置计划表')">购置计划表</span></p>
-                        <p><i class="fas fa-file-signature mr-1 text-slate-400"></i> <span class="doc-link" onclick="openModal('ResearchReport.html', '调研报告')">调研报告</span> <span class="text-red-500 text-xs">(需三方会签)</span></p>
+                        <p><i class="fas fa-file-contract mr-1 text-slate-400"></i> <span class="doc-link"
+                                onclick="openModal('RD.html', '需求书')">需求书</span>、<span class="doc-link"
+                                onclick="openModal('PurchasePlan.html', '购置计划表')">购置计划表</span></p>
+                        <p><i class="fas fa-file-signature mr-1 text-slate-400"></i> <span class="doc-link"
+                                onclick="openModal('ResearchReport.html', '调研报告')">调研报告</span> <span
+                                class="text-red-500 text-xs">(需三方会签)</span></p>
                         <p><i class="fas fa-images mr-1 text-slate-400"></i> 询价截图 (自采项目)</p>
                     </div>
                 </div>
@@ -212,28 +270,35 @@
             <!-- Step 04: 需求部门 -->
             <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline group sm:mb-8">
                 <div class="order-1 sm:w-5/12"></div>
-                <div class="z-20 flex items-center order-1 bg-blue-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
+                <div
+                    class="z-20 flex items-center order-1 bg-blue-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
                     <span class="text-white font-bold text-xs">04</span>
                 </div>
-                <div class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-blue-500 relative transition-transform hover:-translate-y-1 duration-300">
-                    <span class="absolute top-4 right-4 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">3-7天</span>
+                <div
+                    class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-blue-500 relative transition-transform hover:-translate-y-1 duration-300">
+                    <span
+                        class="absolute top-4 right-4 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">3-7天</span>
                     <h3 class="mb-2 font-bold text-slate-800 text-lg">上会讨论</h3>
                     <p class="text-sm text-slate-600 mb-2">需求部门报议题，国资处陪同。</p>
                     <div class="grid grid-cols-2 gap-2 text-xs text-center mt-2">
-                         <div class="bg-indigo-50 text-indigo-700 p-1 rounded"> 20万元以上: 院务会</div>
-                         <div class="bg-red-50 text-red-700 p-1 rounded"> 50万元以上: 党委会</div>
+                        <div class="bg-indigo-50 text-indigo-700 p-1 rounded"> 20万元以上: 院务会</div>
+                        <div class="bg-red-50 text-red-700 p-1 rounded"> 50万元以上: 党委会</div>
                     </div>
                 </div>
             </div>
 
-             <!-- Step 05: 需求部门 -->
-             <div class="mb-8 flex justify-between items-center w-full right-timeline group sm:flex-row flex-col sm:mb-8">
+            <!-- Step 05: 需求部门 -->
+            <div
+                class="mb-8 flex justify-between items-center w-full right-timeline group sm:flex-row flex-col sm:mb-8">
                 <div class="order-1 sm:w-5/12"></div>
-                <div class="z-20 flex items-center order-1 bg-blue-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
+                <div
+                    class="z-20 flex items-center order-1 bg-blue-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
                     <span class="text-white font-bold text-xs">05</span>
                 </div>
-                <div class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-blue-500 relative transition-transform hover:-translate-y-1 duration-300">
-                    <span class="absolute top-4 right-4 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">1天</span>
+                <div
+                    class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-blue-500 relative transition-transform hover:-translate-y-1 duration-300">
+                    <span
+                        class="absolute top-4 right-4 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">1天</span>
                     <h3 class="mb-2 font-bold text-slate-800 text-lg">纪委办报备</h3>
                     <p class="text-xs text-slate-400 bg-slate-50 p-2 rounded">对上会通过的项目进行线上流程报备。</p>
                 </div>
@@ -242,25 +307,34 @@
             <!-- Step 06: 国资处 -->
             <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline group sm:mb-8">
                 <div class="order-1 sm:w-5/12"></div>
-                <div class="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
+                <div
+                    class="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
                     <span class="text-white font-bold text-xs">06</span>
                 </div>
-                <div class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-orange-500 relative transition-transform hover:-translate-y-1 duration-300">
-                    <span class="absolute top-4 right-4 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">2-3天</span>
+                <div
+                    class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-orange-500 relative transition-transform hover:-translate-y-1 duration-300">
+                    <span
+                        class="absolute top-4 right-4 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">2-3天</span>
                     <h3 class="mb-2 font-bold text-slate-800 text-lg">签订委托代理协议</h3>
-                    <p class="text-sm text-slate-600 mb-2"><i class="fas fa-file-signature mr-1 text-slate-400"></i> 委托代理协议书</p>
-                    <p class="text-xs text-amber-600 bg-amber-50 p-2 rounded border border-amber-100"><i class="fas fa-exclamation-circle mr-1"></i> 注意：机构需在1-3日内快递纸质资料到校。</p>
+                    <p class="text-sm text-slate-600 mb-2"><i class="fas fa-file-signature mr-1 text-slate-400"></i>
+                        委托代理协议书</p>
+                    <p class="text-xs text-amber-600 bg-amber-50 p-2 rounded border border-amber-100"><i
+                            class="fas fa-exclamation-circle mr-1"></i> 注意：机构需在1-3日内快递纸质资料到校。</p>
                 </div>
             </div>
 
             <!-- Step 07: 国资处 -->
-            <div class="mb-8 flex justify-between items-center w-full right-timeline group sm:flex-row flex-col sm:mb-8">
+            <div
+                class="mb-8 flex justify-between items-center w-full right-timeline group sm:flex-row flex-col sm:mb-8">
                 <div class="order-1 sm:w-5/12"></div>
-                <div class="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
+                <div
+                    class="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
                     <span class="text-white font-bold text-xs">07</span>
                 </div>
-                <div class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-orange-500 relative transition-transform hover:-translate-y-1 duration-300">
-                    <span class="absolute top-4 right-4 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">2天</span>
+                <div
+                    class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-orange-500 relative transition-transform hover:-translate-y-1 duration-300">
+                    <span
+                        class="absolute top-4 right-4 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">2天</span>
                     <h3 class="mb-2 font-bold text-slate-800 text-lg">编制政采计划</h3>
                     <p class="text-sm text-slate-500">内部编制工作</p>
                 </div>
@@ -269,55 +343,70 @@
             <!-- Step 08: 国资处 -->
             <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline group sm:mb-8">
                 <div class="order-1 sm:w-5/12"></div>
-                <div class="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
+                <div
+                    class="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
                     <span class="text-white font-bold text-xs">08</span>
                 </div>
-                <div class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-orange-500 relative transition-transform hover:-translate-y-1 duration-300">
-                    <span class="absolute top-4 right-4 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">2天</span>
+                <div
+                    class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-orange-500 relative transition-transform hover:-translate-y-1 duration-300">
+                    <span
+                        class="absolute top-4 right-4 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">2天</span>
                     <h3 class="mb-2 font-bold text-slate-800 text-lg">上报政采计划</h3>
                     <p class="text-sm text-slate-500">向主管部门上报</p>
                 </div>
             </div>
 
             <!-- Step 09: 国资处 -->
-            <div class="mb-8 flex justify-between items-center w-full right-timeline group sm:flex-row flex-col sm:mb-8">
+            <div
+                class="mb-8 flex justify-between items-center w-full right-timeline group sm:flex-row flex-col sm:mb-8">
                 <div class="order-1 sm:w-5/12"></div>
-                <div class="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
+                <div
+                    class="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
                     <span class="text-white font-bold text-xs">09</span>
                 </div>
-                <div class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-orange-500 relative transition-transform hover:-translate-y-1 duration-300">
-                    <span class="absolute top-4 right-4 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">3-10天</span>
+                <div
+                    class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-orange-500 relative transition-transform hover:-translate-y-1 duration-300">
+                    <span
+                        class="absolute top-4 right-4 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">3-10天</span>
                     <h3 class="mb-2 font-bold text-slate-800 text-lg">招标文件制定及发公告</h3>
                     <p class="text-sm text-slate-600 mb-2"><i class="fas fa-file-pen mr-1 text-slate-400"></i> 采购文件</p>
-                    <p class="text-xs text-slate-400 bg-slate-50 p-2 rounded">需求部门需确认文件，并手签<span class="doc-link" onclick="openModal('PurchaseConfirm.html', '采购项目确认书')">采购项目确认书</span>后方可发布。</p>
+                    <p class="text-xs text-slate-400 bg-slate-50 p-2 rounded">需求部门需确认文件，并手签<span class="doc-link"
+                            onclick="openModal('PurchaseConfirm.html', '采购项目确认书')">采购项目确认书</span>后方可发布。</p>
                 </div>
             </div>
 
             <!-- Step 10: 国资处 -->
             <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline group sm:mb-8">
                 <div class="order-1 sm:w-5/12"></div>
-                <div class="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
+                <div
+                    class="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
                     <span class="text-white font-bold text-xs">10</span>
                 </div>
-                <div class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-orange-500 relative transition-transform hover:-translate-y-1 duration-300">
-                    <span class="absolute top-4 right-4 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">10-20天</span>
+                <div
+                    class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-orange-500 relative transition-transform hover:-translate-y-1 duration-300">
+                    <span
+                        class="absolute top-4 right-4 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">10-20天</span>
                     <h3 class="mb-2 font-bold text-slate-800 text-lg">公告期</h3>
                     <p class="text-sm text-slate-600 mb-2">由签订协议的代理机构发布。</p>
                     <div class="grid grid-cols-2 gap-2 text-xs text-center mt-2">
                         <div class="bg-gray-100 text-gray-700 p-1 rounded">磋商: 10天</div>
                         <div class="bg-gray-100 text-gray-700 p-1 rounded">公开招标: 20天</div>
-                   </div>
+                    </div>
                 </div>
             </div>
 
-             <!-- Step 11: 国资处 -->
-             <div class="mb-8 flex justify-between items-center w-full right-timeline group sm:flex-row flex-col sm:mb-8">
+            <!-- Step 11: 国资处 -->
+            <div
+                class="mb-8 flex justify-between items-center w-full right-timeline group sm:flex-row flex-col sm:mb-8">
                 <div class="order-1 sm:w-5/12"></div>
-                <div class="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
+                <div
+                    class="z-20 flex items-center order-1 bg-orange-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
                     <span class="text-white font-bold text-xs">11</span>
                 </div>
-                <div class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-orange-500 relative transition-transform hover:-translate-y-1 duration-300">
-                    <span class="absolute top-4 right-4 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">1天</span>
+                <div
+                    class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-orange-500 relative transition-transform hover:-translate-y-1 duration-300">
+                    <span
+                        class="absolute top-4 right-4 text-xs font-bold text-orange-600 bg-orange-50 px-2 py-1 rounded">1天</span>
                     <h3 class="mb-2 font-bold text-slate-800 text-lg">执行采购及中标公告</h3>
                     <p class="text-xs text-slate-400 bg-slate-50 p-2 rounded">需求部门需要参与执行。</p>
                 </div>
@@ -326,27 +415,37 @@
             <!-- Step 12: 需求部门 -->
             <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline group sm:mb-8">
                 <div class="order-1 sm:w-5/12"></div>
-                <div class="z-20 flex items-center order-1 bg-blue-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
+                <div
+                    class="z-20 flex items-center order-1 bg-blue-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
                     <span class="text-white font-bold text-xs">12</span>
                 </div>
-                <div class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-blue-500 relative transition-transform hover:-translate-y-1 duration-300">
-                    <span class="absolute top-4 right-4 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">30日内</span>
+                <div
+                    class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-blue-500 relative transition-transform hover:-translate-y-1 duration-300">
+                    <span
+                        class="absolute top-4 right-4 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">30日内</span>
                     <h3 class="mb-2 font-bold text-slate-800 text-lg">签订采购合同</h3>
-                    <p class="text-sm text-slate-600 mb-2"><i class="fas fa-file-contract mr-1 text-slate-400"></i> 采购合同</p>
-                    <p class="text-xs text-amber-600 bg-amber-50 p-2 rounded border border-amber-100"><i class="fas fa-clock mr-1"></i> 时效：中标后30日内签订；签后1日内发国资处上传。</p>
+                    <p class="text-sm text-slate-600 mb-2"><i class="fas fa-file-contract mr-1 text-slate-400"></i> 采购合同
+                    </p>
+                    <p class="text-xs text-amber-600 bg-amber-50 p-2 rounded border border-amber-100"><i
+                            class="fas fa-clock mr-1"></i> 时效：中标后30日内签订；签后1日内发国资处上传。</p>
                 </div>
             </div>
 
-             <!-- Step 13: 需求部门 -->
-             <div class="mb-8 flex justify-between items-center w-full right-timeline group sm:flex-row flex-col sm:mb-8">
+            <!-- Step 13: 需求部门 -->
+            <div
+                class="mb-8 flex justify-between items-center w-full right-timeline group sm:flex-row flex-col sm:mb-8">
                 <div class="order-1 sm:w-5/12"></div>
-                <div class="z-20 flex items-center order-1 bg-blue-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
+                <div
+                    class="z-20 flex items-center order-1 bg-blue-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
                     <span class="text-white font-bold text-xs">13</span>
                 </div>
-                <div class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-blue-500 relative transition-transform hover:-translate-y-1 duration-300">
-                    <span class="absolute top-4 right-4 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">按合同</span>
+                <div
+                    class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-blue-500 relative transition-transform hover:-translate-y-1 duration-300">
+                    <span
+                        class="absolute top-4 right-4 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">按合同</span>
                     <h3 class="mb-2 font-bold text-slate-800 text-lg">验收</h3>
-                    <p class="text-sm text-slate-600 mb-2"><i class="fas fa-check-circle mr-1 text-slate-400"></i> 验收报告</p>
+                    <p class="text-sm text-slate-600 mb-2"><i class="fas fa-check-circle mr-1 text-slate-400"></i> 验收报告
+                    </p>
                     <p class="text-xs text-slate-400 bg-slate-50 p-2 rounded">出验收报告后3日内发国资处以上传备案。</p>
                 </div>
             </div>
@@ -354,25 +453,33 @@
             <!-- Step 14: 需求部门 -->
             <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline group sm:mb-8">
                 <div class="order-1 sm:w-5/12"></div>
-                <div class="z-20 flex items-center order-1 bg-blue-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
+                <div
+                    class="z-20 flex items-center order-1 bg-blue-500 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
                     <span class="text-white font-bold text-xs">14</span>
                 </div>
-                <div class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-blue-500 relative transition-transform hover:-translate-y-1 duration-300">
-                    <span class="absolute top-4 right-4 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">验收后</span>
+                <div
+                    class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-blue-500 relative transition-transform hover:-translate-y-1 duration-300">
+                    <span
+                        class="absolute top-4 right-4 text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">验收后</span>
                     <h3 class="mb-2 font-bold text-slate-800 text-lg">入库</h3>
-                    <p class="text-sm text-slate-600 mb-2"><i class="fas fa-warehouse mr-1 text-slate-400"></i> 资产入库登记</p>
+                    <p class="text-sm text-slate-600 mb-2"><i class="fas fa-warehouse mr-1 text-slate-400"></i> 资产入库登记
+                    </p>
                     <p class="text-xs text-slate-400 bg-slate-50 p-2 rounded">验收合格后办理资产入库手续，录入资产管理系统。</p>
                 </div>
             </div>
 
             <!-- Step 15: 预算部门 -->
-            <div class="mb-8 flex justify-between items-center w-full right-timeline group sm:flex-row flex-col sm:mb-8">
+            <div
+                class="mb-8 flex justify-between items-center w-full right-timeline group sm:flex-row flex-col sm:mb-8">
                 <div class="order-1 sm:w-5/12"></div>
-                <div class="z-20 flex items-center order-1 bg-green-600 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
+                <div
+                    class="z-20 flex items-center order-1 bg-green-600 shadow-xl w-8 h-8 rounded-full ml-0 sm:ml-0 absolute left-0 sm:left-1/2 sm:-translate-x-1/2 justify-center">
                     <span class="text-white font-bold text-xs">15</span>
                 </div>
-                <div class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-green-600 relative transition-transform hover:-translate-y-1 duration-300">
-                    <span class="absolute top-4 right-4 text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded">最终</span>
+                <div
+                    class="order-1 bg-white rounded-lg shadow-md w-full sm:w-5/12 px-6 py-4 ml-10 sm:ml-0 border-l-4 border-green-600 relative transition-transform hover:-translate-y-1 duration-300">
+                    <span
+                        class="absolute top-4 right-4 text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded">最终</span>
                     <h3 class="mb-2 font-bold text-slate-800 text-lg">付款</h3>
                     <p class="text-sm text-slate-600">按合同条款执行付款。</p>
                     <p class="text-xs text-slate-400 mt-2">流程结束</p>
@@ -382,7 +489,7 @@
         </div>
     </main>
 
-<footer class="text-center py-6 text-slate-400 text-sm">
+    <footer class="text-center py-6 text-slate-400 text-sm">
         <p>流程图基于用户口述与上传资料整理生成</p>
     </footer>
 
@@ -406,21 +513,21 @@
             document.getElementById('docModal').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
-        
+
         function closeModal() {
             document.getElementById('docModal').classList.remove('active');
             document.getElementById('modalIframe').src = '';
             document.body.style.overflow = '';
         }
-        
+
         function closeModalOnOverlay(event) {
             if (event.target === document.getElementById('docModal')) {
                 closeModal();
             }
         }
-        
+
         // ESC 键关闭弹窗
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 closeModal();
             }
@@ -428,4 +535,5 @@
     </script>
 
 </body>
+
 </html>
