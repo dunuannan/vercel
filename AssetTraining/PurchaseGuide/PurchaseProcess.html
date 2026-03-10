@@ -498,7 +498,15 @@
         <div class="modal-container">
             <div class="modal-header">
                 <span class="modal-title" id="modalTitle">文档预览</span>
-                <button class="modal-close" onclick="closeModal()">✕</button>
+                <div class="flex items-center gap-3">
+                    <button
+                        class="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                        onclick="downloadPdf()">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>下载 PDF</span>
+                    </button>
+                    <button class="modal-close" onclick="closeModal()">✕</button>
+                </div>
             </div>
             <div class="modal-body">
                 <iframe id="modalIframe" src=""></iframe>
@@ -518,6 +526,40 @@
             document.getElementById('docModal').classList.remove('active');
             document.getElementById('modalIframe').src = '';
             document.body.style.overflow = '';
+        }
+
+        function downloadPdf() {
+            const iframe = document.getElementById('modalIframe');
+            if (iframe && iframe.src) {
+                // 从当前 iframe 的完整 src 路径中提取出文件名 (例如 'RD.html')
+                const urlObj = new URL(iframe.src);
+                const filename = urlObj.pathname.split('/').pop();
+
+                // 建立 HTML 文件到已生成 PDF 的映射字典
+                const pdfMap = {
+                    'RD.html': '项目需求书.pdf',
+                    'ValidationChecklist.html': '采购需求论证项目清单.pdf',
+                    'PurchasePlan.html': '购置计划表.pdf',
+                    'ResearchReport.html': '调研报告.pdf',
+                    'PurchaseConfirm.html': '采购项目确认书.pdf'
+                };
+
+                const pdfName = pdfMap[filename];
+
+                if (pdfName) {
+                    // 创建隐形 <a> 标签以触发原生强制下载
+                    const link = document.createElement('a');
+                    link.href = 'pdf/' + encodeURIComponent(pdfName);
+                    link.download = pdfName;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                } else {
+                    alert('当前文档暂未提供独立的 PDF 下载。');
+                }
+            } else {
+                alert('文档仍在加载中或无法访问，请稍后再试。');
+            }
         }
 
         function closeModalOnOverlay(event) {
