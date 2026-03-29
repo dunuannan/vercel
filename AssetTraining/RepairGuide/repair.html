@@ -3,165 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>图片素材清单展示</title>
+    <title>教学设备维修指南</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .img-card {
-            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-        }
-        html {
-            scroll-behavior: smooth;
-        }
-        .img-placeholder {
-            background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-        .img-loaded {
-            animation: fadeIn 0.3s ease-in;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        .home-btn {
+        html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+
+        .sidebar {
+            width: 240px;
+            height: 100vh;
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
             position: fixed;
-            top: 80px;
-            left: 20px;
-            z-index: 999;
-            background: white;
-            border: 1px solid #e2e8f0;
-            color: #1a5f7a;
-            padding: 8px 14px;
+            left: 0;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+        }
+
+        .sidebar-header {
+            padding: 24px 20px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .sidebar-header h1 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #f1f5f9;
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-header p {
+            font-size: 11px;
+            color: #64748b;
+            margin: 6px 0 0;
+        }
+
+        .nav-list {
+            flex: 1;
+            padding: 12px 10px;
+            overflow-y: auto;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 600;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            padding: 12px 12px 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 14px;
+            margin: 3px 0;
             border-radius: 8px;
             cursor: pointer;
             font-size: 13px;
             font-weight: 500;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: all 0.3s;
+            color: #94a3b8;
+            transition: all 0.2s ease;
             text-decoration: none;
+            border: 1px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.06);
+            color: #e2e8f0;
+        }
+
+        .nav-item.active {
+            background: rgba(56, 189, 248, 0.1);
+            color: #38bdf8;
+            border-color: rgba(56, 189, 248, 0.2);
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-footer {
+            padding: 12px 10px 16px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .home-link {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: #64748b;
+            transition: all 0.2s ease;
+            text-decoration: none;
         }
-        .home-btn:hover {
-            background: #1a5f7a;
-            color: white;
-            transform: translateY(-2px);
+
+        .home-link:hover {
+            background: rgba(255,255,255,0.06);
+            color: #e2e8f0;
+        }
+
+        .main-content {
+            margin-left: 240px;
+            height: 100vh;
+            background: #f8fafc;
+        }
+
+        .main-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
+<body>
 
-    <a href="../index.html" class="home-btn">← 返回首页</a>
-
-    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
-        <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl font-bold tracking-tight text-slate-800">图片资源预览</h1>
-            <span id="counter" class="text-sm font-medium px-3 py-1 bg-slate-100 rounded-full text-slate-500">
-                正在统计...
-            </span>
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h1>维修指南</h1>
+            <p>教学设备维修维护</p>
         </div>
-    </header>
 
-    <main class="max-w-4xl mx-auto px-6 py-12">
-        <div id="image-list" class="space-y-16"></div>
-    </main>
+        <div class="nav-list">
+            <div class="nav-label">内容导航</div>
 
-    <button onclick="window.scrollTo(0,0)" class="fixed bottom-8 right-8 p-3 bg-white border border-slate-200 rounded-full shadow-lg hover:bg-slate-50 transition-colors">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
-    </button>
+            <div class="nav-item" data-page="RepairSystem.html" onclick="switchPage(this)">
+                <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+                    <circle cx="9" cy="9" r="2"/>
+                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                </svg>
+                教学设备维修制度
+            </div>
+
+            <div class="nav-item active" data-page="ProjectorAnalysis.html" onclick="switchPage(this)">
+                <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+                    <path d="M9 7h6"/><path d="M9 11h6"/><path d="M9 15h4"/>
+                </svg>
+                投影设备现状分析
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <a href="../index.html" class="home-link" onclick="window.top.location.href='../index.html'; return false;">
+                <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m15 18-6-6 6-6"/>
+                    </svg>
+                返回首页
+            </a>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <iframe id="contentFrame" src="ProjectorAnalysis.html"></iframe>
+    </div>
 
     <script>
-        const imageFiles = ["images/repair1.png", "images/repair2.png", "images/repair3.png", "images/repair4.png", "images/repair5.png", "images/repair6.png", "images/repair7.png", "images/repair8.png", "images/repair13.png","images/repair10.png", "images/repair12.png"];
-        
-        const container = document.getElementById('image-list');
-        const counter = document.getElementById('counter');
-        
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(function(entry) {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    const realSrc = img.dataset.src;
-                    if (realSrc && !img.src.includes(realSrc)) {
-                        img.src = realSrc;
-                    }
-                    observer.unobserve(img);
-                }
+        function switchPage(el) {
+            document.querySelectorAll('.nav-item').forEach(function(item) {
+                item.classList.remove('active');
             });
-        }, {
-            rootMargin: '200px 0px',
-            threshold: 0.01
-        });
+            el.classList.add('active');
 
-        document.addEventListener('DOMContentLoaded', function() {
-            counter.innerText = "共 " + imageFiles.length + " 张图片";
+            var frame = document.getElementById('contentFrame');
+            frame.src = el.getAttribute('data-page');
+        }
 
-            imageFiles.forEach(function(fileName, index) {
-                const id = fileName.split('.')[0];
-                
-                const section = document.createElement('section');
-                section.className = "flex flex-col space-y-4";
-                
-                const headerDiv = document.createElement('div');
-                headerDiv.className = "flex items-center space-x-3 opacity-60";
-                headerDiv.innerHTML = '<span class="text-xs font-mono font-bold bg-slate-200 px-2 py-1 rounded">#' + id + '</span><div class="h-px flex-1 bg-slate-200"></div>';
-                
-                const cardDiv = document.createElement('div');
-                cardDiv.className = "img-card bg-white rounded-xl overflow-hidden border border-slate-100 transition-all hover:border-blue-200";
-                
-                const nameTag = document.createElement('div');
-                nameTag.className = "bg-slate-50 p-2 text-center text-xs text-slate-400 font-mono border-b border-slate-50";
-                nameTag.innerText = fileName;
-                
-                const imgWrapper = document.createElement('div');
-                imgWrapper.className = "relative group min-h-[200px] flex items-center justify-center bg-slate-50";
-                
-                const placeholder = document.createElement('div');
-                placeholder.className = "img-placeholder absolute inset-0";
-                
-                const img = document.createElement('img');
-                img.alt = "Image " + id;
-                img.className = "w-full h-auto block opacity-0 transition-opacity";
-                img.decoding = "async";
-                
-                if (index < 2) {
-                    img.src = fileName;
-                    img.loading = "eager";
-                    img.fetchPriority = "high";
-                } else {
-                    img.dataset.src = fileName;
-                    img.loading = "lazy";
-                    observer.observe(img);
-                }
-                
-                img.onload = function() {
-                    img.classList.remove('opacity-0');
-                    img.classList.add('img-loaded');
-                    placeholder.style.display = 'none';
-                    imgWrapper.style.minHeight = 'auto';
-                };
-                
-                img.onerror = function() {
-                    placeholder.style.display = 'none';
-                    imgWrapper.innerHTML = '<div class="p-12 text-center text-slate-300 italic">图片加载失败: ' + fileName + '</div>';
-                };
-                
-                imgWrapper.appendChild(placeholder);
-                imgWrapper.appendChild(img);
-                cardDiv.appendChild(nameTag);
-                cardDiv.appendChild(imgWrapper);
-                
-                section.appendChild(headerDiv);
-                section.appendChild(cardDiv);
-                
-                container.appendChild(section);
-            });
-        });
+        function hideHomeBtn() {
+            try {
+                var doc = document.getElementById('contentFrame').contentDocument;
+                if (!doc) return;
+                var btn = doc.querySelector('.home-btn');
+                if (btn) btn.style.display = 'none';
+            } catch(e) {}
+        }
+
+        var frame = document.getElementById('contentFrame');
+        frame.addEventListener('load', hideHomeBtn);
+        // 确保初始加载也执行
+        setTimeout(hideHomeBtn, 500);
     </script>
 
 </body>

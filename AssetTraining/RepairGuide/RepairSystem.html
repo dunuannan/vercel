@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片素材清单展示</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .img-card {
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        .img-placeholder {
+            background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .img-loaded {
+            animation: fadeIn 0.3s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .home-btn {
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            z-index: 999;
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #1a5f7a;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .home-btn:hover {
+            background: #1a5f7a;
+            color: white;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <!-- <a href="../index.html" class="home-btn">← 返回首页</a> -->
+
+    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold tracking-tight text-slate-800">图片资源预览</h1>
+            <span id="counter" class="text-sm font-medium px-3 py-1 bg-slate-100 rounded-full text-slate-500">
+                正在统计...
+            </span>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-6 py-12">
+        <div id="image-list" class="space-y-16"></div>
+    </main>
+
+    <button onclick="window.scrollTo(0,0)" class="fixed bottom-8 right-8 p-3 bg-white border border-slate-200 rounded-full shadow-lg hover:bg-slate-50 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+    </button>
+
+    <script>
+        const imageFiles = ["images/repair1.png", "images/repair2.png", "images/repair3.png", "images/repair4.png", "images/repair5.png", "images/repair6.png", "images/repair7.png", "images/repair8.png", "images/repair13.png","images/repair10.png", "images/repair12.png"];
+        
+        const container = document.getElementById('image-list');
+        const counter = document.getElementById('counter');
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    const realSrc = img.dataset.src;
+                    if (realSrc && !img.src.includes(realSrc)) {
+                        img.src = realSrc;
+                    }
+                    observer.unobserve(img);
+                }
+            });
+        }, {
+            rootMargin: '200px 0px',
+            threshold: 0.01
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            counter.innerText = "共 " + imageFiles.length + " 张图片";
+
+            imageFiles.forEach(function(fileName, index) {
+                const id = fileName.split('.')[0];
+                
+                const section = document.createElement('section');
+                section.className = "flex flex-col space-y-4";
+                
+                const headerDiv = document.createElement('div');
+                headerDiv.className = "flex items-center space-x-3 opacity-60";
+                headerDiv.innerHTML = '<span class="text-xs font-mono font-bold bg-slate-200 px-2 py-1 rounded">#' + id + '</span><div class="h-px flex-1 bg-slate-200"></div>';
+                
+                const cardDiv = document.createElement('div');
+                cardDiv.className = "img-card bg-white rounded-xl overflow-hidden border border-slate-100 transition-all hover:border-blue-200";
+                
+                const nameTag = document.createElement('div');
+                nameTag.className = "bg-slate-50 p-2 text-center text-xs text-slate-400 font-mono border-b border-slate-50";
+                nameTag.innerText = fileName;
+                
+                const imgWrapper = document.createElement('div');
+                imgWrapper.className = "relative group min-h-[200px] flex items-center justify-center bg-slate-50";
+                
+                const placeholder = document.createElement('div');
+                placeholder.className = "img-placeholder absolute inset-0";
+                
+                const img = document.createElement('img');
+                img.alt = "Image " + id;
+                img.className = "w-full h-auto block opacity-0 transition-opacity";
+                img.decoding = "async";
+                
+                if (index < 2) {
+                    img.src = fileName;
+                    img.loading = "eager";
+                    img.fetchPriority = "high";
+                } else {
+                    img.dataset.src = fileName;
+                    img.loading = "lazy";
+                    observer.observe(img);
+                }
+                
+                img.onload = function() {
+                    img.classList.remove('opacity-0');
+                    img.classList.add('img-loaded');
+                    placeholder.style.display = 'none';
+                    imgWrapper.style.minHeight = 'auto';
+                };
+                
+                img.onerror = function() {
+                    placeholder.style.display = 'none';
+                    imgWrapper.innerHTML = '<div class="p-12 text-center text-slate-300 italic">图片加载失败: ' + fileName + '</div>';
+                };
+                
+                imgWrapper.appendChild(placeholder);
+                imgWrapper.appendChild(img);
+                cardDiv.appendChild(nameTag);
+                cardDiv.appendChild(imgWrapper);
+                
+                section.appendChild(headerDiv);
+                section.appendChild(cardDiv);
+                
+                container.appendChild(section);
+            });
+        });
+    </script>
+
+</body>
+</html>
