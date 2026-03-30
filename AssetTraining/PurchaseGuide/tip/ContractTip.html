@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>招标采购合同合规性检查提示</title>
+    <style>
+        :root {
+            --bg: #f4efe6;
+            --paper: rgba(255, 252, 247, 0.94);
+            --card: #ffffff;
+            --ink: #1f2937;
+            --muted: #5f6b7a;
+            --navy: #123b68;
+            --navy-soft: #dbe8f4;
+            --gold: #c28b2c;
+            --gold-soft: #f9efd8;
+            --rose: #b54f42;
+            --rose-soft: #fbe7e2;
+            --green: #2f6b57;
+            --green-soft: #e3f0ea;
+            --line: rgba(18, 59, 104, 0.14);
+            --shadow: 0 18px 40px rgba(35, 46, 66, 0.08);
+            --radius-lg: 28px;
+            --radius-md: 18px;
+            --radius-sm: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans SC", sans-serif;
+            line-height: 1.72;
+            background:
+                radial-gradient(circle at top right, rgba(194, 139, 44, 0.16), transparent 28%),
+                radial-gradient(circle at left 20%, rgba(18, 59, 104, 0.12), transparent 22%),
+                linear-gradient(180deg, #f8f5ef 0%, #f4efe6 48%, #efe7da 100%);
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(18, 59, 104, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(18, 59, 104, 0.03) 1px, transparent 1px);
+            background-size: 28px 28px;
+            mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.45), transparent 92%);
+        }
+
+        .page {
+            width: min(1200px, calc(100% - 36px));
+            margin: 32px auto 56px;
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            padding: 42px 42px 34px;
+            border-radius: var(--radius-lg);
+            background:
+                linear-gradient(135deg, rgba(18, 59, 104, 0.98), rgba(32, 91, 145, 0.92)),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 55%);
+            color: #f8fbff;
+            box-shadow: var(--shadow);
+        }
+
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .hero::before {
+            width: 360px;
+            height: 360px;
+            top: -150px;
+            right: -70px;
+        }
+
+        .hero::after {
+            width: 180px;
+            height: 180px;
+            right: 240px;
+            bottom: -90px;
+        }
+
+        .hero-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            font-size: 13px;
+            letter-spacing: 0.08em;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ffd67e;
+            box-shadow: 0 0 0 6px rgba(255, 214, 126, 0.18);
+        }
+
+        h1 {
+            margin: 18px 0 12px;
+            font-family: "STZhongsong", "SimSun", "Microsoft YaHei", serif;
+            font-size: clamp(30px, 4vw, 44px);
+            line-height: 1.22;
+            letter-spacing: 0.02em;
+        }
+
+        .hero p {
+            max-width: 920px;
+            margin: 0;
+            font-size: 16px;
+            color: rgba(248, 251, 255, 0.9);
+        }
+
+        .meta,
+        .stats {
+            display: grid;
+            gap: 14px;
+        }
+
+        .meta {
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            margin-top: 28px;
+        }
+
+        .meta-card,
+        .stat-card,
+        .note,
+        .intro,
+        .issue,
+        .legal-card,
+        .footer-card {
+            background: var(--paper);
+            backdrop-filter: blur(6px);
+        }
+
+        .meta-card {
+            padding: 16px 18px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .meta-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(248, 251, 255, 0.72);
+            margin-bottom: 6px;
+        }
+
+        .meta-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .section {
+            margin-top: 24px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0 0 16px;
+            font-size: 24px;
+            color: var(--navy);
+        }
+
+        .section-heading::before {
+            content: "";
+            width: 10px;
+            height: 28px;
+            border-radius: 10px;
+            background: linear-gradient(180deg, var(--gold), var(--navy));
+        }
+
+        .intro-wrap {
+            display: grid;
+            grid-template-columns: 1.35fr 0.95fr;
+            gap: 18px;
+        }
+
+        .intro,
+        .note,
+        .footer-card {
+            padding: 24px 26px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+        }
+
+        .intro p,
+        .note p,
+        .footer-card p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .intro strong,
+        .note strong,
+        .issue strong,
+        .legal-card strong {
+            color: var(--navy);
+        }
+
+        .stats {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            margin-top: 18px;
+        }
+
+        .stat-card {
+            padding: 22px 22px 20px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+        }
+
+        .stat-value {
+            display: block;
+            font-size: clamp(28px, 4vw, 38px);
+            line-height: 1;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .jump-links {
+            display: grid;
+            grid-template-columns: repeat(8, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .jump-links a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 0;
+            padding: 14px 10px;
+            border-radius: 999px;
+            text-decoration: none;
+            color: var(--navy);
+            background: rgba(255, 255, 255, 0.78);
+            border: 1px solid var(--line);
+            text-align: center;
+            font-weight: 600;
+            font-size: 15px;
+            white-space: nowrap;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+        }
+
+        .jump-links a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(18, 59, 104, 0.1);
+            background: #ffffff;
+        }
+
+        .issues {
+            display: grid;
+            gap: 18px;
+        }
+
+        .issue {
+            padding: 0;
+            border-radius: 26px;
+            border: 1px solid var(--line);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .issue-head {
+            display: grid;
+            grid-template-columns: 92px 1fr;
+            gap: 0;
+            background: linear-gradient(90deg, var(--gold-soft), rgba(255, 255, 255, 0.82));
+            border-bottom: 1px solid rgba(194, 139, 44, 0.24);
+        }
+
+        .issue-no {
+            display: grid;
+            place-items: center;
+            font-size: 34px;
+            font-weight: 700;
+            color: var(--gold);
+            background: rgba(194, 139, 44, 0.08);
+        }
+
+        .issue-title-wrap {
+            padding: 24px 28px 20px 10px;
+        }
+
+        .issue-title {
+            margin: 0 0 8px;
+            font-size: 24px;
+            color: var(--navy);
+        }
+
+        .issue-summary {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .issue-body {
+            display: grid;
+            grid-template-columns: 0.92fr 1.08fr;
+            gap: 20px;
+            padding: 22px 24px 24px;
+            background: rgba(255, 255, 255, 0.74);
+        }
+
+        .panel {
+            padding: 20px 20px 18px;
+            border-radius: 20px;
+            border: 1px solid var(--line);
+            background: var(--card);
+        }
+
+        .panel.problem {
+            background: linear-gradient(180deg, #fffdfa, #fff7f1);
+        }
+
+        .panel.evidence {
+            background: linear-gradient(180deg, #fbfdff, #f3f8fc);
+        }
+
+        .panel h3 {
+            margin: 0 0 12px;
+            font-size: 17px;
+            color: var(--navy);
+        }
+
+        .panel ul {
+            margin: 0;
+            padding-left: 18px;
+            color: var(--muted);
+        }
+
+        .panel li + li {
+            margin-top: 9px;
+        }
+
+        .case-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .case {
+            padding: 14px 14px 14px 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(18, 59, 104, 0.1);
+            background: #ffffff;
+            position: relative;
+        }
+
+        .case::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 12px;
+            bottom: 12px;
+            width: 4px;
+            border-radius: 10px;
+            background: linear-gradient(180deg, var(--navy), var(--gold));
+        }
+
+        .case-label {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: var(--navy-soft);
+            color: var(--navy);
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .case p {
+            margin: 0;
+            color: var(--muted);
+        }
+
+        .risk-note {
+            margin-top: 14px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: var(--rose-soft);
+            border: 1px solid rgba(181, 79, 66, 0.18);
+            color: #844136;
+            font-size: 14px;
+        }
+
+        .legal-grid {
+            display: grid;
+            gap: 18px;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .legal-card {
+            padding: 22px 22px 20px;
+            border-radius: 22px;
+            border: 1px solid var(--line);
+            box-shadow: var(--shadow);
+        }
+
+        .legal-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: var(--green-soft);
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .legal-card h3 {
+            margin: 0 0 6px;
+            font-size: 19px;
+            color: var(--navy);
+        }
+
+        .legal-card p {
+            margin: 0 0 12px;
+            color: var(--muted);
+        }
+
+        .article {
+            margin-bottom: 10px;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .footer-card {
+            display: grid;
+            gap: 14px;
+            background:
+                linear-gradient(135deg, rgba(18, 59, 104, 0.96), rgba(24, 82, 133, 0.9)),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 55%);
+            color: #eff6ff;
+        }
+
+        .footer-card p {
+            color: rgba(239, 246, 255, 0.88);
+        }
+
+        .footer-sign {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 16px;
+            flex-wrap: wrap;
+            padding-top: 6px;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .footer-sign strong {
+            color: #ffffff;
+        }
+
+        @media (max-width: 960px) {
+            .intro-wrap,
+            .issue-body,
+            .legal-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .jump-links {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 720px) {
+            .page {
+                width: min(100% - 20px, 1000px);
+                margin-top: 10px;
+            }
+
+            .hero {
+                padding: 30px 22px 24px;
+            }
+
+            .issue-head {
+                grid-template-columns: 1fr;
+            }
+
+            .issue-no {
+                padding: 16px 0;
+                font-size: 28px;
+            }
+
+            .issue-title-wrap,
+            .issue-body,
+            .intro,
+            .note,
+            .footer-card {
+                padding-left: 18px;
+                padding-right: 18px;
+            }
+
+            .panel {
+                padding: 16px;
+            }
+
+            .jump-links {
+                display: grid;
+                grid-auto-flow: column;
+                grid-auto-columns: 132px;
+                grid-template-columns: none;
+                overflow-x: auto;
+                padding-bottom: 6px;
+                scrollbar-width: thin;
+            }
+
+            .jump-links a {
+                font-size: 14px;
+            }
+        }
+
+        @media print {
+            body {
+                background: #ffffff;
+            }
+
+            body::before {
+                display: none;
+            }
+
+            .page {
+                width: 100%;
+                margin: 0;
+            }
+
+            .hero,
+            .intro,
+            .note,
+            .issue,
+            .legal-card,
+            .footer-card,
+            .stat-card {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <header class="hero">
+            <div class="hero-inner">
+                <div class="eyebrow">内部合规提示材料</div>
+                <h1>招标采购合同合规性检查提示</h1>
+                <p>依据《工作提示》列示的六类高频问题，对合同签订环节进行归纳说明，并将问题凭证中的典型情况进行脱敏重述，形成可直接用于宣贯、提醒和内部审查的综合页面。</p>
+
+                <div class="meta">
+                    <div class="meta-card">
+                        <div class="meta-label">发文单位</div>
+                        <div class="meta-value">国有资产管理处</div>
+                    </div>
+                    <div class="meta-card">
+                        <div class="meta-label">发布日期</div>
+                        <div class="meta-value">2026年3月25日</div>
+                    </div>
+                    <div class="meta-card">
+                        <div class="meta-label">提示范围</div>
+                        <div class="meta-value">招标采购合同签订与审核环节</div>
+                    </div>
+                    <div class="meta-card">
+                        <div class="meta-label">材料性质</div>
+                        <div class="meta-value">案例脱敏整合稿</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="section">
+            <div class="intro-wrap">
+                <div class="intro">
+                    <h2 class="section-heading">内容说明</h2>
+                    <p><strong>本页以《工作提示》原文为提纲。</strong> 页面围绕合同金额、合同期限、付款方式、条款与技术参数、验收标准、合同编号六个方面展开，每一项均补充了来源于问题凭证的脱敏案例，用于增强问题识别的直观性和说服力。</p>
+                </div>
+                <div class="note">
+                    <h2 class="section-heading">脱敏说明</h2>
+                    <p>本页所有案例均已对<strong>具体项目名称、供应商信息、合同截图细节、具体日期、页码信息</strong>进行处理，仅保留足以说明问题性质的业务特征和关键差异，不对应披露任何原始合同主体信息。</p>
+                </div>
+            </div>
+
+            <div class="stats">
+                <div class="stat-card">
+                    <span class="stat-value">6</span>
+                    <div class="stat-label">类重点合同合规问题</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">多组</span>
+                    <div class="stat-label">问题凭证脱敏案例支撑</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">3</span>
+                    <div class="stat-label">项制度条款直接对应</div>
+                </div>
+            </div>
+
+            <div class="jump-links">
+                <a href="#issue-1">合同金额</a>
+                <a href="#issue-2">合同期限</a>
+                <a href="#issue-3">付款方式</a>
+                <a href="#issue-4">条款与参数</a>
+                <a href="#issue-5">验收标准</a>
+                <a href="#issue-6">合同编号</a>
+                <a href="#legal">制度条款</a>
+                <a href="#work-requirements">工作要求</a>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-heading">检查发现的主要问题</h2>
+            <div class="issues">
+                <article class="issue" id="issue-1">
+                    <div class="issue-head">
+                        <div class="issue-no">01</div>
+                        <div class="issue-title-wrap">
+                            <h3 class="issue-title">合同金额与中标金额不一致</h3>
+                            <p class="issue-summary">合同金额、价款性质或者计价口径偏离成交结果，常见表现为总价与单价混淆、价款名称改变、合同总额与采购结果不一致。</p>
+                        </div>
+                    </div>
+                    <div class="issue-body">
+                        <div class="panel problem">
+                            <h3>提示问题</h3>
+                            <ul>
+                                <li>合同金额与中标金额不一致，存在单价、总价混淆等情况。</li>
+                                <li>合同价款名称被替换为其他收费表述，导致合同义务边界不清。</li>
+                                <li>计价方式一旦偏离采购文件，后续结算、审计和履约评价均会失去统一依据。</li>
+                            </ul>
+                            <div class="risk-note">风险提示：合同价款口径变化属于实质性内容偏移，容易引发支付依据不充分、结算争议和审计质疑。</div>
+                        </div>
+                        <div class="panel evidence">
+                            <h3>脱敏案例</h3>
+                            <div class="case-list">
+                                <div class="case">
+                                    <div class="case-label">案例 A / 服务保障类</div>
+                                    <p>某服务类项目的招标结果以<strong>合同总额</strong>为基础确定成交，但合同文本却将价款表述为“<strong>资源占用费</strong>”，并按<strong>单价口径</strong>呈现，导致合同金额性质与采购结果明显不一致。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="issue" id="issue-2">
+                    <div class="issue-head">
+                        <div class="issue-no">02</div>
+                        <div class="issue-title-wrap">
+                            <h3 class="issue-title">合同服务、供货或施工期限与招标文件不符</h3>
+                            <p class="issue-summary">合同期限出现缩短、延长、前后不一致，或者在招标文件之外新增限制条件，都会破坏原采购文件与合同文本的一致性。</p>
+                        </div>
+                    </div>
+                    <div class="issue-body">
+                        <div class="panel problem">
+                            <h3>提示问题</h3>
+                            <ul>
+                                <li>合同服务、供货或施工期限与招标文件不符。</li>
+                                <li>部分合同存在期限前后表述不统一、擅自增加服务内容或附加条件等问题。</li>
+                                <li>期限条款失真会直接影响履约计划、违约认定和项目验收节奏。</li>
+                            </ul>
+                            <div class="risk-note">风险提示：期限约定被任意调整，可能形成对采购文件的实质性修改，也会放大履约延期与责任认定争议。</div>
+                        </div>
+                        <div class="panel evidence">
+                            <h3>脱敏案例</h3>
+                            <div class="case-list">
+                                <div class="case">
+                                    <div class="case-label">案例 A / 系统建设类</div>
+                                    <p>某建设类项目招标文件要求在支付首付款后<strong>100个自然日</strong>内完成交付，但合同改写为<strong>60个自然日</strong>内完成，供货期限被明显缩短。</p>
+                                </div>
+                                <div class="case">
+                                    <div class="case-label">案例 B / 驻场服务类</div>
+                                    <p>某服务类项目合同服务期长度仍为<strong>一年</strong>，但起止日期整体<strong>后移 2 天</strong>，看似差异不大，实则已偏离招标文件的时间安排。</p>
+                                </div>
+                                <div class="case">
+                                    <div class="case-label">案例 C / 改造施工类</div>
+                                    <p>某施工类项目合同工期条款新增“<strong>具体结合场地条件为准</strong>”等表述，该附加条件并未出现在招标文件中，改变了交付边界。</p>
+                                </div>
+                                <div class="case">
+                                    <div class="case-label">案例 D / 内容交付类</div>
+                                    <p>某内容交付类项目合同约定的完成期限<strong>长于招标文件要求</strong>，项目交付周期被延展，影响采购时承诺的进度安排。</p>
+                                </div>
+                                <div class="case">
+                                    <div class="case-label">案例 E / 履约期限类</div>
+                                    <p>某项目合同文本内部存在<strong>不同页面工期表述不一致</strong>的情况，签署后难以判断究竟应以哪个履约期限作为执行依据。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="issue" id="issue-3">
+                    <div class="issue-head">
+                        <div class="issue-no">03</div>
+                        <div class="issue-title-wrap">
+                            <h3 class="issue-title">合同付款方式与招标文件不一致</h3>
+                            <p class="issue-summary">付款比例、付款节点、支付条件如与招标文件不一致，或合同内部出现多个版本并存，会削弱合同作为支付依据的严肃性。</p>
+                        </div>
+                    </div>
+                    <div class="issue-body">
+                        <div class="panel problem">
+                            <h3>提示问题</h3>
+                            <ul>
+                                <li>合同付款方式与招标文件不一致。</li>
+                                <li>合同内付款条款前后矛盾，无法形成唯一明确的付款条件。</li>
+                                <li>付款节奏被修改后，资金支付责任、履约担保责任和验收关联关系都会受到影响。</li>
+                            </ul>
+                            <div class="risk-note">风险提示：付款条款属于合同核心商业条款，前后不一致或偏离采购文件，极易造成超节点支付、提前支付或支付争议。</div>
+                        </div>
+                        <div class="panel evidence">
+                            <h3>脱敏案例</h3>
+                            <div class="case-list">
+                                <div class="case">
+                                    <div class="case-label">案例 A / 常规运维类</div>
+                                    <p>某服务类项目招标文件约定<strong>按月支付</strong>，合同文本却改为“<strong>5% + 95%</strong>”的分段支付方式，付款节奏发生了实质性变化。</p>
+                                </div>
+                                <div class="case">
+                                    <div class="case-label">案例 B / 建设实施类</div>
+                                    <p>某项目合同第前部条款与后部条款对<strong>付款时间</strong>的写法不一致，形成两个相互冲突的支付口径。</p>
+                                </div>
+                                <div class="case">
+                                    <div class="case-label">案例 C / 场景建设类</div>
+                                    <p>某建设类项目合同中的付款安排与招标文件约定不一致，未能完整延续采购环节中已经明确的支付条件和支付节点。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="issue" id="issue-4">
+                    <div class="issue-head">
+                        <div class="issue-no">04</div>
+                        <div class="issue-title-wrap">
+                            <h3 class="issue-title">合同服务、供货条款明细及技术参数填写不完整</h3>
+                            <p class="issue-summary">条款不全、参数缺失、服务内容不细化，会导致合同难以作为执行与验收的精确依据，尤其在设备采购和专业服务项目中更为突出。</p>
+                        </div>
+                    </div>
+                    <div class="issue-body">
+                        <div class="panel problem">
+                            <h3>提示问题</h3>
+                            <ul>
+                                <li>合同服务、供货条款明细及技术参数填写不完整、不规范。</li>
+                                <li>关键参数、服务边界和交付要求缺失，容易导致履约内容被泛化。</li>
+                                <li>条款不完整时，即使发生争议，也难以据此确认应交付的范围和标准。</li>
+                            </ul>
+                            <div class="risk-note">风险提示：技术参数和服务清单是合同执行的基础，一旦缺漏，将直接削弱质量控制、验收和索赔能力。</div>
+                        </div>
+                        <div class="panel evidence">
+                            <h3>脱敏案例</h3>
+                            <div class="case-list">
+                                <div class="case">
+                                    <div class="case-label">案例 A / 设备采购类</div>
+                                    <p>某设备采购类项目中，合同对于一项核心设备的技术参数描述<strong>缺少其中一条关键参数</strong>，造成规格要求不完整。</p>
+                                </div>
+                                <div class="case">
+                                    <div class="case-label">案例 B / 维保服务类</div>
+                                    <p>某维保类项目合同仅写明服务事项名称，未进一步列明<strong>具体服务内容、频次和范围</strong>，服务条款明显过粗。</p>
+                                </div>
+                                <div class="case">
+                                    <div class="case-label">案例 C / 物资供应类</div>
+                                    <p>某供货类项目中，合同对重要产品的<strong>规格参数描述不完整</strong>，无法支撑后续到货核验和质量追责。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="issue" id="issue-5">
+                    <div class="issue-head">
+                        <div class="issue-no">05</div>
+                        <div class="issue-title-wrap">
+                            <h3 class="issue-title">合同未明确约定验收标准</h3>
+                            <p class="issue-summary">验收标准缺失时，项目完成与否、成果是否合格、付款是否触发都失去可以操作的判断基准，是最容易在履约后期形成争议的条款缺口。</p>
+                        </div>
+                    </div>
+                    <div class="issue-body">
+                        <div class="panel problem">
+                            <h3>提示问题</h3>
+                            <ul>
+                                <li>合同未明确约定验收标准，缺乏可操作的验收依据。</li>
+                                <li>服务成果、交付节点、完成标准之间未形成闭环。</li>
+                                <li>没有验收标准，质量不达标也难以形成有效的书面认定。</li>
+                            </ul>
+                            <div class="risk-note">风险提示：验收标准缺位会使付款触发条件和违约责任都失去抓手，后续治理成本显著上升。</div>
+                        </div>
+                        <div class="panel evidence">
+                            <h3>脱敏案例</h3>
+                            <div class="case-list">
+                                <div class="case">
+                                    <div class="case-label">案例 A / 综合服务类</div>
+                                    <p>某服务类项目合同全文未设置<strong>验收标准</strong>或质量评价条款，导致服务完成后缺少明确的判断依据。</p>
+                                </div>
+                                <div class="case">
+                                    <div class="case-label">案例 B / 咨询服务类</div>
+                                    <p>某咨询类项目合同对于成果提交和合同终止有表述，但没有同步写明<strong>成果验收标准</strong>和验收程序。</p>
+                                </div>
+                                <div class="case">
+                                    <div class="case-label">案例 C / 活动执行类</div>
+                                    <p>某执行类项目合同仅约定活动完成时间，未写明<strong>验收依据、交付清单和质量标准</strong>，不利于付款审核和结果评价。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="issue" id="issue-6">
+                    <div class="issue-head">
+                        <div class="issue-no">06</div>
+                        <div class="issue-title-wrap">
+                            <h3 class="issue-title">合同未按规范编制合同编号</h3>
+                            <p class="issue-summary">合同编号是档案管理和全流程追溯的重要基础项，看似形式问题，实际直接影响归档、查询、监督和责任留痕。</p>
+                        </div>
+                    </div>
+                    <div class="issue-body">
+                        <div class="panel problem">
+                            <h3>提示问题</h3>
+                            <ul>
+                                <li>合同未按规范编制合同编号。</li>
+                                <li>缺少编号会影响合同台账管理、归档一致性和跨部门追踪。</li>
+                                <li>在多项目并行场景下，无编号合同极易造成附件错配和审批留痕缺失。</li>
+                            </ul>
+                            <div class="risk-note">风险提示：编号不规范虽不直接改变交易条件，但会削弱合同全生命周期管理和档案可追溯性。</div>
+                        </div>
+                        <div class="panel evidence">
+                            <h3>脱敏案例</h3>
+                            <div class="case-list">
+                                <div class="case">
+                                    <div class="case-label">案例 A / 平台服务类</div>
+                                    <p>某平台服务类项目合同签署文本中<strong>未见合同编号</strong>，无法与合同台账、采购审批材料和归档目录形成稳定对应关系。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="section" id="legal">
+            <h2 class="section-heading">相关制度条款</h2>
+            <div class="legal-grid">
+                <article class="legal-card">
+                    <div class="legal-tag">制度依据 01</div>
+                    <h3>《中华人民共和国政府采购法》</h3>
+                    <div class="article">第四十六条</div>
+                    <p>采购人与中标、成交供应商应当在中标、成交通知书发出之日起<strong>三十日内</strong>，按照采购文件确定的事项签订政府采购合同。</p>
+				</article>
+                <article class="legal-card">
+                    <div class="legal-tag">制度依据 02</div>
+                    <h3>《政府采购非招标采购方式管理办法》</h3>
+                    <div class="article">第十九条</div>
+                    <p>采购人与成交供应商应当在成交通知书发出之日起<strong>30日内</strong>，按照采购文件确定的合同文本以及采购标的、规格型号、采购金额、采购数量、技术和服务要求等事项签订政府采购合同。</p>
+                    <p>采购人不得向成交供应商提出超出采购文件以外的任何要求作为签订合同的条件，不得订立背离采购文件确定内容的协议。</p>
+                </article>
+                <article class="legal-card">
+                    <div class="legal-tag">制度依据 03</div>
+                    <h3>《政府采购货物和服务招标投标管理办法》</h3>
+                    <div class="article">第七十一条</div>
+                    <p>采购人应当自中标通知书发出之日起<strong>30日内</strong>，按照招标文件和中标人投标文件的规定，与中标人签订书面合同。所签订的合同不得对招标文件确定的事项和中标人投标文件作实质性修改。</p>
+					<p>采购人不得向中标人提出任何不合理的要求作为签订合同的条件。</p>
+				</article>
+            </div>
+        </section>
+
+        <section class="section" id="work-requirements">
+            <div class="footer-card">
+                <h2 class="section-heading" style="color:#ffffff;">工作要求</h2>
+                <p>请各部门严格遵守上述法律条款要求，确保合同签订的合法性、准确性，从而保障项目质量，规避履约风险。对照本页所列问题和案例，重点核查合同金额口径、履约期限、付款节点、技术参数、验收标准和合同编号等关键字段，避免在合同签订阶段出现与采购文件不一致、与合同文本内部不一致、与履约管理需求不匹配的情况。</p>
+                <p>国有资产管理处将继续对涉及部门和项目逐一反馈整改意见，持续提升学院招标采购管理质效，切实保障国有资产安全和资金使用效益。</p>
+                <div class="footer-sign">
+                    <div><strong>国有资产管理处</strong></div>
+                    <div>2026年3月25日</div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
