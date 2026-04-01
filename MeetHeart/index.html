@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>「遇见」心理育人辅导员工作室 - 天津海运职业学院</title>
+    <meta name="description" content="天津海运职业学院「遇见」心理育人辅导员工作室，以遇见自我、遇见成长、遇见温暖为理念，致力于大学生心理健康教育、心理咨询服务与心理危机干预。">
+    <meta name="keywords" content="遇见工作室,天津海运职业学院,心理育人,辅导员工作室,心理健康教育,大学生心理,朋辈辅导,心理咨询">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop" aria-label="返回顶部">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+    </button>
+
+    <!-- A. 顶部导航栏 -->
+    <header class="header" id="header">
+        <div class="header-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- 灯塔+心形组合Logo -->
+                        <circle cx="50" cy="50" r="45" fill="url(#logoGradient)" opacity="0.1"/>
+                        <path d="M50 20C40 35 30 45 30 55C30 67.5 40 75 50 75C60 75 70 67.5 70 55C70 45 60 35 50 20Z" fill="#2B6CB0"/>
+                        <path d="M50 28C43 38 38 46 38 53C38 61 43 66 50 66C57 66 62 61 62 53C62 46 57 38 50 28Z" fill="#63B3ED"/>
+                        <circle cx="50" cy="50" r="8" fill="#F6AD55"/>
+                        <path d="M50 58V85M40 85H60" stroke="#2B6CB0" stroke-width="4" stroke-linecap="round"/>
+                        <path d="M35 85C35 75 40 70 50 70C60 70 65 75 65 85" fill="#2B6CB0" opacity="0.3"/>
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0" y1="0" x2="100" y2="100">
+                                <stop offset="0%" stop-color="#2B6CB0"/>
+                                <stop offset="100%" stop-color="#63B3ED"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">「遇见」工作室</span>
+                    <span class="logo-subtitle">天津海运职业学院 · 辅导员工作室</span>
+                </div>
+            </div>
+            
+            <nav class="nav-menu" id="navMenu">
+                <ul class="nav-list">
+                    <li><a href="#home" class="nav-link active">首页</a></li>
+                    <li class="nav-dropdown">
+                        <a href="#about" class="nav-link">走进遇见</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#about">工作室简介</a></li>
+                            <li><a href="#">发展历程</a></li>
+                            <li><a href="#">组织架构</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-dropdown">
+                        <a href="#pillars" class="nav-link">育人天地</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#pillars">心理健康教育</a></li>
+                            <li><a href="#">主题班会</a></li>
+                            <li><a href="#">朋辈辅导</a></li>
+                            <li><a href="#">危机干预</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-dropdown">
+                        <a href="#news" class="nav-link">动态资讯</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#news">工作动态</a></li>
+                            <li><a href="#">活动预告</a></li>
+                            <li><a href="#">媒体报道</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-dropdown">
+                        <a href="#achievements" class="nav-link">成果展示</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#achievements">科研成果</a></li>
+                            <li><a href="#">获奖荣誉</a></li>
+                            <li><a href="#">案例分享</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-dropdown">
+                        <a href="#resources" class="nav-link">心灵驿站</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#resources">心理科普</a></li>
+                            <li><a href="#">自测工具</a></li>
+                            <li><a href="#">推荐阅读</a></li>
+                            <li><a href="#">音频放松</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#team" class="nav-link">团队风采</a></li>
+                    <li><a href="#contact" class="nav-link">联系我们</a></li>
+                </ul>
+            </nav>
+            
+            <div class="header-actions">
+                <button class="search-btn" id="searchBtn" aria-label="搜索">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </button>
+                <div class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 搜索框遮罩 -->
+        <div class="search-overlay" id="searchOverlay">
+            <div class="search-container">
+                <input type="text" placeholder="搜索内容..." class="search-input">
+                <button class="search-close" id="searchClose">×</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- B. 品牌英雄横幅区 -->
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <div class="hero-gradient"></div>
+            <div class="hero-waves">
+                <svg class="wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
+                    <path fill="#ffffff" fill-opacity="0.1" d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                </svg>
+                <svg class="wave wave-2" viewBox="0 0 1440 320" preserveAspectRatio="none">
+                    <path fill="#ffffff" fill-opacity="0.05" d="M0,64L48,80C96,96,192,128,288,128C384,128,480,96,576,106.7C672,117,768,171,864,176C960,181,1056,139,1152,128C1248,117,1344,139,1392,149.3L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+                </svg>
+            </div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title">「 遇 见 」</h1>
+            <p class="hero-subtitle">遇见自我 · 遇见成长 · 遇见温暖</p>
+            <p class="hero-institution">天津海运职业学院 · 心理育人辅导员工作室</p>
+            <div class="hero-buttons">
+                <a href="#about" class="btn btn-primary">走进工作室</a>
+                <a href="#contact" class="btn btn-outline">预约咨询</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-mouse">
+                <div class="scroll-wheel"></div>
+            </div>
+            <span>向下探索</span>
+        </div>
+    </section>
+
+    <!-- C. 工作室简介区 -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">— 走进「遇见」 —</span>
+                <h2 class="section-title">以心育心，用爱导航</h2>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <p class="about-description">
+                        「遇见」心理育人辅导员工作室成立于2019年，是天津海运职业学院落实教育部"十大育人体系"中心理育人要求的重要平台。工作室以<strong>"遇见自我、遇见成长、遇见温暖"</strong>为核心理念，秉持"一人一策、用心陪伴"的工作原则，面向全院学生开展心理健康教育、心理危机预防与干预、朋辈互助辅导等工作。
+                    </p>
+                    <p class="about-description">
+                        我们致力于构建<strong>"预防-教育-咨询-干预"</strong>四位一体的心理育人服务体系，为学生心灵成长保驾护航，让每一位学子都能在这里找到心灵的港湾。
+                    </p>
+                    <a href="#" class="link-more">了解更多 →</a>
+                </div>
+                <div class="about-image">
+                    <div class="about-image-wrapper">
+                        <div class="about-img-placeholder">
+                            <svg viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="400" height="300" rx="16" fill="url(#aboutGrad)"/>
+                                <circle cx="200" cy="120" r="60" fill="#ffffff" opacity="0.3"/>
+                                <path d="M140 180C140 180 170 140 200 140C230 140 260 180 260 180V260H140V180Z" fill="#ffffff" opacity="0.5"/>
+                                <rect x="120" y="200" width="160" height="100" rx="8" fill="#2B6CB0" opacity="0.8"/>
+                                <circle cx="180" cy="250" r="15" fill="#F6AD55"/>
+                                <circle cx="220" cy="250" r="15" fill="#9AE6B4"/>
+                                <text x="200" y="150" text-anchor="middle" fill="#2B6CB0" font-size="24" font-weight="bold">遇见工作室</text>
+                                <defs>
+                                    <linearGradient id="aboutGrad" x1="0" y1="0" x2="400" y2="300">
+                                        <stop offset="0%" stop-color="#63B3ED"/>
+                                        <stop offset="100%" stop-color="#2B6CB0"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        <div class="about-stats">
+                            <div class="stat-item">
+                                <span class="stat-number" data-count="5">0</span>
+                                <span class="stat-unit">年</span>
+                                <span class="stat-label">成立</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" data-count="5000">0</span>
+                                <span class="stat-unit">+</span>
+                                <span class="stat-label">服务人次</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" data-count="20">0</span>
+                                <span class="stat-unit">+</span>
+                                <span class="stat-label">获奖荣誉</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- D. 育人理念 / 核心板块区 -->
+    <section class="pillars" id="pillars">
+        <div class="container">
+            <div class="section-header light">
+                <span class="section-tag">— 遇见 · 四维育心 —</span>
+                <h2 class="section-title">心理育人的四个核心维度</h2>
+            </div>
+            <div class="pillars-grid">
+                <div class="pillar-card" data-aos="fade-up" data-aos-delay="0">
+                    <div class="pillar-accent" style="background: #2B6CB0;"></div>
+                    <div class="pillar-icon" style="background: rgba(43, 108, 176, 0.1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#2B6CB0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6"/><path d="M8 11h6"/></svg>
+                    </div>
+                    <h3 class="pillar-title">遇见·认知</h3>
+                    <p class="pillar-subtitle">心理健康知识普及</p>
+                    <p class="pillar-desc">通过心理健康讲座、主题班会、新生心理适应教育等形式，帮助学生正确认识心理健康，提升心理健康素养。</p>
+                    <a href="#" class="pillar-link" style="color: #2B6CB0;">了解详情 →</a>
+                </div>
+                
+                <div class="pillar-card" data-aos="fade-up" data-aos-delay="150">
+                    <div class="pillar-accent" style="background: #48BB78;"></div>
+                    <div class="pillar-icon" style="background: rgba(72, 187, 120, 0.1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#48BB78" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M8 10l4-4 4 4"/><path d="M8 14l4 4 4-4"/><path d="M2 12h4"/><path d="M18 12h4"/></svg>
+                    </div>
+                    <h3 class="pillar-title">遇见·成长</h3>
+                    <p class="pillar-subtitle">素质拓展与能力培养</p>
+                    <p class="pillar-desc">组织团体心理辅导、心理情景剧、心理健康月活动等，在体验中促进学生自我探索、人格完善与能力提升。</p>
+                    <a href="#" class="pillar-link" style="color: #48BB78;">了解详情 →</a>
+                </div>
+                
+                <div class="pillar-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="pillar-accent" style="background: #F6AD55;"></div>
+                    <div class="pillar-icon" style="background: rgba(246, 173, 85, 0.1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#F6AD55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                    </div>
+                    <h3 class="pillar-title">遇见·关怀</h3>
+                    <p class="pillar-subtitle">朋辈辅导与温暖陪伴</p>
+                    <p class="pillar-desc">培养学生朋辈心理辅导员队伍，以"同伴帮助同伴"理念，构建宿舍-班级-院系三级朋辈支持网络。</p>
+                    <a href="#" class="pillar-link" style="color: #F6AD55;">了解详情 →</a>
+                </div>
+                
+                <div class="pillar-card" data-aos="fade-up" data-aos-delay="450">
+                    <div class="pillar-accent" style="background: #E53E3E;"></div>
+                    <div class="pillar-icon" style="background: rgba(229, 62, 62, 0.1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#E53E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+                    </div>
+                    <h3 class="pillar-title">遇见·守护</h3>
+                    <p class="pillar-subtitle">心理危机预防与干预</p>
+                    <p class="pillar-desc">建立"早发现、早报告、早评估、早干预"四早工作机制，织密心理安全防护网，守护每一位学生。</p>
+                    <a href="#" class="pillar-link" style="color: #E53E3E;">了解详情 →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- E. 导师团队展示区 -->
+    <section class="team" id="team">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">— 遇见 · 我们 —</span>
+                <h2 class="section-title">用心陪伴成长的引路人</h2>
+            </div>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <div class="avatar-placeholder" style="background: linear-gradient(135deg, #2B6CB0, #63B3ED);">
+                            <span>张</span>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">张老师</h3>
+                        <span class="team-role">工作室主持人</span>
+                        <p class="team-title">国家二级心理咨询师</p>
+                        <p class="team-quote">"每一次倾听，都是心灵的相遇"</p>
+                    </div>
+                </div>
+                
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <div class="avatar-placeholder" style="background: linear-gradient(135deg, #48BB78, #9AE6B4);">
+                            <span>李</span>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">李老师</h3>
+                        <span class="team-role">核心成员</span>
+                        <p class="team-title">心理咨询师 / 辅导员</p>
+                        <p class="team-quote">"陪伴是最长情的告白"</p>
+                    </div>
+                </div>
+                
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <div class="avatar-placeholder" style="background: linear-gradient(135deg, #F6AD55, #FC8181);">
+                            <span>王</span>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">王老师</h3>
+                        <span class="team-role">核心成员</span>
+                        <p class="team-title">生涯规划师 / 辅导员</p>
+                        <p class="team-quote">"发现每一个独特的你"</p>
+                    </div>
+                </div>
+                
+                <div class="team-card">
+                    <div class="team-avatar">
+                        <div class="avatar-placeholder" style="background: linear-gradient(135deg, #9F7AEA, #B794F4);">
+                            <span>赵</span>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">赵老师</h3>
+                        <span class="team-role">核心成员</span>
+                        <p class="team-title">心理健康教育辅导员</p>
+                        <p class="team-quote">"用心守护，静待花开"</p>
+                    </div>
+                </div>
+            </div>
+            <div class="team-more">
+                <a href="#" class="link-more">查看完整团队 →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- F. 新闻动态 / 活动资讯区 -->
+    <section class="news" id="news">
+        <div class="container">
+            <div class="section-header light">
+                <span class="section-tag">— 遇见 · 动态 —</span>
+                <h2 class="section-title">最新资讯与活动</h2>
+            </div>
+            <div class="news-tabs">
+                <button class="news-tab active" data-tab="work">工作动态</button>
+                <button class="news-tab" data-tab="activity">活动预告</button>
+                <button class="news-tab" data-tab="media">媒体报道</button>
+            </div>
+            <div class="news-content">
+                <div class="news-featured">
+                    <div class="news-card featured">
+                        <div class="news-image">
+                            <div class="news-img-placeholder" style="background: linear-gradient(135deg, #2B6CB0, #63B3ED);">
+                                <span>心理健康月</span>
+                            </div>
+                        </div>
+                        <div class="news-body">
+                            <span class="news-category">工作动态</span>
+                            <h3 class="news-title">"5·25"心理健康月系列活动圆满落幕</h3>
+                            <p class="news-excerpt">本届心理健康月以"遇见更好的自己"为主题，开展了心理情景剧大赛、心理游园会、团体辅导等十余项活动，参与学生达2000余人次...</p>
+                            <a href="#" class="news-link">阅读全文 →</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="news-list">
+                    <div class="news-item">
+                        <span class="news-dot" style="background: #F6AD55;"></span>
+                        <div class="news-item-content">
+                            <h4>朋辈辅导员培训第三期顺利开展</h4>
+                            <span class="news-date">2024-05-15</span>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <span class="news-dot" style="background: #48BB78;"></span>
+                        <div class="news-item-content">
+                            <h4>"遇见自我"心理情景剧大赛报名开启</h4>
+                            <span class="news-date">2024-05-10</span>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <span class="news-dot" style="background: #2B6CB0;"></span>
+                        <div class="news-item-content">
+                            <h4>工作室受邀参加市级辅导员工作研讨会</h4>
+                            <span class="news-date">2024-05-05</span>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <span class="news-dot" style="background: #9F7AEA;"></span>
+                        <div class="news-item-content">
+                            <h4>春季心理健康普查工作顺利结束</h4>
+                            <span class="news-date">2024-04-28</span>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <span class="news-dot" style="background: #E53E3E;"></span>
+                        <div class="news-item-content">
+                            <h4>心理危机干预专题培训成功举办</h4>
+                            <span class="news-date">2024-04-20</span>
+                        </div>
+                    </div>
+                    <a href="#" class="news-more">更多动态 →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- G. 心理育人成果展示区 -->
+    <section class="achievements" id="achievements">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">— 遇见 · 成果 —</span>
+                <h2 class="section-title">用实践书写育人答卷</h2>
+            </div>
+            <div class="achievements-stats">
+                <div class="achievement-stat">
+                    <div class="stat-icon">🎓</div>
+                    <div class="stat-info">
+                        <span class="stat-number-large" data-count="5000">0</span>
+                        <span class="stat-suffix">+人次</span>
+                        <span class="stat-label">服务学生</span>
+                    </div>
+                </div>
+                <div class="achievement-stat">
+                    <div class="stat-icon">📋</div>
+                    <div class="stat-info">
+                        <span class="stat-number-large" data-count="120">0</span>
+                        <span class="stat-suffix">+场</span>
+                        <span class="stat-label">开展活动</span>
+                    </div>
+                </div>
+                <div class="achievement-stat">
+                    <div class="stat-icon">📝</div>
+                    <div class="stat-info">
+                        <span class="stat-number-large" data-count="15">0</span>
+                        <span class="stat-suffix">+篇</span>
+                        <span class="stat-label">发表论文</span>
+                    </div>
+                </div>
+                <div class="achievement-stat">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-info">
+                        <span class="stat-number-large" data-count="20">0</span>
+                        <span class="stat-suffix">+项</span>
+                        <span class="stat-label">获得荣誉</span>
+                    </div>
+                </div>
+            </div>
+            <div class="achievements-grid">
+                <div class="achievement-card">
+                    <div class="achievement-image" style="background: linear-gradient(135deg, #F6AD55, #FC8181);">
+                        <span>🏆</span>
+                    </div>
+                    <div class="achievement-content">
+                        <span class="achievement-year">2023年</span>
+                        <h4>天津市高校辅导员工作室</h4>
+                        <p>市级立项建设</p>
+                    </div>
+                </div>
+                <div class="achievement-card">
+                    <div class="achievement-image" style="background: linear-gradient(135deg, #2B6CB0, #63B3ED);">
+                        <span>🥇</span>
+                    </div>
+                    <div class="achievement-content">
+                        <span class="achievement-year">2023年</span>
+                        <h4>校级优秀辅导员工作室</h4>
+                        <p>年度考核优秀</p>
+                    </div>
+                </div>
+                <div class="achievement-card">
+                    <div class="achievement-image" style="background: linear-gradient(135deg, #48BB78, #9AE6B4);">
+                        <span>📚</span>
+                    </div>
+                    <div class="achievement-content">
+                        <span class="achievement-year">2022年</span>
+                        <h4>心理育人精品项目</h4>
+                        <p>校级重点课题立项</p>
+                    </div>
+                </div>
+                <div class="achievement-card">
+                    <div class="achievement-image" style="background: linear-gradient(135deg, #9F7AEA, #B794F4);">
+                        <span>⭐</span>
+                    </div>
+                    <div class="achievement-content">
+                        <span class="achievement-year">典型案例</span>
+                        <h4>心理危机干预成功案例</h4>
+                        <p>入选校级优秀案例</p>
+                    </div>
+                </div>
+            </div>
+            <div class="achievements-more">
+                <a href="#" class="link-more">查看全部成果 →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- H. 特色资源 / 心灵驿站区 -->
+    <section class="resources" id="resources">
+        <div class="container">
+            <div class="section-header light">
+                <span class="section-tag">— 遇见 · 心灵驿站 —</span>
+                <h2 class="section-title">在这里，给心灵一个温暖的栖息地</h2>
+            </div>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="resource-icon" style="background: rgba(43, 108, 176, 0.1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2B6CB0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    </div>
+                    <h3 class="resource-title">心理科普专栏</h3>
+                    <p class="resource-desc">情绪管理、人际交往、压力应对等原创科普文章，助你更好地认识自己。</p>
+                    <a href="#" class="resource-link">进入专栏 →</a>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-icon" style="background: rgba(72, 187, 120, 0.1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#48BB78" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                    </div>
+                    <h3 class="resource-title">放松音频空间</h3>
+                    <p class="resource-desc">冥想引导、白噪音、渐进式肌肉放松等专业减压音频，随时随地放松身心。</p>
+                    <a href="#" class="resource-link">开始放松 →</a>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-icon" style="background: rgba(246, 173, 85, 0.1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#F6AD55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
+                    </div>
+                    <h3 class="resource-title">心理自测工具</h3>
+                    <p class="resource-desc">SDS抑郁自评、SAS焦虑自评、SCL-90等专业量表，了解自己的心理状态。</p>
+                    <a href="#" class="resource-link">开始自测 →</a>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-icon" style="background: rgba(159, 122, 234, 0.1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9F7AEA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    </div>
+                    <h3 class="resource-title">推荐书单</h3>
+                    <p class="resource-desc">精选心理学经典读物，从入门到进阶，陪伴你的心灵成长之旅。</p>
+                    <a href="#" class="resource-link">查看书单 →</a>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-icon" style="background: rgba(229, 62, 62, 0.1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E53E3E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="15" x="2" y="7" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
+                    </div>
+                    <h3 class="resource-title">心理电影清单</h3>
+                    <p class="resource-desc">精选心理题材优秀影片，在光影中探索内心世界，收获成长感悟。</p>
+                    <a href="#" class="resource-link">查看影单 →</a>
+                </div>
+                
+                <div class="resource-card">
+                    <div class="resource-icon" style="background: rgba(99, 179, 237, 0.1);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#63B3ED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>
+                    </div>
+                    <h3 class="resource-title">每日心语</h3>
+                    <p class="resource-desc">每日一句正能量心理寄语，温暖你的一天，给你前行的力量。</p>
+                    <a href="#" class="resource-link">查看心语 →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- I. 学生心声 / 互动反馈区 -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">— 遇见 · 心声 —</span>
+                <h2 class="section-title">他们在这里遇见了更好的自己</h2>
+            </div>
+            <div class="testimonials-slider">
+                <button class="slider-arrow slider-prev" aria-label="上一条">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <div class="testimonials-wrapper">
+                    <div class="testimonials-track" id="testimonialsTrack">
+                        <div class="testimonial-card active">
+                            <div class="quote-mark">"</div>
+                            <p class="testimonial-text">在工作室参加团体辅导的那个下午，我第一次学会了正视自己的焦虑情绪。原来，脆弱不是缺点，而是成长的起点。感谢遇见！</p>
+                            <div class="testimonial-author">
+                                <span class="author-info">—— 22级航海技术 小陈同学</span>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="quote-mark">"</div>
+                            <p class="testimonial-text">作为朋辈心理辅导员，我不仅帮助了别人，更在这个过程中找到了自己的价值。工作室教会我用温暖去温暖他人。</p>
+                            <div class="testimonial-author">
+                                <span class="author-info">—— 21级轮机工程 小李同学</span>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="quote-mark">"</div>
+                            <p class="testimonial-text">那次心理危机干预让我真正理解了生命的可贵。感谢老师们的及时帮助，让我重新看到了生活的阳光。</p>
+                            <div class="testimonial-author">
+                                <span class="author-info">—— 20级船舶电子 小王同学</span>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="quote-mark">"</div>
+                            <p class="testimonial-text">心理情景剧大赛让我发现了自己的表演天赋，更重要的是，通过角色扮演，我学会了换位思考，理解了身边人的不易。</p>
+                            <div class="testimonial-author">
+                                <span class="author-info">—— 22级物流管理 小张同学</span>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="quote-mark">"</div>
+                            <p class="testimonial-text">在这里，我遇见了最好的老师和最温暖的伙伴。每一次的倾诉都被认真对待，每一次的成长都有人见证。</p>
+                            <div class="testimonial-author">
+                                <span class="author-info">—— 21级国际邮轮 小赵同学</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="slider-arrow slider-next" aria-label="下一条">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </button>
+                <div class="testimonials-dots" id="testimonialsDots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+            <div class="testimonials-cta">
+                <a href="#contact" class="btn btn-secondary">💬 我也想说说心里话</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- J. 底部信息区 -->
+    <footer class="footer" id="contact">
+        <div class="footer-wave">
+            <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path fill="#EDF2F7" d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,64C960,75,1056,85,1152,80C1248,75,1344,53,1392,42.7L1440,32L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+            </svg>
+        </div>
+        <div class="footer-content">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-brand">
+                        <div class="footer-logo">
+                            <svg viewBox="0 0 100 100" width="50" height="50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M50 20C40 35 30 45 30 55C30 67.5 40 75 50 75C60 75 70 67.5 70 55C70 45 60 35 50 20Z" fill="#ffffff"/>
+                                <circle cx="50" cy="50" r="8" fill="#F6AD55"/>
+                                <path d="M50 58V85M40 85H60" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+                            </svg>
+                            <span>「遇见」工作室</span>
+                        </div>
+                        <p class="footer-desc">天津海运职业学院心理育人辅导员工作室</p>
+                        <p class="footer-slogan">以心育心，用爱导航</p>
+                        <p class="footer-slogan">每一次遇见，都是心灵的靠岸。</p>
+                    </div>
+                    
+                    <div class="footer-nav">
+                        <h4>快速导航</h4>
+                        <ul>
+                            <li><a href="#about">走进遇见</a></li>
+                            <li><a href="#pillars">育人天地</a></li>
+                            <li><a href="#news">动态资讯</a></li>
+                            <li><a href="#resources">心灵驿站</a></li>
+                            <li><a href="#team">团队风采</a></li>
+                            <li><a href="#achievements">成果展示</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-contact">
+                        <h4>联系我们</h4>
+                        <ul>
+                            <li>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                <span>天津市津南区海河教育园区雅深路8号</span>
+                            </li>
+                            <li>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                <span>022-XXXXXXXX</span>
+                            </li>
+                            <li>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                                <span>yujian@tjmvc.edu.cn</span>
+                            </li>
+                            <li>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                <span>周一至周五 8:30-17:00</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-qr">
+                        <h4>关注我们</h4>
+                        <div class="qr-placeholder">
+                            <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="120" height="120" rx="8" fill="#ffffff" opacity="0.1"/>
+                                <rect x="20" y="20" width="30" height="30" stroke="#ffffff" stroke-width="4" fill="none"/>
+                                <rect x="25" y="25" width="20" height="20" fill="#ffffff"/>
+                                <rect x="70" y="20" width="30" height="30" stroke="#ffffff" stroke-width="4" fill="none"/>
+                                <rect x="75" y="25" width="20" height="20" fill="#ffffff"/>
+                                <rect x="20" y="70" width="30" height="30" stroke="#ffffff" stroke-width="4" fill="none"/>
+                                <rect x="25" y="75" width="20" height="20" fill="#ffffff"/>
+                                <rect x="60" y="60" width="10" height="10" fill="#ffffff"/>
+                                <rect x="80" y="60" width="10" height="10" fill="#ffffff"/>
+                                <rect x="60" y="80" width="10" height="10" fill="#ffffff"/>
+                                <rect x="90" y="70" width="10" height="20" fill="#ffffff"/>
+                                <rect x="70" y="90" width="20" height="10" fill="#ffffff"/>
+                            </svg>
+                            <p>微信公众号</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <p>© 2024 天津海运职业学院「遇见」心理育人辅导员工作室 | 津ICP备XXXX号</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
