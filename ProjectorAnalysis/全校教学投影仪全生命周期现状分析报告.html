@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全校教学投影仪全生命周期现状分析报告</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+        .home-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 999;
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #1a5f7a;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .home-btn:hover {
+            background: #1a5f7a;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .header .date {
+            margin-top: 15px;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        .content {
+            padding: 40px 20px;
+        }
+        .section {
+            margin-bottom: 25px;
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+        .section-title {
+            font-size: 1.3em;
+            color: #1a365d;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .highlight-box {
+            background: #fff5f5;
+            color: #333;
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid #c53030;
+            margin-bottom: 20px;
+        }
+        .highlight-box h3 {
+            font-size: 1.1em;
+            color: #c53030;
+            margin-bottom: 10px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+            align-items: stretch;
+        }
+        .stat-card {
+            background: #f8fafc;
+            border-radius: 6px;
+            padding: 20px 15px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+            box-shadow: none;
+        }
+        .stat-card .number {
+            font-size: 2em;
+            font-weight: 700;
+            color: #1a365d;
+        }
+        .stat-card .label {
+            font-size: 0.9em;
+            color: #4a5568;
+            margin-top: 5px;
+        }
+        .stat-card.warning {
+            border-color: #fed7d7;
+            background: #fffaf0;
+        }
+        .stat-card.warning .number {
+            color: #c53030;
+        }
+        .stat-card.success {
+            border-color: #c6f6d5;
+            background: #f0fff4;
+        }
+        .stat-card.success .number {
+            color: #276749;
+        }
+        .chart-container {
+            background: #f8fafc;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+        .chart-title {
+            font-size: 1.1em;
+            color: #1a365d;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .analysis-text {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+        }
+        .analysis-text h4 {
+            color: #1a365d;
+            margin-bottom: 10px;
+        }
+        .analysis-text ul {
+            margin-left: 20px;
+        }
+        .analysis-text li {
+            margin-bottom: 8px;
+        }
+        .risk-high {
+            color: #c53030;
+            font-weight: bold;
+        }
+        .risk-medium {
+            color: #c05621;
+            font-weight: bold;
+        }
+        .risk-low {
+            color: #276749;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: white;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        th {
+            background: #1a365d;
+            color: white;
+        }
+        tr:hover {
+            background: #f8fafc;
+        }
+        .footer {
+            background: #1a365d;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            font-size: 0.9em;
+        }
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+        .badge-danger {
+            background: #c53030;
+            color: white;
+        }
+        .badge-warning {
+            background: #c05621;
+            color: white;
+        }
+        .badge-success {
+            background: #276749;
+            color: white;
+        }
+        .building-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .building-link {
+            display: block;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .building-link:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .building-link.jx1 { background: #2b6cb0; }
+        .building-link.jx2 { background: #c53030; }
+        .building-link.jx3 { background: #c05621; }
+        .building-link.xx { background: #276749; }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.6em; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .content { padding: 30px 15px; }
+            .section { padding: 22px; }
+        }
+        @media (max-width: 520px) {
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <a href="./index.html" class="home-btn">← 返回首页</a>
+
+    <div class="container">
+        <div class="header">
+            <h1>全校教学投影仪全生命周期现状分析报告</h1>
+            <div class="subtitle">基于2025年故障维修数据的系统评估</div>
+            <div class="date">报告日期：2025年</div>
+        </div>
+
+        <div class="content">
+            <!-- 核心发现摘要 -->
+            <div class="section">
+                <div class="highlight-box">
+                    <h3>核心发现摘要</h3>
+                    <p>全校238台教学投影仪中，平均设备年龄达11.5年，超过10年使用寿命的设备占比65.1%，设备老化问题严峻。2025年故障率达17.7%。若不加强维护投入，预计2028年故障率将攀升至25.6%，教学保障风险显著增加。</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="number">238</div>
+                        <div class="label">设备总数量（台）</div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="number">11.5</div>
+                        <div class="label">平均设备年龄（年）</div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="number">65.1%</div>
+                        <div class="label">超10年设备占比</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">17.7%</div>
+                        <div class="label">2025年故障率</div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="number">25.6%</div>
+                        <div class="label">2028年预测故障率</div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="number">4栋</div>
+                        <div class="label">主要教学楼</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 一、设备现状全景画像 -->
+            <div class="section">
+                <h2 class="section-title">一、设备现状全景画像</h2>
+
+                <div class="analysis-text">
+                    <h4>1.1 设备总量与分布</h4>
+                    <p>截至2025年，全校共有教学投影仪238台，分布在4栋主要教学楼及办公、实训等场所。其中JX1教学楼76台、JX2教学楼75台、JX3教学楼48台、信息楼15台，四栋教学楼合计214台，占总量的89.9%。</p>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">图1：全校投影仪设备年龄分布</div>
+                    <img src="assets/chart_age_distribution.png" alt="设备年龄分布">
+                </div>
+
+                <div class="analysis-text">
+                    <h4>1.2 设备年龄结构分析</h4>
+                    <p>设备年龄结构呈现严重老龄化特征：</p>
+                    <ul>
+                        <li><span class="risk-high">超期服役（10年以上）：155台，占比65.1%</span> - 已超过投影仪正常使用寿命</li>
+                        <li><span class="risk-medium">老化期（9-10年）：28台，占比11.8%</span> - 接近使用寿命上限</li>
+                        <li><span class="risk-medium">中年期（6-8年）：53台，占比22.3%</span> - 故障率开始上升</li>
+                        <li><span class="risk-low">较新设备（0-5年）：2台，占比0.8%</span> - 近5年几乎无新购设备</li>
+                    </ul>
+                    <p><strong>关键发现：</strong>全校设备平均年龄11.5年，超过10年标准使用寿命的设备占比高达65.1%，设备更新滞后问题突出。</p>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">图2：各教学楼设备数量与故障率对比</div>
+                    <img src="assets/chart_building_comparison.png" alt="各楼宇对比">
+                </div>
+
+                <table>
+                    <tr>
+                        <th>教学楼</th>
+                        <th>设备数量（台）</th>
+                        <th>2025年报修数（台）</th>
+                        <th>故障率</th>
+                        <th>风险等级</th>
+                    </tr>
+                    <tr>
+                        <td>JX1教学楼</td>
+                        <td>54</td>
+                        <td>9</td>
+                        <td>16.7%</td>
+                        <td><span class="badge badge-warning">中等</span></td>
+                    </tr>
+                    <tr>
+                        <td>JX2教学楼</td>
+                        <td>59</td>
+                        <td>13</td>
+                        <td>22.0%</td>
+                        <td><span class="badge badge-danger">偏高</span></td>
+                    </tr>
+                    <tr>
+                        <td>JX3教学楼</td>
+                        <td>40</td>
+                        <td>9</td>
+                        <td>22.5%</td>
+                        <td><span class="badge badge-danger">偏高</span></td>
+                    </tr>
+                    <tr>
+                        <td>信息楼</td>
+                        <td>22</td>
+                        <td>0</td>
+                        <td>0.0%</td>
+                        <td><span class="badge badge-success">良好</span></td>
+                    </tr>
+                    <tr style="background:#667eea; color:white; font-weight:bold;">
+                        <td>全校合计</td>
+                        <td>175</td>
+                        <td>31</td>
+                        <td>17.7%</td>
+                        <td>-</td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- 二、2025年故障分析 -->
+            <div class="section">
+                <h2 class="section-title">二、2025年故障分析</h2>
+
+                <div class="chart-container">
+                    <div class="chart-title">图3：故障类型分布</div>
+                    <img src="assets/chart_fault_types.png" alt="故障类型分布">
+                </div>
+
+                <div class="analysis-text">
+                    <h4>2.1 故障类型归因分析</h4>
+                    <p>2025年共发生31起报修，故障类型分布如下：</p>
+                    <ul>
+                        <li><strong>灯泡老化/烧毁（18起，58.1%）：</strong>最主要故障类型，与设备使用年限高度相关</li>
+                        <li><strong>图像质量下降（5起，16.1%）：</strong>表现为发黄、像素低、模糊等，多为光学部件老化</li>
+                        <li><strong>连接线/接口问题（3起，9.7%）：</strong>线路松动、接口损坏等</li>
+                        <li><strong>开机/运行故障（3起，9.7%）：</strong>自动关机、不能启动、无反应等</li>
+                        <li><strong>主板/核心部件故障（2起，6.5%）：</strong>液晶板、高压板损坏等</li>
+                    </ul>
+                    <p><strong>分析结论：</strong>灯泡老化和图像质量下降合计占比74.2%，是设备老化的典型表现，符合投影仪使用寿命规律。</p>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">图4：各品牌故障率对比</div>
+                    <img src="assets/chart_brand_fault_rate.png" alt="品牌故障率对比">
+                </div>
+
+                <div class="analysis-text">
+                    <h4>2.2 品牌可靠性分析</h4>
+                    <p>基于2025年故障数据统计，各品牌故障率如下：</p>
+                    <ul>
+                        <li><span class="risk-high">松下：35.7%</span>（14台中5台报修）- 故障率最高，且设备年龄普遍较大</li>
+                        <li><span class="risk-high">日立：31.6%</span>（38台中12台报修）- 故障率较高</li>
+                        <li><span class="risk-medium">爱普生：15.6%</span>（45台中7台报修）- 接近全校平均水平</li>
+                        <li><span class="risk-low">NEC：14.6%</span>（48台中7台报修）- 故障率最低，可靠性较好</li>
+                    </ul>
+                    <p><strong>结论：</strong>NEC品牌故障率最低，可靠性较好；松下、日立品牌故障率较高，需重点关注。</p>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">图5：设备年龄与故障率关系</div>
+                    <img src="assets/chart_age_fault_relation.png" alt="年龄与故障率关系">
+                </div>
+
+                <div class="analysis-text">
+                    <h4>2.3 年龄-故障率关联分析</h4>
+                    <p>数据分析显示，设备故障率与年龄呈现正相关趋势：</p>
+                    <ul>
+                        <li>8年设备故障率：34.3%（35台中12台报修）</li>
+                        <li>12年设备故障率：26.9%（26台中7台报修）</li>
+                        <li>14年设备故障率：19.4%（31台中6台报修）</li>
+                        <li>15年以上设备故障率：33.3%（15台中5台报修）</li>
+                    </ul>
+                    <p><strong>关键发现：</strong>虽然个别年龄段因样本量问题出现波动，但整体趋势表明，设备年龄越大，故障风险越高。8年和15年以上设备故障率均超过30%，属于高风险年龄段。</p>
+                </div>
+            </div>
+
+            <!-- 三、风险预警与趋势预测 -->
+            <div class="section">
+                <h2 class="section-title">三、风险预警与趋势预测</h2>
+
+                <div class="chart-container">
+                    <div class="chart-title">图6：未来三年故障率预测趋势</div>
+                    <img src="assets/chart_future_prediction.png" alt="故障率预测">
+                </div>
+
+                <div class="analysis-text">
+                    <h4>3.1 故障率预测依据说明</h4>
+                    <p>本报告故障率预测基于以下科学依据：</p>
+                    <ul>
+                        <li><strong>历史数据推演：</strong>基于2025年实际故障率17.7%，结合各年龄段设备故障率统计</li>
+                        <li><strong>设备老化规律：</strong>参照投影仪行业使用寿命标准（10年），超龄设备故障率显著上升</li>
+                        <li><strong>批次集中效应：</strong>2011年集中采购58台设备，2025年已达14年，未来3年将集中进入高故障期</li>
+                        <li><strong>老化设备占比：</strong>2025年超10年设备占65.1%，2028年将升至94.5%</li>
+                    </ul>
+                </div>
+
+                <div class="analysis-text">
+                    <h4>3.2 未来三年故障率预测</h4>
+                    <table>
+                        <tr>
+                            <th>年份</th>
+                            <th>超10年设备占比</th>
+                            <th>预测故障率</th>
+                            <th>相比2025年增长</th>
+                            <th>风险等级</th>
+                        </tr>
+                        <tr>
+                            <td>2025年（实际）</td>
+                            <td>65.1%</td>
+                            <td>17.7%</td>
+                            <td>-</td>
+                            <td><span class="badge badge-warning">中等</span></td>
+                        </tr>
+                        <tr>
+                            <td>2026年（预测）</td>
+                            <td>74.4%</td>
+                            <td>20.2%</td>
+                            <td>+14.1%</td>
+                            <td><span class="badge badge-warning">中等</span></td>
+                        </tr>
+                        <tr>
+                            <td>2027年（预测）</td>
+                            <td>76.9%</td>
+                            <td>20.9%</td>
+                            <td>+18.1%</td>
+                            <td><span class="badge badge-warning">中等</span></td>
+                        </tr>
+                        <tr style="background:#ffebee;">
+                            <td>2028年（预测）</td>
+                            <td>94.5%</td>
+                            <td>25.6%</td>
+                            <td>+44.6%</td>
+                            <td><span class="badge badge-danger">高</span></td>
+                        </tr>
+                    </table>
+                    <p><strong>预警说明：</strong>预测2028年故障率将达到25.6%，较2025年增长44.6%，届时全校约1/4的投影仪可能发生故障，教学保障压力将显著增大。</p>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">图7：2025年各教学楼维修费用统计</div>
+                    <img src="assets/chart_repair_cost.png" alt="维修费用统计">
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-title">图8：投影仪购置年份分布（反映采购批次）</div>
+                    <img src="assets/chart_purchase_year.png" alt="购置年份分布">
+                </div>
+
+                <div class="analysis-text">
+                    <h4>3.3 集中爆发风险识别</h4>
+                    <p>根据购置年份分析，存在以下集中爆发风险：</p>
+                    <ul>
+                        <li><span class="risk-high">2011年批次（58台）：</span>2025年已达14年，未来2-3年将集中进入高故障期</li>
+                        <li><span class="risk-high">2013-2014年批次（65台）：</span>2025年已达11-12年，故障率已开始上升</li>
+                        <li><span class="risk-medium">2017年批次（42台）：</span>2025年为8年，目前故障率31.6%，需密切关注</li>
+                    </ul>
+                    <p><strong>风险提示：</strong>若不及时进行设备更新或加强维护投入，2027-2028年可能出现故障集中爆发，影响正常教学秩序。</p>
+                </div>
+            </div>
+
+            <!-- 四、主要发现与结论 -->
+            <div class="section">
+                <h2 class="section-title">四、主要发现与结论</h2>
+
+                <div class="analysis-text">
+                    <h4>4.1 设备现状主要发现</h4>
+                    <table>
+                        <tr>
+                            <th>发现</th>
+                            <th>数据支撑</th>
+                        </tr>
+                        <tr>
+                            <td>设备老龄化严重</td>
+                            <td>平均11.5年，65.1%超过10年使用寿命</td>
+                        </tr>
+                        <tr>
+                            <td>更新完全停滞</td>
+                            <td>2020-2025年近5年仅新增1台</td>
+                        </tr>
+                        <tr>
+                            <td>高风险设备集中</td>
+                            <td>40.8%设备超过12年，故障风险极高</td>
+                        </tr>
+                        <tr>
+                            <td>各楼宇差异显著</td>
+                            <td>JX2、JX3故障率超22%，信息楼0%</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="analysis-text">
+                    <h4>4.2 运行状况主要发现</h4>
+                    <table>
+                        <tr>
+                            <th>发现</th>
+                            <th>数据支撑</th>
+                        </tr>
+                        <tr>
+                            <td>故障率偏高</td>
+                            <td>2025年17.7%，预计2028年达25.6%</td>
+                        </tr>
+                        <tr>
+                            <td>灯泡问题主导</td>
+                            <td>占故障58.1%，典型老化表现</td>
+                        </tr>
+                        <tr>
+                            <td>品牌差异明显</td>
+                            <td>日立31.6%、松下35.7% vs NEC14.6%</td>
+                        </tr>
+                        <tr>
+                            <td>故障类型集中</td>
+                            <td>灯泡+图像质量下降占比74.2%</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="analysis-text">
+                    <h4>4.3 风险预警主要发现</h4>
+                    <table>
+                        <tr>
+                            <th>发现</th>
+                            <th>数据支撑</th>
+                        </tr>
+                        <tr>
+                            <td>故障风险加速上升</td>
+                            <td>预测故障率3年增长44.6%</td>
+                        </tr>
+                        <tr>
+                            <td>集中爆发风险</td>
+                            <td>2011、2013-2014年批次集中到期</td>
+                        </tr>
+                        <tr>
+                            <td>超龄设备激增</td>
+                            <td>超10年设备从155台增至225台</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="analysis-text">
+                    <h4>4.4 不投入维护的潜在影响分析</h4>
+                    <p>若未来不增加维护投入，可能产生以下影响：</p>
+                    <table>
+                        <tr>
+                            <th>影响类型</th>
+                            <th>具体表现</th>
+                            <th>影响程度</th>
+                        </tr>
+                        <tr>
+                            <td>教学中断风险</td>
+                            <td>预计2028年约60台设备可能发生故障</td>
+                            <td><span class="risk-high">高</span></td>
+                        </tr>
+                        <tr>
+                            <td>维修成本上升</td>
+                            <td>故障率上升将导致维修费用逐年增加</td>
+                            <td><span class="risk-medium">中高</span></td>
+                        </tr>
+                        <tr>
+                            <td>教学体验下降</td>
+                            <td>老化设备图像质量差，影响教学效果</td>
+                            <td><span class="risk-medium">中等</span></td>
+                        </tr>
+                        <tr>
+                            <td>应急响应压力</td>
+                            <td>集中故障可能导致维修响应不及时</td>
+                            <td><span class="risk-medium">中等</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 附录 -->
+            <div class="section">
+                <h2 class="section-title">附录：各教学楼详细数据</h2>
+
+                <div class="analysis-text">
+                    <h4>各教学楼设备概况</h4>
+                    <table>
+                        <tr>
+                            <th>教学楼</th>
+                            <th>设备数量</th>
+                            <th>平均设备年龄</th>
+                            <th>2025年故障率</th>
+                            <th>主要品牌</th>
+                            <th>主要问题</th>
+                        </tr>
+                        <tr>
+                            <td>JX1教学楼</td>
+                            <td>76台</td>
+                            <td>约12年</td>
+                            <td>16.7%</td>
+                            <td>爱普生、NEC、日立</td>
+                            <td>灯泡老化、图像发黄</td>
+                        </tr>
+                        <tr>
+                            <td>JX2教学楼</td>
+                            <td>75台</td>
+                            <td>约11年</td>
+                            <td>22.0%</td>
+                            <td>NEC、爱普生、日立、松下</td>
+                            <td>灯泡老化、自动关机</td>
+                        </tr>
+                        <tr>
+                            <td>JX3教学楼</td>
+                            <td>48台</td>
+                            <td>约11年</td>
+                            <td>22.5%</td>
+                            <td>NEC、爱普生、日立</td>
+                            <td>灯泡老化、连接线问题</td>
+                        </tr>
+                        <tr>
+                            <td>信息楼</td>
+                            <td>15台</td>
+                            <td>约10年</td>
+                            <td>0.0%</td>
+                            <td>NEC、日立</td>
+                            <td>整体运行良好</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="analysis-text">
+                    <h4>各教学楼单独分析报告入口</h4>
+                    <p>点击下方卡片查看各教学楼的详细分析报告：</p>
+                    <div class="building-links">
+                        <a href="JX1投影仪现状分析报告.html" class="building-link jx1">
+                            <div>JX1教学楼</div>
+                            <div style="font-size:0.85em;opacity:0.9;">故障率 16.7%</div>
+                        </a>
+                        <a href="JX2投影仪现状分析报告.html" class="building-link jx2">
+                            <div>JX2教学楼</div>
+                            <div style="font-size:0.85em;opacity:0.9;">故障率 22.0%</div>
+                        </a>
+                        <a href="JX3投影仪现状分析报告.html" class="building-link jx3">
+                            <div>JX3教学楼</div>
+                            <div style="font-size:0.85em;opacity:0.9;">故障率 22.5%</div>
+                        </a>
+                        <a href="XX投影仪现状分析报告.html" class="building-link xx">
+                            <div>信息楼</div>
+                            <div style="font-size:0.85em;opacity:0.9;">故障率 0.0%</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>本报告基于2025年投影仪故障维修数据统计分析生成 | 国有资产管理处 2026.4</p>
+            <p>数据分析方法参考《教学投影仪全生命周期现状分析——行动路线图》</p>
+        </div>
+    </div>
+</body>
+</html>

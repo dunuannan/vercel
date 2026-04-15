@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>教学投影仪现状分析报告</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2.2em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+        }
+        .card h2 {
+            color: #1a365d;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 20px 15px;
+            background: #f8fafc;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        .stat-item .num {
+            font-size: 2em;
+            font-weight: 700;
+            color: #1a365d;
+        }
+        .stat-item .num.warning { color: #c53030; }
+        .stat-item .num.success { color: #276749; }
+        .stat-item .label {
+            font-size: 0.9em;
+            color: #4a5568;
+            margin-top: 5px;
+        }
+        .btn {
+            display: inline-block;
+            background: #1a365d;
+            color: white;
+            padding: 14px 35px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1em;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #2c5282;
+        }
+        .btn-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .btn-small {
+            display: block;
+            padding: 16px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            color: white;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s;
+            border: none;
+        }
+        .btn-small:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .btn-jx1 { background: #2b6cb0; }
+        .btn-jx2 { background: #c53030; }
+        .btn-jx3 { background: #c05621; }
+        .btn-xx { background: #276749; }
+        .highlight-box {
+            background: #fff5f5;
+            border-left: 4px solid #c53030;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .highlight-box h3 {
+            color: #c53030;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        .highlight-box p {
+            color: #4a5568;
+            line-height: 1.7;
+        }
+        .footer {
+            background: #1a365d;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            font-size: 0.9em;
+        }
+        .footer p {
+            opacity: 0.8;
+        }
+        .chart-list {
+            margin-left: 20px;
+            color: #4a5568;
+            line-height: 2;
+        }
+        .chart-list li {
+            margin-bottom: 5px;
+        }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.6em; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>教学投影仪现状分析报告</h1>
+        <p>基于2025年故障维修数据的全生命周期分析</p>
+    </div>
+    
+    <div class="container">
+        <div class="card">
+            <div class="highlight-box">
+                <h3>核心发现</h3>
+                <p>全校238台教学投影仪中，平均设备年龄达11.5年，超过10年使用寿命的设备占比65.1%。2025年故障率17.7%，预计2028年将攀升至25.6%，教学保障风险显著增加。</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="num">238台</div>
+                    <div class="label">设备总数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="num warning">11.5年</div>
+                    <div class="label">平均年龄</div>
+                </div>
+                <div class="stat-item">
+                    <div class="num warning">65.1%</div>
+                    <div class="label">超龄占比</div>
+                </div>
+                <div class="stat-item">
+                    <div class="num">17.7%</div>
+                    <div class="label">当前故障率</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 25px;">
+                <a href="全校教学投影仪全生命周期现状分析报告.html" class="btn">查看全校综合分析报告</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>各教学楼单独报告</h2>
+            <p style="color: #4a5568; margin-bottom: 15px;">点击下方链接查看各教学楼的详细分析报告：</p>
+            <div class="btn-group">
+                <a href="JX1投影仪现状分析报告.html" class="btn-small btn-jx1">
+                    <div style="font-size: 1.1em;">JX1教学楼</div>
+                    <div style="font-size: 0.85em; opacity: 0.9; margin-top: 3px;">故障率 16.7% | 设备 54台</div>
+                </a>
+                <a href="JX2投影仪现状分析报告.html" class="btn-small btn-jx2">
+                    <div style="font-size: 1.1em;">JX2教学楼</div>
+                    <div style="font-size: 0.85em; opacity: 0.9; margin-top: 3px;">故障率 22.0% | 设备 59台</div>
+                </a>
+                <a href="JX3投影仪现状分析报告.html" class="btn-small btn-jx3">
+                    <div style="font-size: 1.1em;">JX3教学楼</div>
+                    <div style="font-size: 0.85em; opacity: 0.9; margin-top: 3px;">故障率 22.5% | 设备 40台</div>
+                </a>
+                <a href="XX投影仪现状分析报告.html" class="btn-small btn-xx">
+                    <div style="font-size: 1.1em;">信息楼</div>
+                    <div style="font-size: 0.85em; opacity: 0.9; margin-top: 3px;">故障率 0.0% | 设备 22台</div>
+                </a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>分析图表</h2>
+            <p style="color: #4a5568; margin-bottom: 15px;">全校综合分析报告包含以下可视化图表：</p>
+            <ul class="chart-list">
+                <li>图1：全校投影仪设备年龄分布</li>
+                <li>图2：各教学楼设备数量与故障率对比</li>
+                <li>图3：故障类型分布饼图</li>
+                <li>图4：各品牌故障率对比</li>
+                <li>图5：设备年龄与故障率关系</li>
+                <li>图6：未来三年故障率预测趋势</li>
+                <li>图7：各教学楼维修费用统计</li>
+                <li>图8：投影仪购置年份分布</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>数据分析基于2025年故障维修记录 | 国有资产管理处 2026.4</p>
+    </div>
+</body>
+</html>
