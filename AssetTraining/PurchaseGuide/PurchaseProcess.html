@@ -507,14 +507,15 @@
             <div class="modal-header">
                 <span class="modal-title" id="modalTitle">文档预览</span>
                 <div class="flex items-center gap-3">
-                    <button
+                    <a
                         id="docxDownloadBtn"
                         class="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
-                        onclick="downloadDocx()"
+                        href="#"
+                        download
                         style="display: none;">
                         <i class="fas fa-file-word"></i>
                         <span>DOCX下载</span>
-                    </button>
+                    </a>
                     <button
                         class="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
                         onclick="downloadPdf()">
@@ -562,7 +563,16 @@
                 return;
             }
 
-            docxBtn.style.display = docxMap[filename] ? 'flex' : 'none';
+            const docxName = docxMap[filename];
+            if (docxName) {
+                docxBtn.href = 'docx/' + encodeURIComponent(docxName);
+                docxBtn.download = docxName;
+                docxBtn.style.display = 'flex';
+            } else {
+                docxBtn.removeAttribute('href');
+                docxBtn.removeAttribute('download');
+                docxBtn.style.display = 'none';
+            }
         }
 
         function openModal(url, title) {
@@ -594,26 +604,6 @@
                     document.body.removeChild(link);
                 } else {
                     alert('当前文档暂未提供独立的 PDF 下载。');
-                }
-            } else {
-                alert('文档仍在加载中或无法访问，请稍后再试。');
-            }
-        }
-
-        function downloadDocx() {
-            const filename = getCurrentDocName();
-            if (filename) {
-                const docxName = docxMap[filename];
-
-                if (docxName) {
-                    const link = document.createElement('a');
-                    link.href = 'docx/' + encodeURIComponent(docxName);
-                    link.download = docxName;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                } else {
-                    alert('当前文档暂未提供对应的 DOCX 模板下载。');
                 }
             } else {
                 alert('文档仍在加载中或无法访问，请稍后再试。');
