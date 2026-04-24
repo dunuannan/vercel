@@ -632,9 +632,15 @@
         }
 
         let downloadTipTimer;
+        let downloadBlurHandler;
 
         function resetDownloadTip() {
             window.clearTimeout(downloadTipTimer);
+            if (downloadBlurHandler) {
+                window.removeEventListener('blur', downloadBlurHandler);
+                downloadBlurHandler = null;
+            }
+
             const downloadTip = document.getElementById('downloadTip');
             if (downloadTip) {
                 downloadTip.classList.remove('active');
@@ -652,9 +658,18 @@
             downloadTipText.textContent = '正在准备' + type + '下载，请稍候...';
             downloadTip.classList.add('active');
 
+            if (downloadBlurHandler) {
+                window.removeEventListener('blur', downloadBlurHandler);
+            }
+
+            downloadBlurHandler = () => {
+                resetDownloadTip();
+            };
+            window.addEventListener('blur', downloadBlurHandler, { once: true });
+
             downloadTipTimer = window.setTimeout(() => {
-                downloadTipText.textContent = type + '下载已开始，请查看浏览器下载栏。';
-            }, 1800);
+                resetDownloadTip();
+            }, 3000);
 
             return true;
         }
