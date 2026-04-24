@@ -123,6 +123,64 @@
             background: rgba(255, 255, 255, 0.3);
         }
 
+        .download-tip {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 20px;
+            background: #eff6ff;
+            border-bottom: 1px solid #bfdbfe;
+            color: #1e40af;
+            font-size: 14px;
+        }
+
+        .download-tip.active {
+            display: flex;
+        }
+
+        .download-tip-icon {
+            color: #2563eb;
+        }
+
+        .download-tip-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .download-tip-text {
+            line-height: 1.5;
+        }
+
+        .download-tip-track {
+            position: relative;
+            height: 3px;
+            margin-top: 6px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #dbeafe;
+        }
+
+        .download-tip-bar {
+            position: absolute;
+            top: 0;
+            left: -40%;
+            width: 40%;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #60a5fa, #1d4ed8);
+            animation: download-progress 1.1s ease-in-out infinite;
+        }
+
+        @keyframes download-progress {
+            0% {
+                left: -40%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
         .modal-body {
             flex: 1;
             overflow: hidden;
@@ -512,6 +570,7 @@
                         class="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
                         href="#"
                         download
+                        onclick="showDownloadTip('DOCX')"
                         style="display: none;">
                         <i class="fas fa-file-word"></i>
                         <span>DOCX下载</span>
@@ -523,6 +582,15 @@
                         <span>PDF下载</span>
                     </button>
                     <button class="modal-close" onclick="closeModal()">✕</button>
+                </div>
+            </div>
+            <div id="downloadTip" class="download-tip" aria-live="polite">
+                <i class="fas fa-circle-notch fa-spin download-tip-icon"></i>
+                <div class="download-tip-content">
+                    <div id="downloadTipText" class="download-tip-text">正在准备下载，请稍候...</div>
+                    <div class="download-tip-track">
+                        <span class="download-tip-bar"></span>
+                    </div>
                 </div>
             </div>
             <div class="modal-body">
@@ -561,6 +629,34 @@
 
             const urlObj = new URL(iframe.src);
             return urlObj.pathname.split('/').pop();
+        }
+
+        let downloadTipTimer;
+
+        function resetDownloadTip() {
+            window.clearTimeout(downloadTipTimer);
+            const downloadTip = document.getElementById('downloadTip');
+            if (downloadTip) {
+                downloadTip.classList.remove('active');
+            }
+        }
+
+        function showDownloadTip(type) {
+            const downloadTip = document.getElementById('downloadTip');
+            const downloadTipText = document.getElementById('downloadTipText');
+            if (!downloadTip || !downloadTipText) {
+                return true;
+            }
+
+            window.clearTimeout(downloadTipTimer);
+            downloadTipText.textContent = '正在准备' + type + '下载，请稍候...';
+            downloadTip.classList.add('active');
+
+            downloadTipTimer = window.setTimeout(() => {
+                downloadTipText.textContent = type + '下载已开始，请查看浏览器下载栏。';
+            }, 1800);
+
+            return true;
         }
 
         function warmUpDocx(filename) {
@@ -617,6 +713,7 @@
         function openModal(url, title) {
             document.getElementById('modalTitle').textContent = title;
             document.getElementById('modalIframe').src = url;
+            resetDownloadTip();
             updateDocxButton(url);
             document.getElementById('docModal').classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -625,6 +722,7 @@
         function closeModal() {
             document.getElementById('docModal').classList.remove('active');
             document.getElementById('modalIframe').src = '';
+            resetDownloadTip();
             updateDocxButton('');
             document.body.style.overflow = '';
         }
@@ -635,6 +733,7 @@
                 const pdfName = pdfMap[filename];
 
                 if (pdfName) {
+                    showDownloadTip('PDF');
                     const link = document.createElement('a');
                     link.href = 'pdf/' + encodeURIComponent(pdfName);
                     link.download = pdfName;
