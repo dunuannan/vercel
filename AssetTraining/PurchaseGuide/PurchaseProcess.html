@@ -547,6 +547,12 @@
             'ResearchReport.html': '2.采购项目调研报告模板-2026.4.23.docx'
         };
 
+        const docxCache = {};
+
+        function getDocxPath(docxName) {
+            return 'docx/' + encodeURIComponent(docxName);
+        }
+
         function getCurrentDocName() {
             const iframe = document.getElementById('modalIframe');
             if (!iframe || !iframe.src) {
@@ -557,6 +563,37 @@
             return urlObj.pathname.split('/').pop();
         }
 
+        function warmUpDocx(filename) {
+            const docxName = docxMap[filename];
+            if (!docxName || docxCache[docxName]) {
+                return;
+            }
+
+            docxCache[docxName] = { ready: false, objectUrl: '' };
+
+            fetch(getDocxPath(docxName))
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('DOCX 模板加载失败');
+                    }
+
+                    return response.blob();
+                })
+                .then(blob => {
+                    docxCache[docxName] = {
+                        ready: true,
+                        objectUrl: URL.createObjectURL(blob)
+                    };
+
+                    if (getCurrentDocName() === filename) {
+                        updateDocxButton(filename);
+                    }
+                })
+                .catch(() => {
+                    delete docxCache[docxName];
+                });
+        }
+
         function updateDocxButton(filename) {
             const docxBtn = document.getElementById('docxDownloadBtn');
             if (!docxBtn) {
@@ -565,9 +602,11 @@
 
             const docxName = docxMap[filename];
             if (docxName) {
-                docxBtn.href = 'docx/' + encodeURIComponent(docxName);
+                const cachedDocx = docxCache[docxName];
+                docxBtn.href = cachedDocx && cachedDocx.ready ? cachedDocx.objectUrl : getDocxPath(docxName);
                 docxBtn.download = docxName;
                 docxBtn.style.display = 'flex';
+                warmUpDocx(filename);
             } else {
                 docxBtn.removeAttribute('href');
                 docxBtn.removeAttribute('download');
