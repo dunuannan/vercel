@@ -566,6 +566,16 @@
                 <span class="modal-title" id="modalTitle">文档预览</span>
                 <div class="flex items-center gap-3">
                     <a
+                        id="docxDownloadBtnGov"
+                        class="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                        href="#"
+                        download
+                        onclick="showDownloadTip('DOCX')"
+                        style="display: none;">
+                        <i class="fas fa-file-word"></i>
+                        <span>≥50万 DOCX下载</span>
+                    </a>
+                    <a
                         id="docxDownloadBtn"
                         class="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
                         href="#"
@@ -610,9 +620,32 @@
         };
 
         const docxMap = {
-            'RD.html': '1.项目需求书模板-2026.4.23.docx',
-            'PurchasePlan.html': '3.设备购置计划模板-2026.4.23.docx',
-            'ResearchReport.html': '2.采购项目调研报告模板-2026.4.23.docx'
+            'RD.html': [
+                {
+                    id: 'docxDownloadBtnGov',
+                    label: '≥50万 DOCX下载',
+                    filename: '4.政府采购项目需求书模板-2026.4.24.docx'
+                },
+                {
+                    id: 'docxDownloadBtn',
+                    label: '<50万 DOCX下载',
+                    filename: '1.项目需求书模板-2026.4.23.docx'
+                }
+            ],
+            'PurchasePlan.html': [
+                {
+                    id: 'docxDownloadBtn',
+                    label: 'DOCX下载',
+                    filename: '3.设备购置计划模板-2026.4.23.docx'
+                }
+            ],
+            'ResearchReport.html': [
+                {
+                    id: 'docxDownloadBtn',
+                    label: 'DOCX下载',
+                    filename: '2.采购项目调研报告模板-2026.4.23.docx'
+                }
+            ]
         };
 
         const docxCache = {};
@@ -674,8 +707,7 @@
             return true;
         }
 
-        function warmUpDocx(filename) {
-            const docxName = docxMap[filename];
+        function warmUpDocx(docxName) {
             if (!docxName || docxCache[docxName]) {
                 return;
             }
@@ -696,8 +728,8 @@
                         objectUrl: URL.createObjectURL(blob)
                     };
 
-                    if (getCurrentDocName() === filename) {
-                        updateDocxButton(filename);
+                    if (docxMap[getCurrentDocName()]) {
+                        updateDocxButton(getCurrentDocName());
                     }
                 })
                 .catch(() => {
@@ -706,23 +738,35 @@
         }
 
         function updateDocxButton(filename) {
-            const docxBtn = document.getElementById('docxDownloadBtn');
-            if (!docxBtn) {
+            const docxButtons = [
+                document.getElementById('docxDownloadBtnGov'),
+                document.getElementById('docxDownloadBtn')
+            ].filter(Boolean);
+
+            docxButtons.forEach(button => {
+                button.removeAttribute('href');
+                button.removeAttribute('download');
+                button.style.display = 'none';
+            });
+
+            const docxList = docxMap[filename];
+            if (!docxList) {
                 return;
             }
 
-            const docxName = docxMap[filename];
-            if (docxName) {
-                const cachedDocx = docxCache[docxName];
-                docxBtn.href = cachedDocx && cachedDocx.ready ? cachedDocx.objectUrl : getDocxPath(docxName);
-                docxBtn.download = docxName;
+            docxList.forEach(item => {
+                const docxBtn = document.getElementById(item.id);
+                if (!docxBtn) {
+                    return;
+                }
+
+                const cachedDocx = docxCache[item.filename];
+                docxBtn.href = cachedDocx && cachedDocx.ready ? cachedDocx.objectUrl : getDocxPath(item.filename);
+                docxBtn.download = item.filename;
+                docxBtn.querySelector('span').textContent = item.label;
                 docxBtn.style.display = 'flex';
-                warmUpDocx(filename);
-            } else {
-                docxBtn.removeAttribute('href');
-                docxBtn.removeAttribute('download');
-                docxBtn.style.display = 'none';
-            }
+                warmUpDocx(item.filename);
+            });
         }
 
         function openModal(url, title) {
