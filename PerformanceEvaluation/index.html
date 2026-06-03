@@ -1,0 +1,1540 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>设备、平台与资源使用效率与效果考核指标看板</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%230f766e'/%3E%3Cpath d='M16 18h32v8H16zm0 13h22v8H16zm0 13h28v8H16z' fill='white'/%3E%3C/svg%3E" />
+  <style>
+    :root {
+      --bg: oklch(98% 0.006 235);
+      --surface: oklch(100% 0 0);
+      --surface-soft: oklch(96.5% 0.01 235);
+      --fg: oklch(20% 0.018 240);
+      --muted: oklch(52% 0.02 240);
+      --border: oklch(88% 0.012 235);
+      --accent: oklch(58% 0.16 168);
+      --accent-2: oklch(58% 0.16 245);
+      --warn: oklch(68% 0.14 70);
+      --danger: oklch(58% 0.18 25);
+      --ok: oklch(57% 0.15 150);
+      --shadow: 0 18px 48px rgb(15 23 42 / 0.10);
+      --font-display: "Microsoft YaHei UI", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
+      --font-body: "Microsoft YaHei UI", "PingFang SC", "Noto Sans CJK SC", system-ui, sans-serif;
+      --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { min-height: 100%; background: var(--bg); }
+    body {
+      margin: 0;
+      min-height: 100%;
+      color: var(--fg);
+      font-family: var(--font-body);
+      background:
+        linear-gradient(180deg, oklch(96% 0.02 225) 0, transparent 420px),
+        radial-gradient(circle at 18% 0%, color-mix(in oklch, var(--accent-2), transparent 84%), transparent 360px),
+        var(--bg);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    button, input { font: inherit; }
+    button { color: inherit; }
+    a { color: inherit; }
+
+    .app {
+      width: min(1720px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 20px;
+      align-items: center;
+      padding: 14px 0 18px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .brandline {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .brandline::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 5px color-mix(in oklch, var(--accent), transparent 86%);
+    }
+
+    .top-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .control-btn {
+      min-height: 40px;
+      padding: 0 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: color-mix(in oklch, var(--surface), transparent 10%);
+      cursor: pointer;
+      box-shadow: 0 1px 0 rgb(255 255 255 / 0.7) inset;
+    }
+
+    .control-btn:hover { border-color: color-mix(in oklch, var(--accent-2), var(--border) 45%); }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+      gap: 22px;
+      align-items: stretch;
+      margin-top: 12px;
+    }
+
+    .hero-main, .hero-panel, .summary-card, .column, .governance-card, .source-panel {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: color-mix(in oklch, var(--surface), transparent 4%);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-main {
+      position: relative;
+      overflow: hidden;
+      padding: 32px;
+      min-height: 300px;
+    }
+
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      inset: auto -80px -120px auto;
+      width: 380px;
+      height: 260px;
+      border: 1px solid color-mix(in oklch, var(--accent-2), transparent 70%);
+      border-radius: 50%;
+      background: color-mix(in oklch, var(--accent-2), transparent 92%);
+      transform: rotate(-20deg);
+      pointer-events: none;
+    }
+
+    .kicker {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      width: min(860px, 100%);
+      margin: 14px 0 18px;
+      font-family: var(--font-display);
+      font-size: 44px;
+      line-height: 1.08;
+      letter-spacing: 0;
+      text-wrap: pretty;
+    }
+
+    .hero-copy {
+      width: min(780px, 100%);
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.8;
+    }
+
+    .hero-stats {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .stat {
+      min-height: 86px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: color-mix(in oklch, var(--surface), transparent 12%);
+    }
+
+    .stat strong {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 28px;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .hero-panel {
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .meta-row {
+      display: grid;
+      grid-template-columns: 94px minmax(0, 1fr);
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .meta-row:last-child { border-bottom: 0; }
+    .meta-row dt {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+    }
+    .meta-row dd { margin: 0; line-height: 1.6; }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+
+    .summary-card {
+      position: relative;
+      overflow: hidden;
+      padding: 18px;
+      min-height: 170px;
+      box-shadow: none;
+    }
+
+    .summary-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 4px;
+      background: var(--card-accent, var(--accent));
+    }
+
+    .summary-card h2 {
+      margin: 0 0 10px;
+      font-size: 19px;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+
+    .summary-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .summary-card .score {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 7px;
+      margin-top: 16px;
+      font-family: var(--font-mono);
+      color: var(--card-accent, var(--accent));
+    }
+
+    .summary-card .score b {
+      font-size: 25px;
+      line-height: 1;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 68px;
+      z-index: 15;
+      display: grid;
+      grid-template-columns: minmax(260px, 420px) minmax(0, 1fr);
+      gap: 14px;
+      align-items: center;
+      margin: 20px 0 14px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: color-mix(in oklch, var(--surface), transparent 6%);
+      box-shadow: 0 16px 42px rgb(15 23 42 / 0.08);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .search {
+      position: relative;
+      min-width: 0;
+    }
+
+    .search input {
+      width: 100%;
+      height: 44px;
+      padding: 0 14px 0 40px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--fg);
+      background: var(--surface);
+      outline: none;
+    }
+
+    .search input:focus {
+      border-color: var(--accent-2);
+      box-shadow: 0 0 0 3px color-mix(in oklch, var(--accent-2), transparent 82%);
+    }
+
+    .search::before {
+      content: "";
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--muted);
+      border-radius: 50%;
+      transform: translateY(-55%);
+    }
+
+    .search::after {
+      content: "";
+      position: absolute;
+      left: 27px;
+      top: 27px;
+      width: 8px;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--muted);
+      transform: rotate(45deg);
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip {
+      min-height: 38px;
+      padding: 0 13px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .filter-chip[aria-pressed="true"] {
+      color: var(--fg);
+      border-color: color-mix(in oklch, var(--accent), var(--border) 40%);
+      background: color-mix(in oklch, var(--accent), var(--surface) 88%);
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(300px, 1fr));
+      gap: 14px;
+      align-items: start;
+      min-height: 540px;
+    }
+
+    .column {
+      --column-accent: var(--accent);
+      display: grid;
+      gap: 12px;
+      padding: 12px;
+      box-shadow: none;
+      background:
+        linear-gradient(180deg, color-mix(in oklch, var(--column-accent), transparent 92%), transparent 170px),
+        color-mix(in oklch, var(--surface), transparent 2%);
+    }
+
+    .column-header {
+      display: grid;
+      gap: 8px;
+      padding: 4px 4px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .column-title {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .column-title h2 {
+      margin: 0;
+      font-size: 19px;
+      line-height: 1.25;
+    }
+
+    .column-count {
+      min-width: 44px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      color: var(--column-accent);
+      background: color-mix(in oklch, var(--column-accent), transparent 90%);
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .column-subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .lane {
+      display: grid;
+      gap: 8px;
+    }
+
+    .lane-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 9px 4px 2px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .metric-card {
+      width: 100%;
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+    }
+
+    .metric-card:hover {
+      border-color: color-mix(in oklch, var(--column-accent), var(--border) 30%);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 28px rgb(15 23 42 / 0.08);
+    }
+
+    .card-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .card-code {
+      display: inline-flex;
+      width: fit-content;
+      padding: 3px 8px;
+      border-radius: 999px;
+      color: var(--column-accent);
+      background: color-mix(in oklch, var(--column-accent), transparent 90%);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .card-title {
+      margin: 8px 0 0;
+      font-size: 16px;
+      line-height: 1.45;
+      letter-spacing: 0;
+    }
+
+    .card-score {
+      min-width: 50px;
+      color: var(--column-accent);
+      text-align: right;
+      font-family: var(--font-mono);
+      font-size: 20px;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .card-score small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: 0.05em;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 6px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .mini-list li {
+      display: grid;
+      grid-template-columns: 12px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+    }
+
+    .mini-list li::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      margin-top: 7px;
+      border-radius: 50%;
+      background: var(--column-accent);
+    }
+
+    .card-meta {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 8px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface-soft);
+    }
+
+    .governance {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .governance-card {
+      padding: 20px;
+      box-shadow: none;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.3;
+    }
+
+    .weight-grid, .grade-grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .weight-row, .grade-row {
+      display: grid;
+      grid-template-columns: 92px minmax(0, 1fr) 54px;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-soft);
+      font-size: 13px;
+    }
+
+    .weight-row b, .grade-row b {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .danger-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .danger-list li {
+      padding: 10px 12px;
+      border: 1px solid color-mix(in oklch, var(--danger), var(--border) 45%);
+      border-radius: 8px;
+      background: color-mix(in oklch, var(--danger), transparent 93%);
+      line-height: 1.55;
+    }
+
+    .source-panel {
+      margin-top: 18px;
+      box-shadow: none;
+      overflow: hidden;
+    }
+
+    .source-panel summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px 20px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      font-weight: 700;
+    }
+
+    .source-content {
+      max-height: 620px;
+      overflow: auto;
+      padding: 20px;
+      background: var(--surface);
+    }
+
+    .source-content h1,
+    .source-content h2,
+    .source-content h3,
+    .source-content h4 {
+      margin: 18px 0 10px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    .source-content h1 { font-size: 26px; }
+    .source-content h2 { font-size: 21px; border-top: 1px solid var(--border); padding-top: 18px; }
+    .source-content h3 { font-size: 17px; }
+    .source-content h4 { font-size: 15px; }
+    .source-content p, .source-content li, .source-content blockquote { line-height: 1.75; }
+    .source-content blockquote {
+      margin: 12px 0;
+      padding: 12px 14px;
+      border-left: 3px solid var(--accent);
+      background: var(--surface-soft);
+      color: var(--muted);
+    }
+
+    .source-content table, .drawer table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 18px;
+      font-size: 13px;
+    }
+
+    .source-content th, .source-content td,
+    .drawer th, .drawer td {
+      border: 1px solid var(--border);
+      padding: 9px 10px;
+      vertical-align: top;
+      text-align: left;
+      line-height: 1.55;
+    }
+
+    .source-content th, .drawer th {
+      background: var(--surface-soft);
+      color: var(--fg);
+    }
+
+    .empty-state {
+      padding: 22px 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 35;
+      display: none;
+      background: rgb(15 23 42 / 0.36);
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 40;
+      width: min(760px, 100%);
+      height: 100%;
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      box-shadow: -24px 0 64px rgb(15 23 42 / 0.18);
+      transform: translateX(102%);
+      transition: transform 0.2s ease;
+    }
+
+    body.drawer-open .drawer { transform: translateX(0); }
+    body.drawer-open .drawer-backdrop { display: block; }
+
+    .drawer-head {
+      display: grid;
+      gap: 12px;
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, color-mix(in oklch, var(--drawer-accent, var(--accent)), transparent 92%), var(--surface));
+    }
+
+    .drawer-title-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .drawer h2 {
+      margin: 8px 0 0;
+      font-size: 24px;
+      line-height: 1.35;
+      letter-spacing: 0;
+    }
+
+    .drawer-close {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .drawer-body {
+      overflow: auto;
+      padding: 20px;
+    }
+
+    .drawer-note {
+      margin: 0 0 10px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface-soft);
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .copy-status {
+      min-height: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: right;
+    }
+
+    @media (max-width: 1180px) {
+      .hero { grid-template-columns: 1fr; }
+      .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .board { grid-template-columns: repeat(2, minmax(300px, 1fr)); }
+      .governance { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 760px) {
+      .app {
+        width: min(100% - 24px, 1720px);
+        padding-top: 16px;
+      }
+      .topbar, .toolbar {
+        position: static;
+        grid-template-columns: 1fr;
+      }
+      .top-actions, .filter-row { justify-content: flex-start; }
+      .hero-main { padding: 22px; }
+      h1 { font-size: 31px; }
+      .hero-stats, .summary-grid, .board { grid-template-columns: 1fr; }
+      .hero-panel { padding: 16px; }
+      .meta-row { grid-template-columns: 1fr; gap: 5px; }
+      .weight-row, .grade-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brandline">Tianjin Maritime College · Performance Evaluation</div>
+      <div class="top-actions">
+        <button class="control-btn" type="button" id="copyOutline">复制当前看板摘要</button>
+        <button class="control-btn" type="button" id="openSource">查看全文</button>
+      </div>
+    </header>
+
+    <section class="hero" aria-label="文件摘要">
+      <div class="hero-main">
+        <div class="kicker">Kanban Board View · 2026 试行版</div>
+        <h1>设备、平台与资源使用效率与效果考核指标及评分细则</h1>
+        <p class="hero-copy">
+          将 Markdown 文件中的四类考核对象、一级指标、评分项、数据来源、佐证材料、一票否决、等级划分与结果应用整合成可筛选的工作台。每张卡片对应一组评分细则，点击即可查看公式、阈值和材料要求。
+        </p>
+        <div class="hero-stats" id="heroStats" aria-label="关键数字"></div>
+      </div>
+      <dl class="hero-panel" id="documentMeta" aria-label="文件元信息"></dl>
+    </section>
+
+    <section class="summary-grid" id="summaryGrid" aria-label="考核对象分类"></section>
+
+    <section class="toolbar" aria-label="筛选与检索">
+      <label class="search">
+        <input id="searchInput" type="search" placeholder="搜索指标、公式、评分标准、佐证材料..." autocomplete="off" />
+      </label>
+      <div class="filter-row" id="filterRow" aria-label="指标类型筛选"></div>
+    </section>
+
+    <main class="board" id="board" aria-label="绩效指标看板"></main>
+
+    <section class="governance" aria-label="考核组织与结果应用">
+      <article class="governance-card">
+        <div class="section-title">
+          <h2>考核方式与等级</h2>
+          <span class="tag">第六章</span>
+        </div>
+        <div class="weight-grid" id="weightGrid"></div>
+        <div class="grade-grid" id="gradeGrid" style="margin-top: 12px;"></div>
+      </article>
+      <article class="governance-card">
+        <div class="section-title">
+          <h2>一票否决情形</h2>
+          <span class="tag">直接评定 D 档</span>
+        </div>
+        <ul class="danger-list" id="dangerList"></ul>
+      </article>
+    </section>
+
+    <details class="source-panel" id="sourcePanel">
+      <summary>
+        <span>全文索引与原始 Markdown 渲染</span>
+        <span class="tag">保留全部文件内容</span>
+      </summary>
+      <div class="source-content" id="sourceContent"></div>
+    </details>
+  </div>
+
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <aside class="drawer" id="drawer" aria-hidden="true" aria-label="评分细则详情"></aside>
+
+  <script src="source-data.js"></script>
+  <script>
+    const CATEGORY_META = {
+      device: {
+        id: "device",
+        code: "A",
+        chapter: "第二章",
+        label: "A类 · 设备",
+        title: "设备使用效率与效果",
+        scope: "设备采购与管理专项工作组/部门",
+        accent: "oklch(57% 0.16 168)"
+      },
+      platform: {
+        id: "platform",
+        code: "B",
+        chapter: "第三章",
+        label: "B类 · 平台",
+        title: "平台使用效率与效果",
+        scope: "信息化平台建设专项工作组/部门",
+        accent: "oklch(58% 0.16 245)"
+      },
+      base: {
+        id: "base",
+        code: "C",
+        chapter: "第四章",
+        label: "C类 · 实训基地",
+        title: "实训基地使用效率与效果",
+        scope: "实训基地建设专项工作组/部门",
+        accent: "oklch(58% 0.14 292)"
+      },
+      resource: {
+        id: "resource",
+        code: "D",
+        chapter: "第五章",
+        label: "D类 · 数字资源",
+        title: "软件与数字资源使用效率与效果",
+        scope: "软件与数字资源建设专项工作组/部门",
+        accent: "oklch(66% 0.16 72)"
+      }
+    };
+
+    const FILTERS = ["全部", "效率", "效果", "管理", "协同", "加分"];
+    const state = {
+      activeFilter: "全部",
+      query: "",
+      doc: null,
+      visibleCards: []
+    };
+
+    const els = {
+      heroStats: document.getElementById("heroStats"),
+      documentMeta: document.getElementById("documentMeta"),
+      summaryGrid: document.getElementById("summaryGrid"),
+      filterRow: document.getElementById("filterRow"),
+      searchInput: document.getElementById("searchInput"),
+      board: document.getElementById("board"),
+      weightGrid: document.getElementById("weightGrid"),
+      gradeGrid: document.getElementById("gradeGrid"),
+      dangerList: document.getElementById("dangerList"),
+      sourcePanel: document.getElementById("sourcePanel"),
+      sourceContent: document.getElementById("sourceContent"),
+      drawer: document.getElementById("drawer"),
+      drawerBackdrop: document.getElementById("drawerBackdrop"),
+      copyOutline: document.getElementById("copyOutline"),
+      openSource: document.getElementById("openSource")
+    };
+
+    init();
+
+    async function init() {
+      try {
+        const markdown = await loadMarkdown();
+        state.doc = parseDocument(markdown);
+        renderApp();
+        bindEvents();
+      } catch (error) {
+        renderLoadError(error);
+      }
+    }
+
+    async function loadMarkdown() {
+      const embedded = typeof window.EMBEDDED_SOURCE_MARKDOWN === "string"
+        ? window.EMBEDDED_SOURCE_MARKDOWN
+        : "";
+
+      if (location.protocol === "file:" && embedded.trim()) {
+        return embedded;
+      }
+
+      try {
+        const response = await fetch("source.md", { cache: "no-store" });
+        if (!response.ok) throw new Error("source.md 读取失败");
+        return await response.text();
+      } catch (error) {
+        if (embedded.trim()) return embedded;
+        throw error;
+      }
+    }
+
+    function parseDocument(markdown) {
+      const lines = markdown.replace(/\r\n/g, "\n").split("\n");
+      const doc = {
+        markdown,
+        titles: [],
+        preamble: [],
+        globalTables: [],
+        categories: Object.fromEntries(Object.values(CATEGORY_META).map(meta => [
+          meta.id,
+          { ...meta, total: "100", bonus: "15", range: "", cards: [], lanes: new Map(), scopeText: "" }
+        ])),
+        cards: [],
+        dangerItems: extractBullets(lines, "### 三、一票否决情形"),
+        feedbackItems: extractOrdered(lines, "### 四、诊改与反馈闭环")
+      };
+
+      let chapterTitle = "";
+      let category = null;
+      let primary = null;
+      let sub = null;
+      let lastCard = null;
+      let lastHeading = "";
+
+      for (let i = 0; i < lines.length; i += 1) {
+        const raw = lines[i];
+        const line = raw.trim();
+        if (!line) continue;
+
+        if (/^#\s+/.test(line)) {
+          doc.titles.push(cleanInline(line.replace(/^#\s+/, "")));
+          continue;
+        }
+
+        if (/^##\s+/.test(line)) {
+          chapterTitle = cleanInline(line.replace(/^##\s+/, ""));
+          lastHeading = chapterTitle;
+          category = categoryForChapter(chapterTitle, doc);
+          primary = null;
+          sub = null;
+          if (category) {
+            const totalMatch = chapterTitle.match(/满分\s*([0-9]+)\s*分/);
+            const bonusMatch = chapterTitle.match(/附加分\s*([0-9]+)\s*分/);
+            category.total = totalMatch ? totalMatch[1] : category.total;
+            category.bonus = bonusMatch ? bonusMatch[1] : category.bonus;
+            category.range = chapterTitle;
+          }
+          continue;
+        }
+
+        if (/^###\s+/.test(line)) {
+          const heading = cleanInline(line.replace(/^###\s+/, ""));
+          lastHeading = heading;
+          sub = null;
+          if (category && /^一级指标[:：]/.test(heading)) {
+            primary = createPrimary(heading, category);
+            if (!category.lanes.has(primary.id)) category.lanes.set(primary.id, { ...primary, cards: [] });
+          } else {
+            primary = null;
+          }
+          continue;
+        }
+
+        if (/^####\s+/.test(line)) {
+          const heading = cleanInline(line.replace(/^####\s+/, ""));
+          lastHeading = heading;
+          if (category) {
+            sub = createCard(heading, category, primary);
+            category.cards.push(sub);
+            doc.cards.push(sub);
+            if (primary && category.lanes.has(primary.id)) category.lanes.get(primary.id).cards.push(sub);
+            lastCard = sub;
+          }
+          continue;
+        }
+
+        if (/^\|/.test(line)) {
+          const tableLines = [];
+          let j = i;
+          while (j < lines.length && /^\|/.test(lines[j].trim())) {
+            tableLines.push(lines[j]);
+            j += 1;
+          }
+          const table = parseTable(tableLines);
+          if (table.rows.length) {
+            if (category && sub) {
+              sub.headers = table.headers;
+              sub.rows.push(...table.rows);
+              sub.searchText += " " + table.rows.flatMap(row => Object.values(row)).join(" ");
+            } else if (category && primary) {
+              const direct = primary.directCard || createCard(primary.rawTitle, category, primary, true);
+              primary.directCard = direct;
+              if (!category.cards.includes(direct)) {
+                category.cards.push(direct);
+                doc.cards.push(direct);
+                if (category.lanes.has(primary.id)) category.lanes.get(primary.id).cards.push(direct);
+              }
+              direct.headers = table.headers;
+              direct.rows.push(...table.rows);
+              direct.searchText += " " + table.rows.flatMap(row => Object.values(row)).join(" ");
+              lastCard = direct;
+            } else {
+              doc.globalTables.push({ title: lastHeading, ...table });
+            }
+          }
+          i = j - 1;
+          continue;
+        }
+
+        if (/^>\s*/.test(line)) {
+          const quote = cleanInline(line.replace(/^>\s*/, ""));
+          if (!quote) continue;
+          if (!chapterTitle) doc.preamble.push(quote);
+          if (category && /^设备范围|^平台范围|^基地范围|^资源范围/.test(quote)) category.scopeText = quote;
+          if (category && lastCard) {
+            lastCard.notes.push(quote);
+            lastCard.searchText += " " + quote;
+          }
+          continue;
+        }
+      }
+
+      return doc;
+    }
+
+    function categoryForChapter(title, doc) {
+      const meta = Object.values(CATEGORY_META).find(item => title.includes(item.chapter));
+      return meta ? doc.categories[meta.id] : null;
+    }
+
+    function createPrimary(heading, category) {
+      const rawTitle = heading.replace(/^一级指标[:：]\s*/, "");
+      const code = (rawTitle.match(/^[0-9]+\.[0-9]+/) || [""])[0];
+      const score = extractScore(rawTitle);
+      const title = cleanTitle(rawTitle);
+      return {
+        id: `${category.id}-${code || slug(title)}`,
+        rawTitle,
+        code,
+        title,
+        score,
+        type: classifyType(rawTitle)
+      };
+    }
+
+    function createCard(heading, category, primary, direct = false) {
+      const code = (heading.match(/^[0-9]+\.[0-9]+(?:\.[0-9]+)?/) || [primary && primary.code || ""])[0];
+      const score = extractScore(heading) || (direct && primary ? primary.score : "");
+      const title = cleanTitle(heading);
+      const type = classifyType(`${primary ? primary.rawTitle : ""} ${heading}`);
+      const id = `${category.id}-${slug(code || title)}-${category.cards.length}`;
+      return {
+        id,
+        categoryId: category.id,
+        categoryLabel: category.label,
+        categoryTitle: category.title,
+        accent: category.accent,
+        laneId: primary ? primary.id : "uncategorized",
+        laneTitle: primary ? primary.title : "未分组",
+        code,
+        title,
+        score,
+        type,
+        headers: [],
+        rows: [],
+        notes: [],
+        searchText: `${category.label} ${category.title} ${primary ? primary.rawTitle : ""} ${heading}`
+      };
+    }
+
+    function parseTable(tableLines) {
+      const cleanRows = tableLines
+        .map(line => line.trim().replace(/^\|/, "").replace(/\|$/, "").split("|").map(cell => cleanInline(cell.trim())))
+        .filter(row => row.some(Boolean));
+      if (cleanRows.length < 2) return { headers: [], rows: [] };
+      const headers = cleanRows[0];
+      const dataRows = cleanRows.slice(2);
+      const rows = dataRows.map(row => Object.fromEntries(headers.map((header, index) => [header || `列${index + 1}`, row[index] || ""])));
+      return { headers, rows };
+    }
+
+    function extractScore(text) {
+      const match = text.match(/（([^）]*?(?:满分|最高)?[0-9]+分[^）]*?)）/);
+      if (!match) return "";
+      const score = match[1].match(/(?:满分|最高)?\s*([0-9]+)\s*分/);
+      return score ? `${score[1]}` : match[1];
+    }
+
+    function cleanTitle(text) {
+      return cleanInline(text)
+        .replace(/^[0-9]+\.[0-9]+(?:\.[0-9]+)?\s*/, "")
+        .replace(/（[^）]*分[^）]*）/g, "")
+        .replace(/^附加分——/, "")
+        .trim();
+    }
+
+    function classifyType(text) {
+      if (/附加分|标志性|获奖|荣誉|专利|精品|典型案例/.test(text)) return "加分";
+      if (/开放|共享|互联|辐射|可持续|合作|区域/.test(text)) return "协同";
+      if (/管理|运维|安全|制度|维护|备份|质量管控|技术支持|迭代/.test(text)) return "管理";
+      if (/效果|支撑|满意度|成效|成果|提升|培养/.test(text)) return "效果";
+      if (/效率|利用率|活跃度|覆盖度|访问|服务人次|稳定性|运行/.test(text)) return "效率";
+      return "管理";
+    }
+
+    function renderApp() {
+      renderMeta();
+      renderFilters();
+      renderSummary();
+      renderGovernance();
+      renderBoard();
+      els.sourceContent.innerHTML = renderMarkdown(state.doc.markdown);
+    }
+
+    function renderMeta() {
+      const doc = state.doc;
+      const tableCount = (doc.markdown.match(/^\|/gm) || []).length;
+      const formulaCount = (doc.markdown.match(/公式：/g) || []).length;
+      const materialCount = (doc.markdown.match(/佐证材料/g) || []).length;
+      const vetoCount = doc.dangerItems.length;
+      els.heroStats.innerHTML = [
+        statHtml("4", "考核对象类别"),
+        statHtml(String(doc.cards.length), "指标卡片"),
+        statHtml(String(formulaCount), "计算公式"),
+        statHtml(String(materialCount), "佐证材料节点")
+      ].join("");
+
+      const basisLines = doc.preamble.filter(item => /^-\s*《/.test(item)).map(item => item.replace(/^-\s*/, ""));
+      const metaRows = [
+        ["依据文件", basisLines.join("<br>") || "《绩效管理办法》《绩效考核实施方案》"],
+        ["适用对象", pickPreamble("适用对象") || "各项目实施组、专项工作组及相关责任部门"],
+        ["考核周期", pickPreamble("考核周期") || "年度综合考核（每年末/次年初）"],
+        ["页面内容", `${doc.cards.length} 组评分卡 · ${tableCount} 行表格源码 · ${vetoCount} 条一票否决情形`]
+      ];
+      els.documentMeta.innerHTML = metaRows.map(([label, value]) => `
+        <div class="meta-row">
+          <dt>${label}</dt>
+          <dd>${value}</dd>
+        </div>
+      `).join("");
+    }
+
+    function pickPreamble(label) {
+      const found = state.doc.preamble.find(item => item.includes(label));
+      return found ? found.replace(new RegExp(`^${label}[：:]\\s*`), "") : "";
+    }
+
+    function statHtml(value, label) {
+      return `<div class="stat"><strong>${escapeHtml(value)}</strong><span>${escapeHtml(label)}</span></div>`;
+    }
+
+    function renderFilters() {
+      els.filterRow.innerHTML = FILTERS.map(filter => `
+        <button class="filter-chip" type="button" data-filter="${filter}" aria-pressed="${filter === state.activeFilter}">
+          ${filter}
+        </button>
+      `).join("");
+    }
+
+    function renderSummary() {
+      els.summaryGrid.innerHTML = Object.values(state.doc.categories).map(category => {
+        const scope = category.scopeText || category.scope;
+        const cardCount = category.cards.length;
+        return `
+          <article class="summary-card" style="--card-accent: ${category.accent}">
+            <div class="kicker">${category.label}</div>
+            <h2>${category.title}</h2>
+            <p>${escapeHtml(stripMarkdown(scope))}</p>
+            <div class="score"><b>${category.total}</b><span>分 + 附加 ${category.bonus} 分 · ${cardCount} 卡</span></div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderBoard() {
+      const query = state.query.trim().toLowerCase();
+      state.visibleCards = [];
+      els.board.innerHTML = Object.values(state.doc.categories).map(category => {
+        const lanes = Array.from(category.lanes.values()).map(lane => {
+          const cards = lane.cards.filter(card => matchesCard(card, query));
+          state.visibleCards.push(...cards);
+          if (!cards.length) return "";
+          return `
+            <div class="lane">
+              <div class="lane-label">
+                <span>${escapeHtml(lane.code || "")} ${escapeHtml(lane.title)}</span>
+                <span>${escapeHtml(lane.score ? `${lane.score}分` : "")}</span>
+              </div>
+              ${cards.map(card => cardHtml(card)).join("")}
+            </div>
+          `;
+        }).join("");
+        const visibleCount = category.cards.filter(card => matchesCard(card, query)).length;
+        return `
+          <section class="column" style="--column-accent: ${category.accent}" aria-label="${category.label}">
+            <header class="column-header">
+              <div class="column-title">
+                <h2>${category.label}</h2>
+                <span class="column-count">${visibleCount}/${category.cards.length}</span>
+              </div>
+              <p class="column-subtitle">${escapeHtml(category.scope)}</p>
+            </header>
+            ${lanes || `<div class="empty-state">当前筛选没有匹配卡片。</div>`}
+          </section>
+        `;
+      }).join("");
+    }
+
+    function matchesCard(card, query) {
+      const filterMatch = state.activeFilter === "全部" || card.type === state.activeFilter;
+      const queryMatch = !query || card.searchText.toLowerCase().includes(query);
+      return filterMatch && queryMatch;
+    }
+
+    function cardHtml(card) {
+      const rows = card.rows.slice(0, 3);
+      const rowLabels = rows.map(row => row["评分项"] || row["加分项"] || row["考核环节"] || row["等级"] || Object.values(row)[0]).filter(Boolean);
+      return `
+        <button class="metric-card" type="button" data-card-id="${card.id}" style="--column-accent: ${card.accent}">
+          <span class="card-top">
+            <span>
+              <span class="card-code">${escapeHtml(card.code || card.type)}</span>
+              <span class="card-title">${escapeHtml(card.title)}</span>
+            </span>
+            <span class="card-score">${escapeHtml(card.score || "—")}<small>分</small></span>
+          </span>
+          <ul class="mini-list">
+            ${rowLabels.length ? rowLabels.map(label => `<li>${escapeHtml(label)}</li>`).join("") : "<li>点击查看本组细则</li>"}
+          </ul>
+          <span class="card-meta">
+            <span class="tag">${escapeHtml(card.type)}</span>
+            <span class="tag">${card.rows.length} 项评分</span>
+            <span class="tag">${card.notes.length} 条来源/材料</span>
+          </span>
+        </button>
+      `;
+    }
+
+    function renderGovernance() {
+      const weights = findGlobalTable(["考核环节", "权重"]);
+      const grades = findGlobalTable(["等级", "分数区间"]);
+      els.weightGrid.innerHTML = weights ? weights.rows.map(row => `
+        <div class="weight-row">
+          <b>${escapeHtml(row["权重"] || "")}</b>
+          <span>${escapeHtml(row["考核环节"] || "")}</span>
+          <span>${escapeHtml(row["说明"] || "")}</span>
+        </div>
+      `).join("") : `<div class="empty-state">未找到考核方式表。</div>`;
+
+      els.gradeGrid.innerHTML = grades ? grades.rows.map(row => `
+        <div class="grade-row">
+          <b>${escapeHtml(row["等级"] || "")}</b>
+          <span>${escapeHtml(row["含义"] || "")}</span>
+          <span>${escapeHtml(row["分数区间"] || "")}</span>
+        </div>
+      `).join("") : `<div class="empty-state">未找到等级划分表。</div>`;
+
+      els.dangerList.innerHTML = state.doc.dangerItems.length
+        ? state.doc.dangerItems.map(item => `<li>${escapeHtml(item)}</li>`).join("")
+        : `<li>未解析到一票否决条目，请在全文索引中查看第六章。</li>`;
+    }
+
+    function findGlobalTable(headers) {
+      return state.doc.globalTables.find(table => headers.every(header => table.headers.includes(header)));
+    }
+
+    function openDrawer(cardId) {
+      const card = state.doc.cards.find(item => item.id === cardId);
+      if (!card) return;
+      document.body.classList.add("drawer-open");
+      els.drawer.setAttribute("aria-hidden", "false");
+      els.drawer.style.setProperty("--drawer-accent", card.accent);
+      els.drawer.innerHTML = `
+        <div class="drawer-head">
+          <div class="drawer-title-row">
+            <div>
+              <span class="card-code">${escapeHtml(card.categoryLabel)} · ${escapeHtml(card.code || card.type)}</span>
+              <h2>${escapeHtml(card.title)}</h2>
+            </div>
+            <button class="drawer-close" type="button" aria-label="关闭详情">×</button>
+          </div>
+          <div class="card-meta">
+            <span class="tag">${escapeHtml(card.laneTitle)}</span>
+            <span class="tag">${escapeHtml(card.type)}</span>
+            <span class="tag">${escapeHtml(card.score || "—")} 分</span>
+          </div>
+        </div>
+        <div class="drawer-body">
+          ${card.rows.length ? tableHtml(card.headers, card.rows) : `<p class="drawer-note">此卡片没有独立表格，相关内容保留在全文索引中。</p>`}
+          ${card.notes.length ? `<h3>数据来源 / 佐证材料</h3>${card.notes.map(note => `<p class="drawer-note">${escapeHtml(stripMarkdown(note))}</p>`).join("")}` : ""}
+        </div>
+      `;
+    }
+
+    function closeDrawer() {
+      document.body.classList.remove("drawer-open");
+      els.drawer.setAttribute("aria-hidden", "true");
+    }
+
+    function tableHtml(headers, rows) {
+      const safeHeaders = headers.length ? headers : Object.keys(rows[0] || {});
+      return `
+        <table>
+          <thead><tr>${safeHeaders.map(header => `<th>${escapeHtml(header)}</th>`).join("")}</tr></thead>
+          <tbody>
+            ${rows.map(row => `<tr>${safeHeaders.map(header => `<td>${escapeHtml(row[header] || "")}</td>`).join("")}</tr>`).join("")}
+          </tbody>
+        </table>
+      `;
+    }
+
+    function bindEvents() {
+      els.filterRow.addEventListener("click", event => {
+        const button = event.target.closest("[data-filter]");
+        if (!button) return;
+        state.activeFilter = button.dataset.filter;
+        renderFilters();
+        renderBoard();
+      });
+
+      els.searchInput.addEventListener("input", event => {
+        state.query = event.target.value;
+        renderBoard();
+      });
+
+      els.board.addEventListener("click", event => {
+        const card = event.target.closest("[data-card-id]");
+        if (!card) return;
+        openDrawer(card.dataset.cardId);
+      });
+
+      document.addEventListener("click", event => {
+        if (event.target.closest(".drawer-close")) closeDrawer();
+      });
+
+      els.drawerBackdrop.addEventListener("click", closeDrawer);
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape") closeDrawer();
+      });
+
+      els.openSource.addEventListener("click", () => {
+        els.sourcePanel.open = true;
+        const top = els.sourcePanel.getBoundingClientRect().top + window.pageYOffset - 84;
+        window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+      });
+
+      els.copyOutline.addEventListener("click", copyCurrentOutline);
+    }
+
+    async function copyCurrentOutline() {
+      const lines = state.visibleCards.slice(0, 80).map(card => {
+        const score = card.score ? `${card.score}分` : "—";
+        return `${card.categoryLabel}｜${card.code || card.type} ${card.title}｜${score}｜${card.rows.length}项`;
+      });
+      const text = [
+        "设备、平台与资源使用效率与效果考核指标看板摘要",
+        `筛选：${state.activeFilter}；搜索：${state.query || "无"}`,
+        ...lines
+      ].join("\n");
+      try {
+        await navigator.clipboard.writeText(text);
+        els.copyOutline.textContent = "已复制摘要";
+        window.setTimeout(() => { els.copyOutline.textContent = "复制当前看板摘要"; }, 1400);
+      } catch (_) {
+        els.copyOutline.textContent = "复制失败";
+        window.setTimeout(() => { els.copyOutline.textContent = "复制当前看板摘要"; }, 1400);
+      }
+    }
+
+    function renderMarkdown(markdown) {
+      const lines = markdown.replace(/\r\n/g, "\n").split("\n");
+      const html = [];
+      for (let i = 0; i < lines.length; i += 1) {
+        const line = lines[i].trim();
+        if (!line) continue;
+
+        if (/^\|/.test(line)) {
+          const tableLines = [];
+          let j = i;
+          while (j < lines.length && /^\|/.test(lines[j].trim())) {
+            tableLines.push(lines[j]);
+            j += 1;
+          }
+          const table = parseTable(tableLines);
+          if (table.rows.length) html.push(tableHtml(table.headers, table.rows));
+          i = j - 1;
+          continue;
+        }
+
+        if (/^#\s+/.test(line)) html.push(`<h1>${escapeHtml(cleanInline(line.replace(/^#\s+/, "")))}</h1>`);
+        else if (/^##\s+/.test(line)) html.push(`<h2>${escapeHtml(cleanInline(line.replace(/^##\s+/, "")))}</h2>`);
+        else if (/^###\s+/.test(line)) html.push(`<h3>${escapeHtml(cleanInline(line.replace(/^###\s+/, "")))}</h3>`);
+        else if (/^####\s+/.test(line)) html.push(`<h4>${escapeHtml(cleanInline(line.replace(/^####\s+/, "")))}</h4>`);
+        else if (/^>\s*/.test(line)) html.push(`<blockquote>${escapeHtml(stripMarkdown(line.replace(/^>\s*/, "")))}</blockquote>`);
+        else if (/^-\s+/.test(line)) {
+          const items = [];
+          let j = i;
+          while (j < lines.length && /^-\s+/.test(lines[j].trim())) {
+            items.push(lines[j].trim().replace(/^-\s+/, ""));
+            j += 1;
+          }
+          html.push(`<ul>${items.map(item => `<li>${escapeHtml(stripMarkdown(item))}</li>`).join("")}</ul>`);
+          i = j - 1;
+        } else if (/^[0-9]+[.、]\s+/.test(line)) {
+          const items = [];
+          let j = i;
+          while (j < lines.length && /^[0-9]+[.、]\s+/.test(lines[j].trim())) {
+            items.push(lines[j].trim().replace(/^[0-9]+[.、]\s+/, ""));
+            j += 1;
+          }
+          html.push(`<ol>${items.map(item => `<li>${escapeHtml(stripMarkdown(item))}</li>`).join("")}</ol>`);
+          i = j - 1;
+        } else {
+          html.push(`<p>${escapeHtml(stripMarkdown(line))}</p>`);
+        }
+      }
+      return html.join("");
+    }
+
+    function extractBullets(lines, heading) {
+      const start = lines.findIndex(line => line.trim() === heading);
+      if (start < 0) return [];
+      const items = [];
+      for (let i = start + 1; i < lines.length; i += 1) {
+        const line = lines[i].trim();
+        if (/^#{2,3}\s+/.test(line)) break;
+        if (/^-\s+/.test(line)) items.push(stripMarkdown(line.replace(/^-\s+/, "")));
+      }
+      return items;
+    }
+
+    function extractOrdered(lines, heading) {
+      const start = lines.findIndex(line => line.trim() === heading);
+      if (start < 0) return [];
+      const items = [];
+      for (let i = start + 1; i < lines.length; i += 1) {
+        const line = lines[i].trim();
+        if (/^#{2,3}\s+/.test(line)) break;
+        if (/^[0-9]+[.、]\s+/.test(line)) items.push(stripMarkdown(line.replace(/^[0-9]+[.、]\s+/, "")));
+      }
+      return items;
+    }
+
+    function cleanInline(value) {
+      return value.replace(/\*\*/g, "").replace(/`/g, "").trim();
+    }
+
+    function stripMarkdown(value) {
+      return cleanInline(value)
+        .replace(/\[(.*?)\]\((.*?)\)/g, "$1")
+        .replace(/^[:：]\s*/, "")
+        .trim();
+    }
+
+    function slug(value) {
+      return String(value || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+        .slice(0, 48) || "card";
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function renderLoadError(error) {
+      document.querySelector(".app").innerHTML = `
+        <section class="hero-main">
+          <div class="kicker">Source Load Error</div>
+          <h1>未能读取 source.md</h1>
+          <p class="hero-copy">${escapeHtml(error.message)}。请确认 index.html、source.md 与 source-data.js 位于同一目录；也可以通过本地服务打开该页面。</p>
+        </section>
+      `;
+    }
+  </script>
+</body>
+</html>
