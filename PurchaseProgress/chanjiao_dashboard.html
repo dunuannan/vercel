@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026年产教融合项目委托采购台账数据画像</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+      background: #f0f2f5;
+      color: #2c3e50;
+      min-height: 100vh;
+    }
+    .dashboard-header {
+      background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+      color: #fff;
+      padding: 28px 40px 20px;
+      text-align: center;
+    }
+    .dashboard-header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+    }
+    .dashboard-header .subtitle {
+      font-size: 14px;
+      color: #bdc3c7;
+      letter-spacing: 1px;
+    }
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
+    }
+    /* KPI Cards */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+    .kpi-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 22px 20px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      transition: transform 0.2s;
+    }
+    .kpi-card:hover { transform: translateY(-3px); }
+    .kpi-card .kpi-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+    .kpi-card .kpi-value {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .kpi-card .kpi-label {
+      font-size: 13px;
+      color: #7f8c8d;
+      margin-top: 6px;
+    }
+    .kpi-card .kpi-sub {
+      font-size: 11px;
+      color: #95a5a6;
+      margin-top: 2px;
+    }
+    .kpi-blue .kpi-value { color: #3498db; }
+    .kpi-green .kpi-value { color: #27ae60; }
+    .kpi-orange .kpi-value { color: #f39c12; }
+    .kpi-red .kpi-value { color: #e74c3c; }
+
+    /* Chart Section */
+    .chart-section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .chart-section .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2c3e50;
+      border-left: 4px solid #3498db;
+      padding-left: 12px;
+      margin-bottom: 6px;
+    }
+    .chart-section .section-desc {
+      font-size: 13px;
+      color: #7f8c8d;
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+    .chart-box {
+      width: 100%;
+      height: 400px;
+    }
+    .chart-box-sm {
+      width: 100%;
+      height: 320px;
+    }
+    /* Two-column layout */
+    .chart-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      margin-bottom: 22px;
+    }
+    /* Key Findings */
+    .findings-section {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px 28px;
+      margin-bottom: 22px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .findings-section .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2c3e50;
+      border-left: 4px solid #e74c3c;
+      padding-left: 12px;
+      margin-bottom: 16px;
+    }
+    .finding-item {
+      padding: 10px 16px;
+      background: #fdf2f2;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #2c3e50;
+      border-left: 3px solid #e74c3c;
+    }
+    .finding-item .finding-tag {
+      display: inline-block;
+      background: #e74c3c;
+      color: #fff;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    .finding-item.highlight {
+      background: #fef9e7;
+      border-left-color: #f39c12;
+    }
+    .finding-item.highlight .finding-tag {
+      background: #f39c12;
+    }
+    /* Footer */
+    .dashboard-footer {
+      text-align: center;
+      padding: 20px;
+      color: #95a5a6;
+      font-size: 12px;
+    }
+    @media (max-width: 900px) {
+      .kpi-row { grid-template-columns: repeat(2, 1fr); }
+      .chart-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="dashboard-header">
+  <h1>2026年产教融合项目委托采购台账数据画像</h1>
+  <div class="subtitle">天津海运职业学院 · 产教融合实践中心项目 · 数据截止2026年7月1日</div>
+</div>
+
+<div class="dashboard-container">
+  <!-- KPI Cards -->
+  <div class="kpi-row">
+    <div class="kpi-card kpi-blue">
+      <div class="kpi-icon">&#128203;</div>
+      <div class="kpi-value">9</div>
+      <div class="kpi-label">项目总数</div>
+      <div class="kpi-sub">产教融合实践中心项目</div>
+    </div>
+    <div class="kpi-card kpi-green">
+      <div class="kpi-icon">&#128176;</div>
+      <div class="kpi-value">640<span style="font-size:16px;">万</span></div>
+      <div class="kpi-label">总预算金额</div>
+      <div class="kpi-sub">平均预算71.1万 · 最高155万</div>
+    </div>
+    <div class="kpi-card kpi-orange">
+      <div class="kpi-icon">&#128337;</div>
+      <div class="kpi-value">11.1<span style="font-size:16px;">%</span></div>
+      <div class="kpi-label">平均推进率</div>
+      <div class="kpi-sub">最高23.1% · 0个项目已完成</div>
+    </div>
+    <div class="kpi-card kpi-red">
+      <div class="kpi-icon">&#128227;</div>
+      <div class="kpi-value">6</div>
+      <div class="kpi-label">已公示项目数</div>
+      <div class="kpi-sub">无需公示3个 · 公示覆盖率100%</div>
+    </div>
+  </div>
+
+  <!-- Row 1: Progress Category Pie + Submission Timeliness Ring -->
+  <div class="chart-row">
+    <div class="chart-section">
+      <div class="section-title">项目进度分级分布</div>
+      <div class="section-desc">9个项目中6个处于推进中状态（66.7%），3个未启动（33.3%），0个已完成。整体推进缓慢，三分之一项目尚未开始采购流程。</div>
+      <div id="chart-progress-pie" class="chart-box-sm"></div>
+    </div>
+    <div class="chart-section">
+      <div class="section-title">需求报送时效分析</div>
+      <div class="section-desc">4月30日为需求报送截止日，9个项目中0个按时报送、6个延迟报送（22-39天）、3个未报送。报送时效严重滞后，无一项目按时完成。</div>
+      <div id="chart-timeliness-ring" class="chart-box-sm"></div>
+    </div>
+  </div>
+
+  <!-- Row 2: Budget Bar Chart -->
+  <div class="chart-section">
+    <div class="section-title">各项目预算金额对比</div>
+    <div class="section-desc">9个项目预算金额从20万至155万，预算集中度较高：前3大项目（X-射线残余应力分析平台155万、手工焊接虚拟仿真实训平台125万、船舶焊接设计软件93万）合计占总预算的58.0%。3个教学资源开发项目预算最低（各20万）。</div>
+    <div id="chart-budget-bar" class="chart-box"></div>
+  </div>
+
+  <!-- Row 3: Node Completion Rate Funnel -->
+  <div class="chart-section">
+    <div class="section-title">采购流程节点完成率递减趋势</div>
+    <div class="section-desc">13个采购节点完成率呈典型"前快后慢"特征：需求报送66.7% → 论证申请44.4% → 论证安排33.3%，之后10个节点完成率均为0%。流程瓶颈出现在论证安排之后，4月30日报送截止后的审批环节全面停滞。</div>
+    <div id="chart-node-funnel" class="chart-box"></div>
+  </div>
+
+  <!-- Row 4: Progress Ranking + Publication Distribution -->
+  <div class="chart-row">
+    <div class="chart-section">
+      <div class="section-title">各项目推进率排名</div>
+      <div class="section-desc">9个项目推进率从高到低排列，3个项目完成论证安排（推进率23.1%），1个完成论证申请（15.4%），2个仅完成需求报送（7.7%），3个未启动（0%）。平均推进率仅11.1%，距完成目标差距巨大。</div>
+      <div id="chart-progress-ranking" class="chart-box-sm"></div>
+    </div>
+    <div class="chart-section">
+      <div class="section-title">公示情况分布</div>
+      <div class="section-desc">6个项目已完成公示（占比66.7%），3个教学资源开发项目因预算较低无需公示（占比33.3%）。所有项目公示环节均已到位或豁免，公示流程无障碍。</div>
+      <div id="chart-publication-dist" class="chart-box-sm"></div>
+    </div>
+  </div>
+
+  <!-- Key Findings -->
+  <div class="findings-section">
+    <div class="section-title">核心洞察与风险提示</div>
+    <div class="finding-item">
+      <span class="finding-tag">高风险</span>
+      整体推进率极低：9个项目平均推进率仅<strong>11.1%</strong>，最高推进率23.1%（仅完成4个节点），无一项目完成全部13个采购节点。
+    </div>
+    <div class="finding-item">
+      <span class="finding-tag">高风险</span>
+      需求报送时效堪忧：4月30日前应报送需求的项目中，<strong>0个项目按时报送</strong>，延迟报送6个（延迟22-39天），未报送3个。
+    </div>
+    <div class="finding-item highlight">
+      <span class="finding-tag">关注</span>
+      流程瓶颈节点：论证安排完成率最低（33.3%），仅3个项目完成此节点，后续10个节点完成率均为0%，采购流程在论证环节后全面停滞。
+    </div>
+    <div class="finding-item highlight">
+      <span class="finding-tag">关注</span>
+      预额集中度高：最大项目「X-射线残余应力分析平台」预算155万占总预算24.2%，前3大项目合计占58.0%。
+    </div>
+    <div class="finding-item">
+      <span class="finding-tag">提示</span>
+      无需公示项目均未报送需求：3个无需公示项目中3个尚未报送需求书，整体处于停滞状态。
+    </div>
+    <div class="finding-item">
+      <span class="finding-tag">提示</span>
+      公示流程情况：6个项目已公示、3个项目无需公示，所有项目公示环节均已到位或无需公示，公示环节无阻塞。
+    </div>
+  </div>
+</div>
+
+<div class="dashboard-footer">
+  数据来源：2026年双高+产教融合委托采购台账汇总 · 产教融合汇总 · 分析日期2026年7月1日 · 智数分析专家团
+</div>
+
+<script>
+// ========== Chart 1: Progress Category Pie ==========
+var chartPie = echarts.init(document.getElementById('chart-progress-pie'));
+chartPie.setOption({
+  tooltip: {
+    trigger: 'item',
+    formatter: '{b}: {c}个 ({d}%)'
+  },
+  legend: {
+    bottom: 10,
+    textStyle: { fontSize: 13 }
+  },
+  color: ['#3498db', '#95a5a6', '#27ae60'],
+  series: [{
+    type: 'pie',
+    radius: ['35%', '65%'],
+    center: ['50%', '45%'],
+    avoidLabelOverlap: true,
+    itemStyle: {
+      borderRadius: 6,
+      borderColor: '#fff',
+      borderWidth: 2
+    },
+    label: {
+      show: true,
+      formatter: '{b}\n{c}个 ({d}%)',
+      fontSize: 13,
+      lineHeight: 20
+    },
+    labelLine: { length: 15, length2: 10 },
+    emphasis: {
+      label: { show: true, fontSize: 15, fontWeight: 'bold' }
+    },
+    data: [
+      { value: 6, name: '推进中' },
+      { value: 3, name: '未启动' },
+      { value: 0, name: '已完成' }
+    ]
+  }]
+});
+
+// ========== Chart 2: Submission Timeliness Ring ==========
+var chartTime = echarts.init(document.getElementById('chart-timeliness-ring'));
+chartTime.setOption({
+  tooltip: {
+    trigger: 'item',
+    formatter: function(p) {
+      if (p.name === '延迟报送') return '延迟报送: '+p.value+'个 ('+p.percent+'%)<br/>延迟22-39天';
+      return p.name+': '+p.value+'个 ('+p.percent+'%)';
+    }
+  },
+  legend: {
+    bottom: 10,
+    textStyle: { fontSize: 13 }
+  },
+  color: ['#e74c3c', '#95a5a6', '#27ae60'],
+  series: [{
+    type: 'pie',
+    radius: ['40%', '70%'],
+    center: ['50%', '42%'],
+    avoidLabelOverlap: true,
+    itemStyle: {
+      borderRadius: 6,
+      borderColor: '#fff',
+      borderWidth: 2
+    },
+    label: {
+      show: true,
+      formatter: '{b}\n{c}个 ({d}%)',
+      fontSize: 13,
+      lineHeight: 20
+    },
+    labelLine: { length: 15, length2: 10 },
+    emphasis: {
+      label: { show: true, fontSize: 15, fontWeight: 'bold' }
+    },
+    data: [
+      { value: 6, name: '延迟报送' },
+      { value: 3, name: '未报送' },
+      { value: 0, name: '按时报送' }
+    ]
+  }],
+  graphic: [{
+    type: 'text',
+    left: 'center',
+    top: '38%',
+    style: {
+      text: '0个按时',
+      fontSize: 14,
+      fontWeight: 'bold',
+      fill: '#e74c3c',
+      textAlign: 'center'
+    }
+  }]
+});
+
+// ========== Chart 3: Budget Bar Chart ==========
+var chartBudget = echarts.init(document.getElementById('chart-budget-bar'));
+var budgetNames = [
+  '开放型产教融合…教学资源开发', '运维中心教学资源开发', '制造中心教学资源开发',
+  '焊接设计工作站建设', 'X-射线残余应力分析平台', '制造中心材料理化分析…实训设备',
+  '运维中心力学性能测试…实训设备', '手工焊接虚拟仿真实训平台', '船舶焊接设计软件采购'
+];
+var budgetValues = [20, 20, 20, 67, 155, 55, 85, 125, 93];
+var budgetPcts = ['3.1%', '3.1%', '3.1%', '10.5%', '24.2%', '8.6%', '13.3%', '19.5%', '14.5%'];
+var budgetFullNames = [
+  '开放型产教融合实践中心实训数字化教学资源开发项目',
+  '运维中心教学资源开发项目',
+  '制造中心教学资源开发项目',
+  '船舶与海洋工程装备焊接设计工作站建设项目',
+  '船舶与海洋工程装备X-射线残余应力分析平台建设项目',
+  '船舶与海洋工程装备制造中心材料理化分析实训设备采购项目',
+  '船舶与海洋工程装备运维中心力学性能测试实训设备采购项目',
+  '船舶与海洋工程装备手工焊接虚拟仿真实训平台建设项目',
+  '船舶与海洋工程装备船舶焊接设计软件采购项目'
+];
+chartBudget.setOption({
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: { type: 'shadow' },
+    formatter: function(params) {
+      var idx = params[0].dataIndex;
+      return '<strong>' + budgetFullNames[idx] + '</strong><br/>' +
+             '预算金额: ' + params[0].value + '万元<br/>' +
+             '预算占比: ' + budgetPcts[idx];
+    }
+  },
+  grid: {
+    left: 120, right: 50, top: 20, bottom: 30
+  },
+  xAxis: {
+    type: 'value',
+    name: '万元',
+    nameTextStyle: { fontSize: 12 },
+    axisLabel: { fontSize: 12 },
+    splitLine: { lineStyle: { type: 'dashed', color: '#ddd' } }
+  },
+  yAxis: {
+    type: 'category',
+    data: budgetNames.reverse(),
+    axisLabel: {
+      fontSize: 12,
+      width: 110,
+      overflow: 'truncate'
+    },
+    inverse: false
+  },
+  series: [{
+    type: 'bar',
+    data: budgetValues.reverse(),
+    barWidth: 22,
+    itemStyle: {
+      borderRadius: [0, 4, 4, 0],
+      color: function(params) {
+        var val = params.value;
+        if (val >= 100) return '#2c3e50';
+        if (val >= 60) return '#3498db';
+        if (val >= 40) return '#5dade2';
+        return '#85c1e9';
+      }
+    },
+    label: {
+      show: true,
+      position: 'right',
+      formatter: function(params) {
+        var idx = params.dataIndex;
+        // after reverse, index mapping
+        var origIdx = 8 - idx;
+        return params.value + '万 (' + budgetPcts[origIdx] + ')';
+      },
+      fontSize: 12,
+      color: '#2c3e50'
+    }
+  }]
+});
+
+// ========== Chart 4: Node Completion Rate Funnel ==========
+var chartFunnel = echarts.init(document.getElementById('chart-node-funnel'));
+var nodeNames = ['需求报送','论证申请','论证安排','院务会讨论','用款审批','纪委报备','委托协议','政采计划编制','政采计划上报','招标公告','执行采购','合同签订','验收'];
+var nodeRates = [66.7, 44.4, 33.3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+var nodeCounts = [6, 4, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+chartFunnel.setOption({
+  tooltip: {
+    trigger: 'axis',
+    formatter: function(params) {
+      var idx = params[0].dataIndex;
+      return '<strong>' + nodeNames[idx] + '</strong><br/>' +
+             '完成率: ' + nodeRates[idx] + '%<br/>' +
+             '已完成: ' + nodeCounts[idx] + '/9个项目';
+    }
+  },
+  grid: {
+    left: 100, right: 50, top: 30, bottom: 40
+  },
+  xAxis: {
+    type: 'category',
+    data: nodeNames,
+    axisLabel: {
+      fontSize: 11,
+      rotate: 30,
+      color: function(value, idx) {
+        return nodeRates[idx] > 0 ? '#2c3e50' : '#95a5a6';
+      }
+    },
+    axisLine: { lineStyle: { color: '#bbb' } }
+  },
+  yAxis: {
+    type: 'value',
+    name: '完成率 (%)',
+    max: 80,
+    nameTextStyle: { fontSize: 12 },
+    axisLabel: { fontSize: 12, formatter: '{value}%' },
+    splitLine: { lineStyle: { type: 'dashed', color: '#ddd' } }
+  },
+  series: [{
+    type: 'bar',
+    data: nodeRates.map(function(v, i) {
+      return {
+        value: v,
+        itemStyle: {
+          color: v > 50 ? '#27ae60' : v > 30 ? '#3498db' : v > 0 ? '#f39c12' : '#d5d8dc',
+          borderRadius: v > 0 ? [4, 4, 0, 0] : [0, 0, 0, 0]
+        }
+      };
+    }),
+    barWidth: 32,
+    label: {
+      show: true,
+      position: 'top',
+      formatter: function(params) {
+        if (params.value === 0) return '0%';
+        return params.value + '%';
+      },
+      fontSize: 12,
+      fontWeight: 'bold',
+      color: '#2c3e50'
+    },
+    markLine: {
+      silent: true,
+      lineStyle: { color: '#e74c3c', type: 'dashed', width: 2 },
+      data: [{ yAxis: 50, label: { formatter: '50%基准线', position: 'end', fontSize: 11, color: '#e74c3c' } }]
+    }
+  }, {
+    type: 'line',
+    data: nodeRates,
+    smooth: true,
+    lineStyle: { color: '#e74c3c', width: 2 },
+    symbol: 'circle',
+    symbolSize: 6,
+    itemStyle: { color: '#e74c3c' },
+    label: { show: false }
+  }]
+});
+
+// ========== Chart 5: Progress Ranking Bar ==========
+var chartRanking = echarts.init(document.getElementById('chart-progress-ranking'));
+var rankNames = [
+  'X-射线残余应力分析平台',
+  '制造中心材料理化分析…',
+  '运维中心力学性能测试…',
+  '手工焊接虚拟仿真实训平台',
+  '焊接设计工作站建设',
+  '船舶焊接设计软件采购',
+  '开放型产教融合…教学资源',
+  '运维中心教学资源开发',
+  '制造中心教学资源开发'
+];
+var rankValues = [23.1, 23.1, 23.1, 15.4, 7.7, 7.7, 0, 0, 0];
+var rankNodes = [3, 3, 3, 2, 1, 1, 0, 0, 0];
+var rankFullNames = [
+  '船舶与海洋工程装备X-射线残余应力分析平台建设项目',
+  '船舶与海洋工程装备制造中心材料理化分析实训设备采购项目',
+  '船舶与海洋工程装备运维中心力学性能测试实训设备采购项目',
+  '船舶与海洋工程装备手工焊接虚拟仿真实训平台建设项目',
+  '船舶与海洋工程装备焊接设计工作站建设项目',
+  '船舶与海洋工程装备船舶焊接设计软件采购项目',
+  '开放型产教融合实践中心实训数字化教学资源开发项目',
+  '运维中心教学资源开发项目',
+  '制造中心教学资源开发项目'
+];
+chartRanking.setOption({
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: { type: 'shadow' },
+    formatter: function(params) {
+      var idx = params[0].dataIndex;
+      return '<strong>' + rankFullNames[idx] + '</strong><br/>' +
+             '推进率: ' + params[0].value + '%<br/>' +
+             '已完成节点: ' + rankNodes[idx] + '/13';
+    }
+  },
+  grid: {
+    left: 130, right: 60, top: 20, bottom: 30
+  },
+  xAxis: {
+    type: 'value',
+    name: '推进率 (%)',
+    max: 30,
+    nameTextStyle: { fontSize: 12 },
+    axisLabel: { fontSize: 12, formatter: '{value}%' },
+    splitLine: { lineStyle: { type: 'dashed', color: '#ddd' } }
+  },
+  yAxis: {
+    type: 'category',
+    data: rankNames,
+    axisLabel: {
+      fontSize: 12,
+      width: 120,
+      overflow: 'truncate'
+    }
+  },
+  series: [{
+    type: 'bar',
+    data: rankValues.map(function(v) {
+      return {
+        value: v,
+        itemStyle: {
+          color: v >= 20 ? '#27ae60' : v >= 10 ? '#3498db' : v > 0 ? '#f39c12' : '#d5d8dc',
+          borderRadius: v > 0 ? [0, 4, 4, 0] : [0, 0, 0, 0]
+        }
+      };
+    }),
+    barWidth: 20,
+    label: {
+      show: true,
+      position: 'right',
+      formatter: function(params) {
+        if (params.value === 0) return '未启动';
+        return params.value + '%';
+      },
+      fontSize: 12,
+      color: '#2c3e50'
+    }
+  }],
+  visualMap: {
+    show: false,
+    min: 0,
+    max: 25,
+    inRange: {
+      color: ['#d5d8dc', '#f39c12', '#3498db', '#27ae60']
+    }
+  }
+});
+
+// ========== Chart 6: Publication Distribution ==========
+var chartPub = echarts.init(document.getElementById('chart-publication-dist'));
+chartPub.setOption({
+  tooltip: {
+    trigger: 'item',
+    formatter: '{b}: {c}个 ({d}%)'
+  },
+  legend: {
+    bottom: 10,
+    textStyle: { fontSize: 13 }
+  },
+  color: ['#3498db', '#bdc3c7'],
+  series: [{
+    type: 'pie',
+    radius: ['35%', '65%'],
+    center: ['50%', '42%'],
+    avoidLabelOverlap: true,
+    itemStyle: {
+      borderRadius: 6,
+      borderColor: '#fff',
+      borderWidth: 2
+    },
+    label: {
+      show: true,
+      formatter: '{b}\n{c}个 ({d}%)',
+      fontSize: 14,
+      lineHeight: 20
+    },
+    labelLine: { length: 15, length2: 10 },
+    emphasis: {
+      label: { show: true, fontSize: 16, fontWeight: 'bold' }
+    },
+    data: [
+      { value: 6, name: '已公示' },
+      { value: 3, name: '无需公示' }
+    ]
+  }],
+  graphic: [{
+    type: 'text',
+    left: 'center',
+    top: '35%',
+    style: {
+      text: '100%',
+      fontSize: 22,
+      fontWeight: 'bold',
+      fill: '#3498db',
+      textAlign: 'center'
+    }
+  }, {
+    type: 'text',
+    left: 'center',
+    top: '45%',
+    style: {
+      text: '覆盖率',
+      fontSize: 12,
+      fill: '#7f8c8d',
+      textAlign: 'center'
+    }
+  }]
+});
+
+// ========== Responsive Resize ==========
+window.addEventListener('resize', function() {
+  chartPie.resize();
+  chartTime.resize();
+  chartBudget.resize();
+  chartFunnel.resize();
+  chartRanking.resize();
+  chartPub.resize();
+});
+</script>
+
+</body>
+</html>

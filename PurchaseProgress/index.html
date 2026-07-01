@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026年采购数据画像工作台</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <style>
+    /* ========== 全局基础 ========== */
+    :root {
+      --primary: #1a3a5c;
+      --primary-light: #2a5a8c;
+      --primary-dark: #0d2a42;
+      --gold: #d4af37;
+      --gold-light: #e8cc6a;
+      --gold-dark: #b8942a;
+      --white: #ffffff;
+      --gray-50: #f8f9fa;
+      --gray-100: #e9ecef;
+      --gray-200: #dee2e6;
+      --gray-300: #ced4da;
+      --gray-600: #6c757d;
+      --gray-800: #343a40;
+      --card-red: #e74c3c;
+      --card-orange: #f39c12;
+      --card-blue: #3498db;
+      --card-green: #2ecc71;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.18);
+      --shadow-xl: 0 16px 48px rgba(0,0,0,0.24);
+      --radius: 12px;
+      --radius-lg: 16px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Microsoft YaHei', '微软雅黑', 'PingFang SC', 'Helvetica Neue', sans-serif;
+      background: linear-gradient(135deg, #0d1b2a 0%, #1a3a5c 40%, #1b4d72 70%, #0d2a42 100%);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ========== 容器 ========== */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ========== Header 区域 ========== */
+    .header {
+      position: relative;
+      min-height: 280px;
+      padding: 40px 0 32px 0;
+      overflow: hidden;
+    }
+
+    .header-bg-chart {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .header-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(180deg, rgba(13,27,42,0.3) 0%, rgba(13,27,42,0.75) 100%);
+      z-index: 1;
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* 装饰横线 */
+    .header-deco-line {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+      border-radius: 2px;
+      margin-bottom: 20px;
+    }
+
+    .header-title {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      color: var(--white);
+      text-align: center;
+      margin-bottom: 12px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .header-subtitle {
+      font-size: 16px;
+      color: var(--gold-light);
+      letter-spacing: 2px;
+      text-align: center;
+      margin-bottom: 32px;
+      opacity: 0.9;
+    }
+
+    /* ========== KPI 数字区 ========== */
+    .kpi-row {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+
+    .kpi-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(212,175,55,0.25);
+      border-radius: 8px;
+      padding: 12px 24px;
+      backdrop-filter: blur(4px);
+      transition: all 0.3s ease;
+    }
+
+    .kpi-item:hover {
+      background: rgba(255,255,255,0.14);
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .kpi-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+
+    .kpi-icon-red { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+    .kpi-icon-orange { background: linear-gradient(135deg, #f39c12, #e67e22); }
+    .kpi-icon-blue { background: linear-gradient(135deg, #3498db, #2980b9); }
+    .kpi-icon-green { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+
+    .kpi-text-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.65);
+      letter-spacing: 1px;
+    }
+
+    .kpi-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+    }
+
+    .kpi-unit {
+      font-size: 13px;
+      color: var(--gold-light);
+      font-weight: 400;
+    }
+
+    /* ========== 分割线 ========== */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,175,55,0.3), transparent);
+      margin: 12px 0 40px 0;
+    }
+
+    /* ========== 区块标题 ========== */
+    .section-title-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .section-title-bar {
+      width: 4px;
+      height: 28px;
+      background: linear-gradient(180deg, var(--gold), var(--gold-dark));
+      border-radius: 2px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: 2px;
+    }
+
+    .section-title-hint {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      margin-left: 8px;
+    }
+
+    /* ========== 卡片网格 ========== */
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-bottom: 48px;
+    }
+
+    /* ========== 导航卡片 ========== */
+    .nav-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.03) 100%);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: var(--radius-lg);
+      padding: 28px 28px 24px 28px;
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      overflow: hidden;
+      text-decoration: none;
+      color: var(--white);
+    }
+
+    .nav-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+      transition: height 0.35s ease;
+    }
+
+    .nav-card-red::before { background: linear-gradient(90deg, #e74c3c, #c0392b, #e74c3c); }
+    .nav-card-orange::before { background: linear-gradient(90deg, #f39c12, #e67e22, #f39c12); }
+    .nav-card-blue::before { background: linear-gradient(90deg, #3498db, #2980b9, #3498db); }
+    .nav-card-green::before { background: linear-gradient(90deg, #2ecc71, #27ae60, #2ecc71); }
+
+    .nav-card:hover {
+      transform: translateY(-6px) scale(1.02);
+      border-color: rgba(255,255,255,0.25);
+      background: linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.06) 100%);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .nav-card:hover::before {
+      height: 6px;
+    }
+
+    /* 卡片内部光晕 */
+    .nav-card::after {
+      content: '';
+      position: absolute;
+      top: -80px; right: -80px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+    }
+
+    .nav-card-red::after { background: radial-gradient(circle, rgba(231,76,60,0.15), transparent 70%); }
+    .nav-card-orange::after { background: radial-gradient(circle, rgba(243,156,18,0.15), transparent 70%); }
+    .nav-card-blue::after { background: radial-gradient(circle, rgba(52,152,219,0.15), transparent 70%); }
+    .nav-card-green::after { background: radial-gradient(circle, rgba(46,204,113,0.15), transparent 70%); }
+
+    .nav-card:hover::after { opacity: 1; }
+
+    /* 卡片头部 */
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .card-icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .card-icon-wrap-red { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+    .card-icon-wrap-orange { background: linear-gradient(135deg, #f39c12, #e67e22); }
+    .card-icon-wrap-blue { background: linear-gradient(135deg, #3498db, #2980b9); }
+    .card-icon-wrap-green { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+
+    .card-icon {
+      font-size: 22px;
+      color: var(--white);
+    }
+
+    .card-title-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: 1px;
+      line-height: 1.4;
+    }
+
+    .card-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--gold);
+      margin-top: 4px;
+      opacity: 0.85;
+    }
+
+    .card-badge-star {
+      color: var(--gold);
+      font-size: 12px;
+    }
+
+    /* 卡片描述 */
+    .card-desc {
+      font-size: 14px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    /* 卡片统计行 */
+    .card-stats {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 18px;
+    }
+
+    .card-stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-stat-val {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .card-stat-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.45);
+    }
+
+    /* 卡片底部 */
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .card-tag {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1px;
+    }
+
+    .card-enter-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gold-light);
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+    }
+
+    .card-enter-btn-arrow {
+      font-size: 16px;
+      transition: transform 0.3s ease;
+    }
+
+    .nav-card:hover .card-enter-btn {
+      color: var(--gold);
+    }
+
+    .nav-card:hover .card-enter-btn-arrow {
+      transform: translateX(4px);
+    }
+
+    /* ========== 底部装饰图表区 ========== */
+    .deco-section {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .deco-chart-wrap {
+      width: 100%;
+      height: 180px;
+    }
+
+    /* ========== Footer ========== */
+    .footer {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 24px 0;
+      text-align: center;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .footer-line1 {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 1px;
+    }
+
+    .footer-line2 {
+      font-size: 12px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .footer-gold {
+      color: var(--gold);
+      opacity: 0.7;
+    }
+
+    /* ========== 响应式 ========== */
+    @media (max-width: 768px) {
+      .header-title { font-size: 24px; letter-spacing: 2px; }
+      .header-subtitle { font-size: 13px; }
+      .kpi-row { gap: 16px; }
+      .kpi-item { padding: 10px 16px; }
+      .kpi-value { font-size: 18px; }
+      .card-grid { grid-template-columns: 1fr; gap: 20px; }
+      .container { padding: 0 16px; }
+    }
+
+    @media (max-width: 480px) {
+      .header-title { font-size: 20px; }
+      .kpi-row { flex-direction: column; align-items: center; }
+    }
+
+    /* ========== 加载动画 ========== */
+    .fade-in {
+      animation: fadeIn 0.6s ease both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-in-delay-1 { animation-delay: 0.1s; }
+    .fade-in-delay-2 { animation-delay: 0.2s; }
+    .fade-in-delay-3 { animation-delay: 0.3s; }
+    .fade-in-delay-4 { animation-delay: 0.4s; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Header 区域 ===== -->
+  <header class="header">
+    <div id="headerBgChart" class="header-bg-chart"></div>
+    <div class="header-overlay"></div>
+    <div class="container">
+      <div class="header-content">
+        <div class="header-deco-line"></div>
+        <h1 class="header-title fade-in">2026年采购数据画像工作台</h1>
+        <p class="header-subtitle fade-in fade-in-delay-1">天津海运职业学院 · 双高+产教融合委托采购项目</p>
+
+        <div class="kpi-row fade-in fade-in-delay-2">
+          <div class="kpi-item">
+            <div class="kpi-icon kpi-icon-red">高</div>
+            <div class="kpi-text-group">
+              <span class="kpi-label">双高项目数</span>
+              <span class="kpi-value">42 <span class="kpi-unit">个</span></span>
+            </div>
+          </div>
+          <div class="kpi-item">
+            <div class="kpi-icon kpi-icon-green">产</div>
+            <div class="kpi-text-group">
+              <span class="kpi-label">产教融合项目数</span>
+              <span class="kpi-value">9 <span class="kpi-unit">个</span></span>
+            </div>
+          </div>
+          <div class="kpi-item">
+            <div class="kpi-icon kpi-icon-orange">¥</div>
+            <div class="kpi-text-group">
+              <span class="kpi-label">双高总预算</span>
+              <span class="kpi-value">3349.5 <span class="kpi-unit">万元</span></span>
+            </div>
+          </div>
+          <div class="kpi-item">
+            <div class="kpi-icon kpi-icon-blue">¥</div>
+            <div class="kpi-text-group">
+              <span class="kpi-label">产教融合总预算</span>
+              <span class="kpi-value">640 <span class="kpi-unit">万元</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="divider"></div>
+
+    <!-- ===== 区块标题 ===== -->
+    <div class="section-title-row fade-in fade-in-delay-3">
+      <div class="section-title-bar"></div>
+      <h2 class="section-title">数据画像导航</h2>
+      <span class="section-title-hint">点击卡片即可进入对应报告或仪表盘</span>
+    </div>
+
+    <!-- ===== 卡片网格 ===== -->
+    <div class="card-grid">
+
+      <!-- 卡片1：双高采购数据画像报告 -->
+      <a href="shuanggao_report.html" class="nav-card nav-card-red fade-in fade-in-delay-1">
+        <div class="card-header">
+          <div class="card-icon-wrap card-icon-wrap-red">
+            <span class="card-icon">&#x1F4CA;</span>
+          </div>
+          <div class="card-title-group">
+            <div class="card-title">双高采购数据画像报告</div>
+            <div class="card-badge"><span class="card-badge-star">&#9733;</span> 领导首选</div>
+          </div>
+        </div>
+        <div class="card-desc">涵盖双高建设42个采购项目的完整数据画像，含执行摘要、8类深度分析图表及改进建议，适合领导审阅和汇报使用。</div>
+        <div class="card-stats">
+          <div class="card-stat">
+            <span class="card-stat-val">42</span>
+            <span class="card-stat-label">项目数</span>
+          </div>
+          <div class="card-stat">
+            <span class="card-stat-val">3349.5万</span>
+            <span class="card-stat-label">总预算</span>
+          </div>
+          <div class="card-stat">
+            <span class="card-stat-val">8类</span>
+            <span class="card-stat-label">分析图表</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-tag">画像报告 · 完整版</span>
+          <span class="card-enter-btn">进入查看 <span class="card-enter-btn-arrow">&#8594;</span></span>
+        </div>
+      </a>
+
+      <!-- 卡片2：双高采购可视化仪表盘 -->
+      <a href="shuanggao_dashboard.html" class="nav-card nav-card-orange fade-in fade-in-delay-2">
+        <div class="card-header">
+          <div class="card-icon-wrap card-icon-wrap-orange">
+            <span class="card-icon">&#x1F4BB;</span>
+          </div>
+          <div class="card-title-group">
+            <div class="card-title">双高采购可视化仪表盘</div>
+            <div class="card-badge">交互式图表</div>
+          </div>
+        </div>
+        <div class="card-desc">交互式仪表盘视图，KPI核心指标卡片、采购流程漏斗图、部门预算分布、项目推进排名，支持鼠标悬停查看详情。</div>
+        <div class="card-stats">
+          <div class="card-stat">
+            <span class="card-stat-val">动态</span>
+            <span class="card-stat-label">交互图表</span>
+          </div>
+          <div class="card-stat">
+            <span class="card-stat-val">漏斗</span>
+            <span class="card-stat-label">流程分析</span>
+          </div>
+          <div class="card-stat">
+            <span class="card-stat-val">排名</span>
+            <span class="card-stat-label">推进排名</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-tag">可视化仪表盘 · 交互版</span>
+          <span class="card-enter-btn">进入查看 <span class="card-enter-btn-arrow">&#8594;</span></span>
+        </div>
+      </a>
+
+      <!-- 卡片3：产教融合数据画像报告 -->
+      <a href="chanjiao_report.html" class="nav-card nav-card-blue fade-in fade-in-delay-3">
+        <div class="card-header">
+          <div class="card-icon-wrap card-icon-wrap-blue">
+            <span class="card-icon">&#x1F4CA;</span>
+          </div>
+          <div class="card-title-group">
+            <div class="card-title">产教融合数据画像报告</div>
+            <div class="card-badge"><span class="card-badge-star">&#9733;</span> 领导首选</div>
+          </div>
+        </div>
+        <div class="card-desc">涵盖产教融合9个采购项目的完整数据画像，含执行摘要、7类深度分析图表及改进建议，适合领导审阅和汇报使用。</div>
+        <div class="card-stats">
+          <div class="card-stat">
+            <span class="card-stat-val">9</span>
+            <span class="card-stat-label">项目数</span>
+          </div>
+          <div class="card-stat">
+            <span class="card-stat-val">640万</span>
+            <span class="card-stat-label">总预算</span>
+          </div>
+          <div class="card-stat">
+            <span class="card-stat-val">7类</span>
+            <span class="card-stat-label">分析图表</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-tag">画像报告 · 完整版</span>
+          <span class="card-enter-btn">进入查看 <span class="card-enter-btn-arrow">&#8594;</span></span>
+        </div>
+      </a>
+
+      <!-- 卡片4：产教融合可视化仪表盘 -->
+      <a href="chanjiao_dashboard.html" class="nav-card nav-card-green fade-in fade-in-delay-4">
+        <div class="card-header">
+          <div class="card-icon-wrap card-icon-wrap-green">
+            <span class="card-icon">&#x1F4BB;</span>
+          </div>
+          <div class="card-title-group">
+            <div class="card-title">产教融合可视化仪表盘</div>
+            <div class="card-badge">交互式图表</div>
+          </div>
+        </div>
+        <div class="card-desc">交互式仪表盘视图，采购流程断点分析、报送时效分布、项目推进排名，支持鼠标悬停查看详情和趋势洞察。</div>
+        <div class="card-stats">
+          <div class="card-stat">
+            <span class="card-stat-val">动态</span>
+            <span class="card-stat-label">交互图表</span>
+          </div>
+          <div class="card-stat">
+            <span class="card-stat-val">断点</span>
+            <span class="card-stat-label">流程断点</span>
+          </div>
+          <div class="card-stat">
+            <span class="card-stat-val">排名</span>
+            <span class="card-stat-label">项目排名</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="card-tag">可视化仪表盘 · 交互版</span>
+          <span class="card-enter-btn">进入查看 <span class="card-enter-btn-arrow">&#8594;</span></span>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- ===== 底部装饰图表区（采购总览环形图） ===== -->
+    <div class="deco-section fade-in">
+      <div id="decoChart" class="deco-chart-wrap"></div>
+    </div>
+  </div>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-line1">数据来源：天津海运职业学院2026年双高建设及产教融合委托采购台账</div>
+        <div class="footer-line2">报告生成时间：2026年7月1日 · <span class="footer-gold">国资处制</span></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== JavaScript ===== -->
+  <script>
+    /* ===== Header背景装饰图表：科技数据流 ===== */
+    (function initHeaderBg() {
+      var chartDom = document.getElementById('headerBgChart');
+      var myChart = echarts.init(chartDom);
+
+      // 生成流动数据点
+      var data1 = [];
+      var data2 = [];
+      for (var i = 0; i < 120; i++) {
+        var x = i * 3;
+        data1.push([x, Math.sin(i * 0.15) * 40 + 60 + Math.random() * 10]);
+        data2.push([x, Math.cos(i * 0.12) * 35 + 55 + Math.random() * 8]);
+      }
+
+      var option = {
+        backgroundColor: 'transparent',
+        grid: { left: 0, right: 0, top: 0, bottom: 0 },
+        xAxis: {
+          type: 'value',
+          show: false,
+          min: 0,
+          max: 360
+        },
+        yAxis: {
+          type: 'value',
+          show: false,
+          min: 0,
+          max: 120
+        },
+        series: [
+          {
+            type: 'line',
+            data: data1,
+            smooth: 0.4,
+            symbol: 'none',
+            lineStyle: {
+              width: 2,
+              color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                { offset: 0, color: 'rgba(212,175,55,0.05)' },
+                { offset: 0.5, color: 'rgba(212,175,55,0.2)' },
+                { offset: 1, color: 'rgba(212,175,55,0.05)' }
+              ])
+            },
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: 'rgba(212,175,55,0.08)' },
+                { offset: 1, color: 'rgba(212,175,55,0)' }
+              ])
+            }
+          },
+          {
+            type: 'line',
+            data: data2,
+            smooth: 0.4,
+            symbol: 'none',
+            lineStyle: {
+              width: 1.5,
+              color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                { offset: 0, color: 'rgba(52,152,219,0.05)' },
+                { offset: 0.5, color: 'rgba(52,152,219,0.15)' },
+                { offset: 1, color: 'rgba(52,152,219,0.05)' }
+              ])
+            },
+            areaStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                { offset: 0, color: 'rgba(52,152,219,0.06)' },
+                { offset: 1, color: 'rgba(52,152,219,0)' }
+              ])
+            }
+          },
+          {
+            type: 'effectScatter',
+            coordinateSystem: 'cartesian2d',
+            data: [
+              [60, 85], [150, 70], [240, 92], [320, 68],
+              [90, 55], [200, 78], [280, 62], [350, 80]
+            ],
+            symbolSize: 4,
+            rippleEffect: { brushType: 'stroke', scale: 4, period: 4 },
+            itemStyle: { color: 'rgba(212,175,55,0.3)' }
+          }
+        ],
+        animation: true,
+        animationDuration: 2000
+      };
+
+      myChart.setOption(option);
+
+      window.addEventListener('resize', function() { myChart.resize(); });
+    })();
+
+    /* ===== 底部装饰图表：采购总览环形图 ===== */
+    (function initDecoChart() {
+      var chartDom = document.getElementById('decoChart');
+      var myChart = echarts.init(chartDom);
+
+      var option = {
+        backgroundColor: 'transparent',
+        tooltip: {
+          trigger: 'item',
+          backgroundColor: 'rgba(13,27,42,0.85)',
+          borderColor: 'rgba(212,175,55,0.3)',
+          textStyle: { color: '#fff', fontSize: 13 }
+        },
+        legend: {
+          bottom: 0,
+          textStyle: { color: 'rgba(255,255,255,0.6)', fontSize: 12 },
+          itemWidth: 12,
+          itemHeight: 12,
+          itemGap: 24
+        },
+        series: [
+          {
+            name: '采购总览',
+            type: 'pie',
+            radius: ['42%', '68%'],
+            center: ['50%', '45%'],
+            avoidLabelOverlap: true,
+            itemStyle: {
+              borderRadius: 6,
+              borderColor: 'rgba(13,27,42,0.6)',
+              borderWidth: 2
+            },
+            label: {
+              show: true,
+              color: 'rgba(255,255,255,0.75)',
+              fontSize: 13,
+              formatter: '{b}\n{d}%'
+            },
+            labelLine: {
+              lineStyle: { color: 'rgba(255,255,255,0.3)' }
+            },
+            emphasis: {
+              label: { fontSize: 15, fontWeight: 'bold', color: '#fff' },
+              itemStyle: { shadowBlur: 20, shadowColor: 'rgba(0,0,0,0.3)' }
+            },
+            data: [
+              {
+                value: 3349.5,
+                name: '双高建设',
+                itemStyle: {
+                  color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
+                    { offset: 0, color: '#e74c3c' },
+                    { offset: 1, color: '#c0392b' }
+                  ])
+                }
+              },
+              {
+                value: 640,
+                name: '产教融合',
+                itemStyle: {
+                  color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
+                    { offset: 0, color: '#3498db' },
+                    { offset: 1, color: '#2980b9' }
+                  ])
+                }
+              }
+            ],
+            animationType: 'scale',
+            animationEasing: 'elasticOut',
+            animationDuration: 1600
+          },
+          /* 内圈装饰：项目数量 */
+          {
+            name: '项目数量',
+            type: 'pie',
+            radius: ['22%', '38%'],
+            center: ['50%', '45%'],
+            silent: true,
+            label: {
+              show: true,
+              position: 'center',
+              formatter: '51个项目\n3989.5万元',
+              fontSize: 14,
+              fontWeight: 600,
+              color: 'rgba(255,255,255,0.8)',
+              lineHeight: 22
+            },
+            itemStyle: {
+              borderRadius: 4,
+              borderColor: 'rgba(13,27,42,0.4)',
+              borderWidth: 1
+            },
+            data: [
+              {
+                value: 42,
+                name: '双高项目',
+                itemStyle: {
+                  color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
+                    { offset: 0, color: 'rgba(231,76,60,0.6)' },
+                    { offset: 1, color: 'rgba(192,57,43,0.4)' }
+                  ])
+                }
+              },
+              {
+                value: 9,
+                name: '产教融合项目',
+                itemStyle: {
+                  color: new echarts.graphic.LinearGradient(0, 0, 1, 1, [
+                    { offset: 0, color: 'rgba(52,152,219,0.6)' },
+                    { offset: 1, color: 'rgba(41,128,185,0.4)' }
+                  ])
+                }
+              }
+            ],
+            animationType: 'scale',
+            animationEasing: 'elasticOut',
+            animationDuration: 2000
+          }
+        ]
+      };
+
+      myChart.setOption(option);
+
+      window.addEventListener('resize', function() { myChart.resize(); });
+    })();
+  </script>
+
+</body>
+</html>

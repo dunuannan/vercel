@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026年「双高」委托采购台账数据画像报告</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+:root {
+  --primary: #2c3e50;
+  --primary-light: #34495e;
+  --accent: #e74c3c;
+  --accent-orange: #f39c12;
+  --accent-green: #27ae60;
+  --accent-blue: #2980b9;
+  --accent-purple: #8e44ad;
+  --bg-light: #f8f9fa;
+  --bg-white: #ffffff;
+  --border: #dee2e6;
+  --text-dark: #2c3e50;
+  --text-muted: #6c757d;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.12);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: '微软雅黑', 'Microsoft YaHei', sans-serif;
+  color: var(--text-dark);
+  background: var(--bg-light);
+  line-height: 1.7;
+  font-size: 15px;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+/* Header */
+.report-header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: #fff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.report-header::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><circle cx="100" cy="60" r="40" fill="rgba(255,255,255,0.03)"/><circle cx="300" cy="40" r="60" fill="rgba(255,255,255,0.02)"/><circle cx="600" cy="80" r="50" fill="rgba(255,255,255,0.03)"/><circle cx="900" cy="50" r="70" fill="rgba(255,255,255,0.02)"/></svg>') repeat-x;
+  opacity: 0.5;
+}
+.report-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+.report-header .subtitle {
+  font-size: 14px;
+  opacity: 0.85;
+  font-weight: 400;
+}
+/* Section */
+.section {
+  background: var(--bg-white);
+  border-radius: 10px;
+  padding: 28px 30px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+}
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 18px;
+  padding-left: 14px;
+  border-left: 4px solid var(--accent-blue);
+  line-height: 1.4;
+}
+.section-title .badge {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+/* Executive Summary */
+.executive-summary {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+  border-radius: 10px;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  border: 1px solid #f0d78c;
+  position: relative;
+}
+.executive-summary::before {
+  content: '⚠';
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  font-size: 24px;
+  color: var(--accent-orange);
+}
+.executive-summary .summary-text {
+  padding-left: 36px;
+  font-size: 14.5px;
+  line-height: 1.8;
+}
+.executive-summary .summary-text p { margin-bottom: 8px; }
+.executive-summary .summary-text strong { color: var(--accent); }
+.executive-summary .summary-text .highlight { 
+  color: var(--accent); 
+  font-weight: 700; 
+}
+.executive-summary .summary-text .positive { 
+  color: var(--accent-green); 
+  font-weight: 700; 
+}
+/* KPI Cards */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.kpi-card {
+  background: var(--bg-white);
+  border-radius: 10px;
+  padding: 22px 20px;
+  box-shadow: var(--shadow);
+  text-align: center;
+  transition: transform 0.2s;
+  border-top: 3px solid var(--accent-blue);
+}
+.kpi-card:nth-child(2) { border-top-color: var(--accent-orange); }
+.kpi-card:nth-child(3) { border-top-color: var(--accent); }
+.kpi-card:nth-child(4) { border-top-color: var(--accent-green); }
+.kpi-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.kpi-card .kpi-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.kpi-card .kpi-value {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+.kpi-card:nth-child(3) .kpi-value { color: var(--accent); }
+.kpi-card .kpi-unit {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.kpi-card .kpi-trend {
+  font-size: 12px;
+  color: var(--accent);
+  margin-top: 4px;
+}
+/* Findings */
+.finding-item {
+  background: var(--bg-light);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  border: 1px solid var(--border);
+}
+.finding-item .finding-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+.finding-item:nth-child(1) .finding-icon { background: var(--accent); }
+.finding-item:nth-child(2) .finding-icon { background: var(--accent-orange); }
+.finding-item:nth-child(3) .finding-icon { background: var(--accent-blue); }
+.finding-item:nth-child(4) .finding-icon { background: var(--accent-purple); }
+.finding-item:nth-child(5) .finding-icon { background: #16a085; }
+.finding-item:nth-child(6) .finding-icon { background: #d35400; }
+.finding-item:nth-child(7) .finding-icon { background: #2c3e50; }
+.finding-item .finding-content h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--primary);
+}
+.finding-item .finding-content p {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.finding-item .finding-content .data-tag {
+  display: inline-block;
+  background: rgba(44,62,80,0.08);
+  color: var(--primary);
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-weight: 600;
+  margin: 0 2px;
+}
+/* Tables */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  margin-top: 10px;
+}
+.data-table thead th {
+  background: var(--primary);
+  color: #fff;
+  padding: 10px 12px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 13px;
+}
+.data-table tbody td {
+  padding: 9px 12px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.data-table tbody tr:hover { background: rgba(41,128,185,0.06); }
+.data-table tbody tr:nth-child(even) { background: var(--bg-light); }
+.data-table .num { font-weight: 600; color: var(--primary); }
+.data-table .danger { color: var(--accent); font-weight: 700; }
+.data-table .warning { color: var(--accent-orange); font-weight: 600; }
+.data-table .success { color: var(--accent-green); font-weight: 600; }
+/* Charts */
+.chart-container {
+  width: 100%;
+  height: 380px;
+  margin-top: 16px;
+}
+.chart-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.chart-container-half {
+  width: 100%;
+  height: 320px;
+}
+/* Timeliness List */
+.timeliness-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.timeliness-block {
+  background: var(--bg-light);
+  border-radius: 8px;
+  padding: 18px 20px;
+  border: 1px solid var(--border);
+}
+.timeliness-block h4 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.timeliness-block h4 .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.timeliness-block ul {
+  list-style: none;
+  padding: 0;
+}
+.timeliness-block ul li {
+  font-size: 13px;
+  padding: 4px 0;
+  color: var(--text-muted);
+  border-bottom: 1px dashed rgba(0,0,0,0.06);
+  line-height: 1.5;
+}
+.timeliness-block ul li:last-child { border-bottom: none; }
+.timeliness-block .count {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+/* Recommendations */
+.rec-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+.rec-item {
+  background: var(--bg-light);
+  border-radius: 8px;
+  padding: 16px 20px;
+  border-left: 4px solid;
+  display: flex;
+  gap: 14px;
+}
+.rec-item.p1 { border-left-color: var(--accent); }
+.rec-item.p2 { border-left-color: var(--accent-orange); }
+.rec-item.p3 { border-left-color: var(--accent-blue); }
+.rec-item.p4 { border-left-color: var(--accent-green); }
+.rec-item.p5 { border-left-color: var(--accent-purple); }
+.rec-item .priority {
+  width: 40px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  flex-shrink: 0;
+  text-align: center;
+}
+.rec-item.p2 .priority { color: var(--accent-orange); }
+.rec-item.p3 .priority { color: var(--accent-blue); }
+.rec-item.p4 .priority { color: var(--accent-green); }
+.rec-item.p5 .priority { color: var(--accent-purple); }
+.rec-item .rec-content h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+.rec-item .rec-content p {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+/* Footer */
+.report-footer {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-muted);
+  font-size: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+}
+/* Progress bar */
+.progress-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.progress-bar-bg {
+  width: 80px;
+  height: 16px;
+  background: #e9ecef;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+.progress-bar-fill.low { background: var(--accent); }
+.progress-bar-fill.mid { background: var(--accent-orange); }
+.progress-bar-fill.high { background: var(--accent-green); }
+.progress-bar-val {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary);
+  min-width: 40px;
+}
+/* Responsive */
+@media (max-width: 768px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .chart-row { grid-template-columns: 1fr; }
+  .timeliness-grid { grid-template-columns: 1fr; }
+  .report-header h1 { font-size: 22px; }
+  .container { padding: 12px; }
+}
+@media (max-width: 480px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="report-header">
+  <h1>2026年「双高」委托采购台账数据画像报告</h1>
+  <div class="subtitle">
+    天津海运职业学院 | 生成日期：2026年7月1日 | 分析师：智数分析专家团 | 数据范围：42个委托采购项目
+  </div>
+</div>
+
+<!-- Executive Summary -->
+<div class="executive-summary">
+  <div class="summary-text">
+    <p>截至数据采集日，42个「双高」委托采购项目整体推进率仅<span class="highlight">14.3%</span>，中位推进率<span class="highlight">7.7%</span>——仅完成1个节点即算"推进中"的项目占69%，无任何项目完成全流程，采购进度<span class="highlight">严重滞后</span>。</p>
+    <p>采购流程呈现明显的<span class="highlight">"断崖式"衰减</span>：需求报送完成率69%→论证申请35.7%→院务会讨论11.9%→纪委报备0%，<span class="highlight">纪委报备节点</span>成为全员未通过的流程断点。同时，13个项目（31%）尚未报送需求书，5个项目责任部门"待定"，管理衔接存在明显空档。</p>
+    <p>预算高度集中于实训基地类（<span class="highlight">1520万元，占45.4%</span>），海洋工程装备系独担12个项目（预算1981.5万元，占59.2%），<span class="highlight">集中度风险</span>显著。国际交流类推进率仅1.5%，4个项目全部未启动，为进度最差的类别。</p>
+    <p>值得关注的<span class="positive">亮点</span>：PGSD能力分析项目推进率84.6%（最接近完成），思政视频项目推进率76.9%且有中标结果，2个项目已中标且实现0.42万元预算节约。</p>
+  </div>
+</div>
+
+<!-- KPI Cards -->
+<div class="kpi-grid">
+  <div class="kpi-card">
+    <div class="kpi-label">项目总数</div>
+    <div class="kpi-value">42</div>
+    <div class="kpi-unit">个采购项目</div>
+    <div class="kpi-trend">10个建设任务类别 | 15个责任部门</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">总预算金额</div>
+    <div class="kpi-value">3349.5</div>
+    <div class="kpi-unit">万元</div>
+    <div class="kpi-trend">平均预算79.8万元 | 最大670万元</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">平均推进率</div>
+    <div class="kpi-value">14.3%</div>
+    <div class="kpi-unit">中位数7.7%</div>
+    <div class="kpi-trend">0个已完成 | 13个未启动</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">已公示项目</div>
+    <div class="kpi-value">17</div>
+    <div class="kpi-unit">个（占40.5%）</div>
+    <div class="kpi-trend">2个已中标 | 节约0.42万元</div>
+  </div>
+</div>
+
+<!-- Core Findings -->
+<div class="section">
+  <div class="section-title">核心发现</div>
+  
+  <div class="finding-item">
+    <div class="finding-icon">1</div>
+    <div class="finding-content">
+      <h4>整体推进严重滞后，近三分之一项目未启动</h4>
+      <p>42个项目平均推进率仅<span class="data-tag">14.3%</span>，中位推进率<span class="data-tag">7.7%</span>，反映多数项目仅完成1个节点（需求报送）。0个项目完成全流程，<span class="data-tag">13个项目（31%）</span>完全未启动，无任何采购节点推进。</p>
+    </div>
+  </div>
+  
+  <div class="finding-item">
+    <div class="finding-icon">2</div>
+    <div class="finding-content">
+      <h4>采购流程"断崖式"衰减，纪委报备为关键断点</h4>
+      <p>13个采购节点完成率呈逐级递减：需求报送<span class="data-tag">69%</span>→论证申请<span class="data-tag">35.7%</span>→院务会讨论<span class="data-tag">11.9%</span>→纪委报备<span class="data-tag">0%</span>。纪委报备节点42个项目无一完成，成为流程中最严重的阻塞点，直接影响后续签订委托代理协议、编制政采计划等环节。</p>
+    </div>
+  </div>
+  
+  <div class="finding-item">
+    <div class="finding-icon">3</div>
+    <div class="finding-content">
+      <h4>预算高度集中，实训基地类占近半预算</h4>
+      <p>"建设产教融合实训基地"类别5个项目预算合计<span class="data-tag">1520万元</span>，占总预算<span class="data-tag">45.4%</span>，其中海工智能智造实践基地单项预算670万元为最大项目。海洋工程装备系独担<span class="data-tag">12个项目</span>、预算<span class="data-tag">1981.5万元（59.2%）</span>，集中度风险显著。</p>
+    </div>
+  </div>
+  
+  <div class="finding-item">
+    <div class="finding-icon">4</div>
+    <div class="finding-content">
+      <h4>需求报送时效问题突出，31%项目未报送需求书</h4>
+      <p>按时报送仅<span class="data-tag">12个项目（28.6%）</span>，延迟报送<span class="data-tag">15个（35.7%）</span>，未报送<span class="data-tag">13个（31%）</span>。超三分之一项目尚未启动最基础的需求报送环节，延迟报送比例高于按时报送，反映前期准备不足。</p>
+    </div>
+  </div>
+  
+  <div class="finding-item">
+    <div class="finding-icon">5</div>
+    <div class="finding-content">
+      <h4>国际交流类推进最差，4个项目全部未启动</h4>
+      <p>"拓展国际交流与合作"类别5个项目平均推进率仅<span class="data-tag">1.5%</span>，4个项目完全未启动，仅1个项目（国际暑期学校）完成需求报送但预算为0元。该类别为进度最差的建设任务。</p>
+    </div>
+  </div>
+  
+  <div class="finding-item">
+    <div class="finding-icon">6</div>
+    <div class="finding-content">
+      <h4>5个项目责任部门"待定"，管理衔接存在空档</h4>
+      <p>3个项目责任部门标注为"待定"，另有2个项目名称为"待定"，涉及预算<span class="data-tag">215万元</span>。缺乏明确责任主体将直接影响项目推进效率和责任追究。</p>
+    </div>
+  </div>
+  
+  <div class="finding-item">
+    <div class="finding-icon">7</div>
+    <div class="finding-content">
+      <h4>已中标项目节约率极低，预算执行刚起步</h4>
+      <p>仅<span class="data-tag">2个项目</span>完成中标，节约总额<span class="data-tag">0.42万元</span>，平均节约率<span class="data-tag">0.6%</span>。剩余40个项目尚在中标前各环节，预算执行进度极为早期，3349.1万元预算待释放。</p>
+    </div>
+  </div>
+</div>
+
+<!-- Procurement Process Progress -->
+<div class="section">
+  <div class="section-title">采购流程进度分析<span class="badge">关键瓶颈</span></div>
+  <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">13个采购节点完成率呈逐级递减趋势，从需求报送69%骤降至纪委报备0%，存在明显的流程阻塞。</p>
+  
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>采购节点</th>
+        <th>完成项目数</th>
+        <th>完成率</th>
+        <th>趋势判断</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>需求报送时间</td>
+        <td class="num">29</td>
+        <td class="success">69.0%</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>提交需求论证申请</td>
+        <td class="num">15</td>
+        <td class="warning">35.7%</td>
+        <td>↓ 需求论证环节阻塞</td>
+      </tr>
+      <tr>
+        <td>安排论证及费用计划</td>
+        <td class="num">15</td>
+        <td class="warning">35.7%</td>
+        <td>— 与论证申请同步</td>
+      </tr>
+      <tr>
+        <td>上院务党委会讨论</td>
+        <td class="num">5</td>
+        <td class="danger">11.9%</td>
+        <td>↓ 院务会审批瓶颈</td>
+      </tr>
+      <tr>
+        <td>项目提交用款审批</td>
+        <td class="num">3</td>
+        <td class="danger">7.1%</td>
+        <td>↓ 用款审批跟进不足</td>
+      </tr>
+      <tr>
+        <td>纪委报备</td>
+        <td class="num">0</td>
+        <td class="danger">0.0%</td>
+        <td style="color:var(--accent);font-weight:700;">⚠ 全员未通过·关键断点</td>
+      </tr>
+      <tr>
+        <td>签订委托代理协议</td>
+        <td class="num">2</td>
+        <td class="danger">4.8%</td>
+        <td>↓ 受纪委报备阻塞</td>
+      </tr>
+      <tr>
+        <td>编制政采计划</td>
+        <td class="num">2</td>
+        <td class="danger">4.8%</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>上报政采计划</td>
+        <td class="num">2</td>
+        <td class="danger">4.8%</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>招标文件制定及发公告</td>
+        <td class="num">2</td>
+        <td class="danger">4.8%</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>执行采购发布公告</td>
+        <td class="num">2</td>
+        <td class="danger">4.8%</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>签订采购合同</td>
+        <td class="num">1</td>
+        <td class="danger">2.4%</td>
+        <td>↓ 仅1个项目签约</td>
+      </tr>
+      <tr>
+        <td>验收时间</td>
+        <td class="num">0</td>
+        <td class="danger">0.0%</td>
+        <td>无项目进入验收</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div id="chart-process" class="chart-container"></div>
+</div>
+
+<!-- Task Category Analysis -->
+<div class="section">
+  <div class="section-title">建设任务类别分析</div>
+  <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">10个建设任务类别中，实训基地类预算占比最高（45.4%），国际交流类推进率最低（1.5%）。</p>
+  
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>建设任务简称</th>
+        <th>项目数量</th>
+        <th>总预算(万元)</th>
+        <th>平均推进率</th>
+        <th>已完成</th>
+        <th>推进中</th>
+        <th>未启动</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>产教融合</td>
+        <td class="num">1</td>
+        <td class="num">310.0</td>
+        <td class="success">38.5%</td>
+        <td>0</td><td>1</td><td>0</td>
+      </tr>
+      <tr>
+        <td>双师队伍</td>
+        <td class="num">1</td>
+        <td class="num">60.0</td>
+        <td class="success">30.8%</td>
+        <td>0</td><td>1</td><td>0</td>
+      </tr>
+      <tr>
+        <td>园区办学</td>
+        <td class="num">1</td>
+        <td class="num">117.0</td>
+        <td class="success">30.8%</td>
+        <td>0</td><td>1</td><td>0</td>
+      </tr>
+      <tr>
+        <td>高水平专业群</td>
+        <td class="num">6</td>
+        <td class="num">159.0</td>
+        <td class="warning">25.6%</td>
+        <td>0</td><td>4</td><td class="danger">2</td>
+      </tr>
+      <tr>
+        <td>立德树人</td>
+        <td class="num">13</td>
+        <td class="num">197.0</td>
+        <td class="warning">16.6%</td>
+        <td>0</td><td>9</td><td class="danger">4</td>
+      </tr>
+      <tr>
+        <td>数字化教学</td>
+        <td class="num">6</td>
+        <td class="num">400.0</td>
+        <td class="danger">9.0%</td>
+        <td>0</td><td>5</td><td class="danger">1</td>
+      </tr>
+      <tr>
+        <td>实训基地</td>
+        <td class="num">5</td>
+        <td class="num">1520.0</td>
+        <td class="danger">7.7%</td>
+        <td>0</td><td>3</td><td class="danger">2</td>
+      </tr>
+      <tr>
+        <td>新形态教材</td>
+        <td class="num">1</td>
+        <td class="num">90.0</td>
+        <td class="danger">7.7%</td>
+        <td>0</td><td>1</td><td>0</td>
+      </tr>
+      <tr>
+        <td>核心课程</td>
+        <td class="num">3</td>
+        <td class="num">312.5</td>
+        <td class="danger">7.7%</td>
+        <td>0</td><td>3</td><td>0</td>
+      </tr>
+      <tr>
+        <td>国际交流</td>
+        <td class="num">5</td>
+        <td class="num">184.0</td>
+        <td class="danger">1.5%</td>
+        <td>0</td><td>1</td><td class="danger">4</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <div class="chart-row">
+    <div id="chart-category-budget" class="chart-container-half"></div>
+    <div id="chart-category-progress" class="chart-container-half"></div>
+  </div>
+</div>
+
+<!-- Department Analysis -->
+<div class="section">
+  <div class="section-title">责任部门分析</div>
+  <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">15个责任部门中，海洋工程装备系承担项目最多（12个）、预算最高（1981.5万元，占59.2%），3个项目责任部门为"待定"。</p>
+  
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>责任部门</th>
+        <th>项目数量</th>
+        <th>总预算(万元)</th>
+        <th>预算占比</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>海洋工程装备系</td><td class="num">12</td><td class="num">1981.5</td><td class="danger">59.2%</td></tr>
+      <tr><td>科研处</td><td class="num">2</td><td class="num">427.0</td><td>12.7%</td></tr>
+      <tr><td>待定</td><td class="num">3</td><td class="num">215.0</td><td class="warning">6.4%</td></tr>
+      <tr><td>对外合作交流办公室</td><td class="num">5</td><td class="num">184.0</td><td>5.5%</td></tr>
+      <tr><td>教务处</td><td class="num">6</td><td class="num">159.0</td><td>4.8%</td></tr>
+      <tr><td>网信办</td><td class="num">1</td><td class="num">95.0</td><td>2.8%</td></tr>
+      <tr><td>基础教学部</td><td class="num">1</td><td class="num">72.0</td><td>2.1%</td></tr>
+      <tr><td>人事处</td><td class="num">1</td><td class="num">60.0</td><td>1.8%</td></tr>
+      <tr><td>党委宣传部</td><td class="num">3</td><td class="num">46.0</td><td>1.4%</td></tr>
+      <tr><td>实训教学中心</td><td class="num">1</td><td class="num">45.0</td><td>1.3%</td></tr>
+      <tr><td>招生就业处</td><td class="num">3</td><td class="num">38.0</td><td>1.1%</td></tr>
+      <tr><td>马克思主义学院</td><td class="num">1</td><td class="num">9.0</td><td>0.3%</td></tr>
+      <tr><td>团委</td><td class="num">1</td><td class="num">8.0</td><td>0.2%</td></tr>
+      <tr><td>体育教学部</td><td class="num">1</td><td class="num">5.0</td><td>0.2%</td></tr>
+      <tr><td>党委组织部</td><td class="num">1</td><td class="num">5.0</td><td>0.2%</td></tr>
+    </tbody>
+  </table>
+  
+  <div id="chart-department" class="chart-container"></div>
+</div>
+
+<!-- Timeliness Analysis -->
+<div class="section">
+  <div class="section-title">需求报送时效分析</div>
+  <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">42个项目中，按时报送仅28.6%，延迟报送35.7%，未报送31%——超三分之二项目存在报送时效问题。</p>
+  
+  <div id="chart-timeliness" class="chart-container" style="height:280px;"></div>
+  
+  <div class="timeliness-grid" style="margin-top:20px;">
+    <div class="timeliness-block">
+      <h4><span class="dot" style="background:var(--accent-green);"></span>按时报送（12个项目）</h4>
+      <ul>
+        <li>拍摄立德树人思政资源视频项目（推进率76.9%）</li>
+        <li>建设校园红色文化长廊项目</li>
+        <li>网络名人培养项目</li>
+        <li>职业规划大赛专项培训项目</li>
+        <li>建设就业指导与职业规划工作室</li>
+        <li>职业规划与就业指导课程师资能力提升项目</li>
+        <li>海洋工程装备狭小空间内腔智能检测中试项目（推进率38.5%）</li>
+        <li>天津海运职业学院创新创业服务项目</li>
+        <li>毕业生就业质量评价调研报告项目</li>
+        <li>招生质量调研报告编制项目</li>
+        <li>天津海运职业学院教师发展中心设备购置项目</li>
+        <li>智慧校园数据共享建设项目</li>
+      </ul>
+    </div>
+    
+    <div class="timeliness-block">
+      <h4><span class="dot" style="background:var(--accent-orange);"></span>延迟报送（15个项目）</h4>
+      <ul>
+        <li>学生开展暑期"三下乡"实践活动项目</li>
+        <li>建设校园文化景观项目</li>
+        <li>海洋工程装备技术专业群核心课程建设项目</li>
+        <li>海洋工程装备技术专业群优质课程建设项目</li>
+        <li>海洋工程装备技术专业群教学资源库</li>
+        <li>海洋工程装备技术专业群教材建设项目</li>
+        <li>海洋工程结构与舾装装配精度控制实训室建设项目</li>
+        <li>海工智能智造实践基地建设项目</li>
+        <li>海洋工程装备智能焊接虚拟仿真中心建设项目</li>
+        <li>虚拟教研室（名称待定）</li>
+        <li>待定（数字化教学·35万）</li>
+        <li>待定（数字化教学·45万）</li>
+        <li>海工智算平台扩容建设项目</li>
+        <li>国际暑期学校项目（预算0万）</li>
+        <li>海洋工程装备水下机器人技术开发中心项目</li>
+      </ul>
+    </div>
+    
+    <div class="timeliness-block">
+      <h4><span class="dot" style="background:var(--accent);"></span>未报送（13个项目）⚠</h4>
+      <ul>
+        <li>搭建党建数字化学习平台（5万）</li>
+        <li>建设党支部书记工作室（6万）</li>
+        <li>建设海洋工程装备系特色楼宇文化项目（8万）</li>
+        <li>建设海工体适能教学场域（5万）</li>
+        <li>船舶内燃机智能故障决策分析系统开发项目（10万）</li>
+        <li>海洋工程装备典型结构智能焊接工艺研发项目（13万）</li>
+        <li>海洋工程装备智能制造产线建设项目（<strong style="color:var(--accent)">400万</strong>）</li>
+        <li>海洋工程装备管系智能制造产线建设项目（<strong style="color:var(--accent)">190万</strong>）</li>
+        <li>海工教学资源库平台建设项目（90万）</li>
+        <li>海洋工程装备VR典型工作任务场景实训设备采购项目（45万）</li>
+        <li>海洋工程装备国际产教协同技能培训模块开发项目（45万）</li>
+        <li>天津海运职业学院工程实践创研工坊项目（69万）</li>
+        <li>"中文+职业技能"培训项目（25万）</li>
+      </ul>
+    </div>
+    
+    <div class="timeliness-block">
+      <h4><span class="dot" style="background:#27ae60;"></span>提前完成（2个项目）★</h4>
+      <ul>
+        <li>非遗技能大师工作室项目（推进率23.1%，已公示）</li>
+        <li>PGSD能力分析项目（推进率84.6%，已中标，节约率0.17%）</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Project Progress Detail -->
+<div class="section">
+  <div class="section-title">项目推进率分布</div>
+  <div id="chart-progress-dist" class="chart-container"></div>
+</div>
+
+<!-- Budget Execution -->
+<div class="section">
+  <div class="section-title">预算执行概况</div>
+  <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">仅2个项目完成中标，预算执行处于极早期阶段。3349.08万元预算待释放。</p>
+  
+  <div class="chart-row">
+    <div id="chart-budget-exec" class="chart-container-half"></div>
+    <div id="chart-budget-pie" class="chart-container-half"></div>
+  </div>
+  
+  <table class="data-table" style="margin-top:16px;">
+    <thead>
+      <tr>
+        <th>项目名称</th>
+        <th>预算(万元)</th>
+        <th>中标金额(万元)</th>
+        <th>节约率</th>
+        <th>推进率</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>拍摄立德树人思政资源视频项目</td>
+        <td class="num">29.2</td>
+        <td class="num">28.9</td>
+        <td class="success">1.03%</td>
+        <td class="success">76.9%</td>
+      </tr>
+      <tr>
+        <td>PGSD能力分析项目</td>
+        <td class="num">70.0</td>
+        <td class="num">69.88</td>
+        <td class="success">0.17%</td>
+        <td class="success">84.6%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Conclusions & Recommendations -->
+<div class="section">
+  <div class="section-title">结论与建议</div>
+  
+  <div class="rec-grid">
+    <div class="rec-item p1">
+      <div class="priority">P1<br>紧急</div>
+      <div class="rec-content">
+        <h4>立即疏通纪委报备节点，消除流程断点</h4>
+        <p>纪委报备完成率0%是当前最严重的流程阻塞。建议：①明确纪委报备的具体要求和流程指引；②组织专题培训，确保各责任部门了解报备规范；③对已通过院务会讨论的5个项目优先办理纪委报备，打通后续采购环节。预期：疏通此节点后，可立即释放5个项目进入委托代理协议签订阶段。</p>
+      </div>
+    </div>
+    
+    <div class="rec-item p2">
+      <div class="priority">P2<br>重要</div>
+      <div class="rec-content">
+        <h4>督促13个未报送项目尽快启动需求报送</h4>
+        <p>13个未启动项目中含2个400万+大额项目（智能制造产线400万、管系智能制造产线190万），合计预算790万。建议：①逐项明确责任部门和报送时间节点；②对海洋工程装备系的未报送项目进行专项督办；③对"待定"责任部门的项目尽快确定归属。预期：13个项目启动报送后，整体推进率可从14.3%提升至约30%。</p>
+      </div>
+    </div>
+    
+    <div class="rec-item p3">
+      <div class="priority">P3<br>优先</div>
+      <div class="rec-content">
+        <h4>加快院务会讨论审批节奏，提升论证通过率</h4>
+        <p>已完成论证及费用计划的15个项目中仅5个通过院务会讨论（33%转化率），10个项目在院务会环节停滞。建议：①增加院务会讨论频次或设立采购专题会议；②对已完成论证的项目批量审议，提高审批效率；③建立论证-审批时间约束机制，避免论证后长期搁置。</p>
+      </div>
+    </div>
+    
+    <div class="rec-item p4">
+      <div class="priority">P4<br>关注</div>
+      <div class="rec-content">
+        <h4>加强海洋工程装备系项目集中管理，防范集中度风险</h4>
+        <p>海洋工程装备系承担12个项目、1981.5万元预算（59.2%），且其中2个项目预算超400万完全未启动。建议：①设立系内采购专员统筹推进；②对大额项目（670万智能制造、400万智能制造产线）实行重点跟踪；③建立月度推进汇报机制。</p>
+      </div>
+    </div>
+    
+    <div class="rec-item p5">
+      <div class="priority">P5<br>建议</div>
+      <div class="rec-content">
+        <h4>重点关注国际交流类项目推进，消除零进度类别</h4>
+        <p>国际交流类5个项目平均推进率仅1.5%，4个完全未启动，是进度最差的类别。建议：①对外合作交流办公室制定该类项目推进时间表；②对VR实训设备、国际产教协同培训等项目明确采购路径；③考虑将部分项目与其他类别合并采购以提高效率。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Methodology -->
+<div class="section" style="background:var(--bg-light);">
+  <div class="section-title" style="border-left-color:var(--text-muted);">方法论说明</div>
+  <p style="font-size:13px; color:var(--text-muted); line-height:1.7;">
+    <strong>数据来源：</strong>2026年双高+产教融合委托采购台账汇总（CSV格式），数据采集截至2026年7月1日。<br>
+    <strong>分析方法：</strong>推进率=已完成节点数/13个采购节点总数；进度分级：推进率≥92.3%为已完成，0＜推进率＜92.3%为推进中，推进率=0为未启动；报送时效按4月30日截止日期判定。<br>
+    <strong>局限性：</strong>①部分项目数据存在缺失（如"待定"项目名称和责任部门）；②纪委报备0%完成率可能反映流程设计问题而非执行延误；③节约率基于仅2个中标项目计算，样本量极小，不代表整体趋势。<br>
+    <strong>免责声明：</strong>本报告基于现有台账数据生成，结论仅供决策参考，具体采购执行请以学院正式文件为准。
+  </p>
+</div>
+
+<!-- Footer -->
+<div class="report-footer">
+  天津海运职业学院 · 智数分析专家团 · 2026年7月1日生成 · 数据画像报告 v1.0
+</div>
+
+</div>
+
+<script>
+// Initialize charts after page load
+window.addEventListener('load', function() {
+  
+  // Color palette
+  const colors = ['#2980b9','#e74c3c','#f39c12','#27ae60','#8e44ad','#16a085','#d35400','#2c3e50','#1abc9c','#c0392b'];
+  
+  // Chart 1: Process Completion Rate (Bar Chart)
+  const chartProcess = echarts.init(document.getElementById('chart-process'));
+  chartProcess.setOption({
+    title: { text: '各采购节点完成率', left: 'center', textStyle: { fontSize: 15, color: '#2c3e50' } },
+    tooltip: { trigger: 'axis', formatter: '{b}: {c}%' },
+    grid: { left: '8%', right: '5%', bottom: '15%', top: '12%' },
+    xAxis: {
+      type: 'category',
+      data: ['需求报送','论证申请','论证安排','院务会讨论','用款审批','纪委报备','委托代理协议','编制政采计划','上报政采计划','招标文件公告','执行采购公告','签订合同','验收'],
+      axisLabel: { fontSize: 11, rotate: 30, color: '#6c757d' },
+      axisLine: { lineStyle: { color: '#dee2e6' } }
+    },
+    yAxis: {
+      type: 'value', max: 80,
+      axisLabel: { formatter: '{value}%', fontSize: 11 },
+      splitLine: { lineStyle: { color: '#eee' } }
+    },
+    series: [{
+      type: 'bar',
+      data: [69.0, 35.7, 35.7, 11.9, 7.1, 0.0, 4.8, 4.8, 4.8, 4.8, 4.8, 2.4, 0.0],
+      barWidth: '50%',
+      itemStyle: {
+        color: function(params) {
+          const val = params.value;
+          if (val === 0) return '#e74c3c';
+          if (val < 10) return '#e74c3c';
+          if (val < 36) return '#f39c12';
+          return '#27ae60';
+        },
+        borderRadius: [3, 3, 0, 0]
+      },
+      label: {
+        show: true,
+        position: 'top',
+        formatter: '{c}%',
+        fontSize: 11,
+        color: '#2c3e50'
+      }
+    }]
+  });
+  
+  // Chart 2: Category Budget (Horizontal Bar)
+  const chartCatBudget = echarts.init(document.getElementById('chart-category-budget'));
+  const catNames = ['实训基地','数字化教学','核心课程','产教融合','立德树人','国际交流','高水平专业群','园区办学','新形态教材','双师队伍'];
+  const catBudgets = [1520, 400, 312.5, 310, 197, 184, 159, 117, 90, 60];
+  chartCatBudget.setOption({
+    title: { text: '各类别预算金额(万元)', left: 'center', textStyle: { fontSize: 14, color: '#2c3e50' } },
+    tooltip: { trigger: 'axis', formatter: '{b}: {c}万元' },
+    grid: { left: '22%', right: '10%', bottom: '5%', top: '15%' },
+    xAxis: { type: 'value', axisLabel: { fontSize: 11 } },
+    yAxis: {
+      type: 'category',
+      data: catNames,
+      axisLabel: { fontSize: 12, color: '#2c3e50' },
+      inverse: true
+    },
+    series: [{
+      type: 'bar',
+      data: catBudgets,
+      barWidth: '55%',
+      itemStyle: {
+        color: function(params) {
+          return colors[params.dataIndex] || '#2980b9';
+        },
+        borderRadius: [0, 3, 3, 0]
+      },
+      label: {
+        show: true,
+        position: 'right',
+        formatter: '{c}',
+        fontSize: 11,
+        color: '#2c3e50'
+      }
+    }]
+  });
+  
+  // Chart 3: Category Progress (Bar)
+  const chartCatProgress = echarts.init(document.getElementById('chart-category-progress'));
+  chartCatProgress.setOption({
+    title: { text: '各类别平均推进率', left: 'center', textStyle: { fontSize: 14, color: '#2c3e50' } },
+    tooltip: { trigger: 'axis', formatter: '{b}: {c}%' },
+    grid: { left: '22%', right: '12%', bottom: '5%', top: '15%' },
+    xAxis: { type: 'value', max: 50, axisLabel: { formatter: '{value}%', fontSize: 11 } },
+    yAxis: {
+      type: 'category',
+      data: catNames,
+      axisLabel: { fontSize: 12, color: '#2c3e50' },
+      inverse: true
+    },
+    series: [{
+      type: 'bar',
+      data: [7.7, 9.0, 7.7, 38.5, 16.6, 1.5, 25.6, 30.8, 7.7, 30.8],
+      barWidth: '55%',
+      itemStyle: {
+        color: function(params) {
+          const val = params.value;
+          if (val < 10) return '#e74c3c';
+          if (val < 25) return '#f39c12';
+          return '#27ae60';
+        },
+        borderRadius: [0, 3, 3, 0]
+      },
+      label: {
+        show: true,
+        position: 'right',
+        formatter: '{c}%',
+        fontSize: 11,
+        color: '#2c3e50'
+      }
+    }]
+  });
+  
+  // Chart 4: Department Budget (Pie)
+  const chartDept = echarts.init(document.getElementById('chart-department'));
+  chartDept.setOption({
+    title: { text: '各责任部门预算占比', left: 'center', textStyle: { fontSize: 15, color: '#2c3e50' } },
+    tooltip: { trigger: 'item', formatter: '{b}: {c}万元 ({d}%)' },
+    legend: {
+      type: 'scroll',
+      orient: 'vertical',
+      right: '5%',
+      top: 'middle',
+      textStyle: { fontSize: 11 },
+      itemWidth: 12,
+      itemHeight: 12
+    },
+    series: [{
+      type: 'pie',
+      radius: ['35%', '65%'],
+      center: ['40%', '50%'],
+      data: [
+        { value: 1981.5, name: '海洋工程装备系', itemStyle: { color: '#e74c3c' } },
+        { value: 427, name: '科研处', itemStyle: { color: '#2980b9' } },
+        { value: 215, name: '待定', itemStyle: { color: '#f39c12' } },
+        { value: 184, name: '对外合作交流办公室', itemStyle: { color: '#27ae60' } },
+        { value: 159, name: '教务处', itemStyle: { color: '#8e44ad' } },
+        { value: 95, name: '网信办', itemStyle: { color: '#16a085' } },
+        { value: 72, name: '基础教学部', itemStyle: { color: '#d35400' } },
+        { value: 60, name: '人事处', itemStyle: { color: '#1abc9c' } },
+        { value: 46, name: '党委宣传部', itemStyle: { color: '#c0392b' } },
+        { value: 45, name: '实训教学中心', itemStyle: { color: '#34495e' } },
+        { value: 38, name: '招生就业处', itemStyle: { color: '#3498db' } },
+        { value: 9, name: '马克思主义学院' },
+        { value: 8, name: '团委' },
+        { value: 5, name: '体育教学部' },
+        { value: 5, name: '党委组织部' }
+      ],
+      label: {
+        formatter: function(params) {
+          if (params.percent > 3) return params.name + '\n' + params.percent.toFixed(1) + '%';
+          return '';
+        },
+        fontSize: 11
+      },
+      emphasis: {
+        itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0,0,0,0.2)' }
+      }
+    }]
+  });
+  
+  // Chart 5: Timeliness Distribution (Pie)
+  const chartTimeliness = echarts.init(document.getElementById('chart-timeliness'));
+  chartTimeliness.setOption({
+    title: { text: '需求报送时效分布', left: 'center', textStyle: { fontSize: 15, color: '#2c3e50' } },
+    tooltip: { trigger: 'item', formatter: '{b}: {c}个 ({d}%)' },
+    legend: { bottom: '5%', textStyle: { fontSize: 12 } },
+    series: [{
+      type: 'pie',
+      radius: ['30%', '55%'],
+      center: ['50%', '45%'],
+      data: [
+        { value: 12, name: '按时报送', itemStyle: { color: '#27ae60' } },
+        { value: 15, name: '延迟报送', itemStyle: { color: '#f39c12' } },
+        { value: 13, name: '未报送', itemStyle: { color: '#e74c3c' } },
+        { value: 2, name: '提前完成', itemStyle: { color: '#2980b9' } }
+      ],
+      label: {
+        formatter: '{b}\n{c}个 ({d}%)',
+        fontSize: 12
+      },
+      emphasis: {
+        itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0,0,0,0.2)' }
+      }
+    }]
+  });
+  
+  // Chart 6: Progress Distribution (Bar)
+  const chartProgressDist = echarts.init(document.getElementById('chart-progress-dist'));
+  // Group projects by progress ranges
+  const progressRanges = ['0%(未启动)','7.7%(1节点)','23.1%(3节点)','30.8%(4节点)','38.5%(5节点)','76.9%(10节点)','84.6%(11节点)'];
+  const progressCounts = [13, 11, 9, 2, 1, 1, 1];
+  // Actually let me recount from data:
+  // 0%: 13 projects (未启动)
+  // 7.7%: projects with 1 node completed: 2,6,7,21,22,23,24,26,30,33,34,35,36,40 = need to recount
+  // Let me use actual data: count by completed nodes
+  const nodeCounts = {};
+  const projectList = [
+    {nodes:0,count:13},{nodes:1,count:0},{nodes:3,count:0},{nodes:4,count:0},{nodes:5,count:0},{nodes:10,count:0},{nodes:11,count:0}
+  ];
+  // Actual distribution from data:
+  // 0 nodes: 13 projects
+  // 1 node: projects 2,6,7,21,22,23,24,26,30,33,34,35,36,40 = wait let me recount
+  // From the JSON, projects with 已完成节点数=1: #2,6,7,21,22,23,24,26,30,33,34,35,36,40
+  // That's 14 projects with 1 node? Let me verify from the data.
+  // Actually: 推进中 with 已完成节点数=1 includes many. Let me use the推进率 grouping.
+  
+  // Using actual data from analysis:
+  const progressGroups = {
+    '0% (未启动)': 13,
+    '7.7% (1节点)': 14,
+    '23.1% (3节点)': 8,
+    '30.8% (4节点)': 2,
+    '38.5% (5节点)': 1,
+    '76.9% (10节点)': 1,
+    '84.6% (11节点)': 1
+  };
+  // Total = 13+14+8+2+1+1+1 = 40... missing 2. Let me adjust.
+  // 42 projects total. Let me recount precisely:
+  // 未启动(0%): 13
+  // 推进中(7.7%): #2,6,7,21,22,23,24,26,30,33,34,35,36,40 = but #40 has budget 0 and 推进率 7.7%. Let me count all 推进中=29 projects.
+  // Among 29 推进中 projects, by completed nodes:
+  // 1 node: those with 推进率 7.7% - #2(1),6(1),7(1),21(1),22(1),23(1),24(1),26(1),30(1),33(1),34(1),35(1),36(1),40(1) = 14 projects with 1 node
+  // 3 nodes: those with 推进率 23.1% - #8(3),9(3),10(3),12(3),13(3),16(3),17(3),18(3),28(3),31(3) = 10 projects with 3 nodes
+  // Wait, #28 has 3 nodes (23.1%), #31 has 3 nodes. Let me count: 8(3),9(3),10(3),12(3),13(3),16(3),17(3),18(3),28(3),31(3) = 10
+  // 4 nodes: #25(4),42(4) = 2
+  // 5 nodes: #14(5) = 1
+  // 10 nodes: #4(10) = 1
+  // 11 nodes: #15(11) = 1
+  // Total: 13+14+10+2+1+1+1 = 42 ✓
+
+  chartProgressDist.setOption({
+    title: { text: '项目推进率分布（按已完成节点数）', left: 'center', textStyle: { fontSize: 15, color: '#2c3e50' } },
+    tooltip: { trigger: 'axis', formatter: '{b}: {c}个项目' },
+    grid: { left: '5%', right: '5%', bottom: '12%', top: '12%' },
+    xAxis: {
+      type: 'category',
+      data: ['0节点\n(未启动)', '1节点\n(7.7%)', '3节点\n(23.1%)', '4节点\n(30.8%)', '5节点\n(38.5%)', '10节点\n(76.9%)', '11节点\n(84.6%)'],
+      axisLabel: { fontSize: 11, color: '#6c757d' }
+    },
+    yAxis: { type: 'value', axisLabel: { formatter: '{value}个', fontSize: 11 }, splitLine: { lineStyle: { color: '#eee' } } },
+    series: [{
+      type: 'bar',
+      data: [
+        {value:13, itemStyle:{color:'#e74c3c'}},
+        {value:14, itemStyle:{color:'#f39c12'}},
+        {value:10, itemStyle:{color:'#f39c12'}},
+        {value:2, itemStyle:{color:'#2980b9'}},
+        {value:1, itemStyle:{color:'#2980b9'}},
+        {value:1, itemStyle:{color:'#27ae60'}},
+        {value:1, itemStyle:{color:'#27ae60'}}
+      ],
+      barWidth: '55%',
+      itemStyle: { borderRadius: [3, 3, 0, 0] },
+      label: { show: true, position: 'top', formatter: '{c}', fontSize: 12, color: '#2c3e50' }
+    }]
+  });
+  
+  // Chart 7: Budget Execution Status
+  const chartBudgetExec = echarts.init(document.getElementById('chart-budget-exec'));
+  chartBudgetExec.setOption({
+    title: { text: '预算执行进度', left: 'center', textStyle: { fontSize: 14, color: '#2c3e50' } },
+    tooltip: { trigger: 'item', formatter: '{b}: {c}万元' },
+    series: [{
+      type: 'pie',
+      radius: ['40%', '65%'],
+      center: ['50%', '55%'],
+      data: [
+        { value: 98.78, name: '已中标', itemStyle: { color: '#27ae60' } },
+        { value: 3250.72, name: '待执行', itemStyle: { color: '#dee2e6' } }
+      ],
+      label: {
+        formatter: '{b}\n{c}万元',
+        fontSize: 12
+      }
+    }]
+  });
+  
+  // Chart 8: Budget Category Pie
+  const chartBudgetPie = echarts.init(document.getElementById('chart-budget-pie'));
+  chartBudgetPie.setOption({
+    title: { text: '预算类别占比', left: 'center', textStyle: { fontSize: 14, color: '#2c3e50' } },
+    tooltip: { trigger: 'item', formatter: '{b}: {c}万元 ({d}%)' },
+    legend: { type: 'scroll', orient: 'vertical', right: '2%', top: 'middle', textStyle: { fontSize: 10 }, itemWidth: 10, itemHeight: 10 },
+    series: [{
+      type: 'pie',
+      radius: ['30%', '58%'],
+      center: ['38%', '55%'],
+      data: [
+        { value: 1520, name: '实训基地', itemStyle: { color: '#e74c3c' } },
+        { value: 400, name: '数字化教学', itemStyle: { color: '#2980b9' } },
+        { value: 312.5, name: '核心课程', itemStyle: { color: '#8e44ad' } },
+        { value: 310, name: '产教融合', itemStyle: { color: '#f39c12' } },
+        { value: 197, name: '立德树人', itemStyle: { color: '#27ae60' } },
+        { value: 184, name: '国际交流', itemStyle: { color: '#16a085' } },
+        { value: 159, name: '高水平专业群', itemStyle: { color: '#d35400' } },
+        { value: 117, name: '园区办学', itemStyle: { color: '#1abc9c' } },
+        { value: 90, name: '新形态教材', itemStyle: { color: '#34495e' } },
+        { value: 60, name: '双师队伍', itemStyle: { color: '#c0392b' } }
+      ],
+      label: {
+        formatter: function(params) {
+          if (params.percent > 5) return params.name + '\n' + params.percent.toFixed(1) + '%';
+          return '';
+        },
+        fontSize: 11
+      }
+    }]
+  });
+  
+  // Resize handler
+  window.addEventListener('resize', function() {
+    chartProcess.resize();
+    chartCatBudget.resize();
+    chartCatProgress.resize();
+    chartDept.resize();
+    chartTimeliness.resize();
+    chartProgressDist.resize();
+    chartBudgetExec.resize();
+    chartBudgetPie.resize();
+  });
+});
+</script>
+
+</body>
+</html>
