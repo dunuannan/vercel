@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>暑假学习工作台 · 2026</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#ffffff; --ink:#1a2332; --sub:#64748b; --line:#e8ecf1;
+    --accent:#0f766e; --accent-soft:#e6f4f2; --accent-mid:#5fb3ab;
+    --amber:#d97706; --amber-soft:#fdf3e3; --red:#dc2626; --red-soft:#fdecec;
+    --shadow:0 1px 2px rgba(16,24,40,.04),0 8px 24px -12px rgba(16,24,40,.10);
+    --radius:20px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",Roboto,sans-serif;
+    background:var(--bg);color:var(--ink);min-height:100dvh;line-height:1.6;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 64px}
+  button{font-family:inherit;cursor:pointer}
+
+  /* ===== 顶部学习者卡片 ===== */
+  .hero{
+    background:linear-gradient(135deg,#0f766e 0%,#115e59 55%,#134e4a 100%);
+    border-radius:26px;padding:28px 30px;color:#fff;position:relative;overflow:hidden;
+    box-shadow:0 12px 32px -14px rgba(15,118,110,.5);
+  }
+  .hero::after{
+    content:"";position:absolute;right:-70px;top:-70px;width:260px;height:260px;border-radius:50%;
+    background:radial-gradient(circle,rgba(255,255,255,.14),transparent 70%);
+  }
+  .hero-top{display:flex;align-items:center;gap:18px;flex-wrap:wrap;position:relative;z-index:1}
+  .avatar{
+    width:64px;height:64px;border-radius:18px;background:rgba(255,255,255,.16);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    border:1px solid rgba(255,255,255,.25);
+  }
+  .hero h1{font-size:24px;font-weight:700;letter-spacing:-.02em}
+  .hero .meta{font-size:13.5px;opacity:.82;margin-top:2px}
+  .hero-tags{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;position:relative;z-index:1}
+  .tag{
+    font-size:12.5px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.22);display:inline-flex;align-items:center;gap:6px;
+  }
+  .hero-streak{margin-left:auto;text-align:right;position:relative;z-index:1}
+  .hero-streak .num{font-size:34px;font-weight:800;line-height:1.1}
+  .hero-streak .lbl{font-size:12.5px;opacity:.8}
+  .hero-actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;position:relative;z-index:1}
+  .hbtn{
+    min-height:44px;padding:9px 16px;border-radius:12px;font-size:13px;font-weight:600;
+    background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.3);
+    display:inline-flex;align-items:center;gap:6px;transition:background .2s;
+  }
+  .hbtn:hover{background:rgba(255,255,255,.26)}
+  .hbtn.danger{background:rgba(220,38,38,.25);border-color:rgba(255,255,255,.35)}
+
+  /* ===== 备份提示条 ===== */
+  .backup-tip{
+    margin-top:16px;background:var(--amber-soft);border:1px solid #f3d9ac;color:#92600a;
+    border-radius:14px;padding:11px 16px;font-size:13px;display:none;align-items:center;gap:8px;
+  }
+
+  /* ===== 今日录入 ===== */
+  .entry-panel{
+    margin-top:20px;background:var(--card);border:2px solid var(--accent);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:22px 24px;
+  }
+  .entry-panel h2{font-size:17px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .entry-panel h2 .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);animation:pulse 1.6s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .entry-form{display:grid;grid-template-columns:1fr 1fr 1.6fr .8fr 1.2fr auto;gap:10px;margin-top:14px;align-items:end}
+  .field label{display:block;font-size:12px;color:var(--sub);margin-bottom:5px;font-weight:600}
+  .field input,.field select{
+    width:100%;min-height:44px;padding:9px 12px;font-size:16px;border:1.5px solid var(--line);border-radius:12px;
+    background:#fbfcfd;color:var(--ink);outline:none;transition:border-color .2s;font-family:inherit;
+  }
+  .field input:focus,.field select:focus{border-color:var(--accent)}
+  .add-btn{
+    min-height:44px;padding:10px 22px;border:none;border-radius:12px;background:var(--accent);color:#fff;
+    font-size:15px;font-weight:700;transition:transform .15s,background .2s;white-space:nowrap;
+  }
+  .add-btn:hover{background:#0d6961}
+  .add-btn:active{transform:scale(.97)}
+  .today-list{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+  .today-item{
+    display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;background:#f8fafb;
+    border:1px solid var(--line);font-size:13.5px;
+  }
+  .today-item .pill{font-size:11.5px;font-weight:700;color:#fff;padding:2px 10px;border-radius:99px;flex-shrink:0}
+  .today-item .t-task{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .today-item .t-min{font-weight:700;color:var(--accent);flex-shrink:0}
+  .del-btn{
+    width:32px;height:32px;border-radius:9px;border:none;background:var(--red-soft);color:var(--red);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s;
+  }
+  .del-btn:hover{background:#fbd5d5}
+  .today-empty{font-size:13px;color:var(--sub);padding:12px 4px}
+  .src{font-size:10.5px;padding:1px 7px;border-radius:99px;flex-shrink:0}
+  .src.manual{background:var(--accent-soft);color:var(--accent);font-weight:700}
+  .src.base{background:#eef1f5;color:#94a3b8}
+
+  /* ===== 总览卡片 ===== */
+  .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:20px}
+  .stat{
+    background:var(--card);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);
+    border:1px solid var(--line);transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s;
+  }
+  .stat:hover{transform:translateY(-3px);box-shadow:0 6px 24px -8px rgba(16,24,40,.16)}
+  .stat .ic{
+    width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    background:var(--accent-soft);color:var(--accent);margin-bottom:12px;
+  }
+  .stat .v{font-size:26px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+  .stat .v small{font-size:14px;font-weight:600;color:var(--sub);margin-left:2px}
+  .stat .k{font-size:12.5px;color:var(--sub);margin-top:2px}
+  .stat .extra{font-size:11.5px;color:var(--accent);margin-top:6px;font-weight:600}
+
+  /* ===== 区块 ===== */
+  section{margin-top:34px}
+  .sec-head{display:flex;align-items:baseline;gap:10px;margin-bottom:16px}
+  .sec-head h2{font-size:18px;font-weight:700;letter-spacing:-.01em}
+  .sec-head span{font-size:12.5px;color:var(--sub)}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 24px}
+  .grid-2{display:grid;grid-template-columns:1.7fr 1fr;gap:16px}
+  .chart-note{display:flex;gap:18px;font-size:12px;color:var(--sub);margin-top:10px;flex-wrap:wrap}
+  .chart-note i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  .bar-tip{font-size:11px;fill:var(--sub)}
+
+  /* ===== 在学课程 ===== */
+  .course-list{display:flex;flex-direction:column}
+  .course{
+    display:grid;grid-template-columns:44px 1.35fr 2fr .7fr .9fr .9fr;gap:14px;align-items:center;
+    padding:15px 4px;border-bottom:1px solid var(--line);
+  }
+  .course:last-child{border-bottom:none}
+  .course .badge-ic{
+    width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+    font-size:17px;font-weight:800;color:#fff;
+  }
+  .course .name{font-weight:700;font-size:15px}
+  .course .sub-info{font-size:12px;color:var(--sub);margin-top:1px}
+  .pbar{height:8px;border-radius:99px;background:#eef1f5;overflow:hidden}
+  .pbar i{display:block;height:100%;border-radius:99px;transform-origin:left;animation:grow 1s cubic-bezier(.16,1,.3,1) both}
+  @keyframes grow{from{transform:scaleX(0)}}
+  .pnum{font-size:12.5px;font-weight:700;margin-top:5px}
+  .cell-k{font-size:11px;color:var(--sub)}
+  .cell-v{font-size:13.5px;font-weight:600}
+  .lag{color:var(--amber);font-size:11.5px;font-weight:600;background:var(--amber-soft);padding:2px 8px;border-radius:99px;display:inline-block;margin-top:4px}
+  .ok-tag{color:var(--accent);font-size:11.5px;font-weight:600;background:var(--accent-soft);padding:2px 8px;border-radius:99px;display:inline-block;margin-top:4px}
+  .new-tag{color:#2f80ed;font-size:11.5px;font-weight:600;background:#e8f1fd;padding:2px 8px;border-radius:99px;display:inline-block;margin-top:4px}
+
+  /* ===== 徽章 ===== */
+  .badges{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .badge{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px 16px;
+    text-align:center;box-shadow:var(--shadow);transition:transform .25s cubic-bezier(.16,1,.3,1);
+    animation:pop .55s cubic-bezier(.34,1.56,.64,1) both;animation-delay:calc(var(--i)*50ms);
+  }
+  @keyframes pop{from{opacity:0;transform:scale(.85) translateY(10px)}}
+  .badge:hover{transform:translateY(-4px)}
+  .badge .medal{
+    width:56px;height:56px;margin:0 auto 12px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;color:#b45309;
+    box-shadow:0 4px 12px -4px rgba(245,158,11,.5),inset 0 2px 4px rgba(255,255,255,.7);
+  }
+  .badge .bn{font-weight:700;font-size:14px}
+  .badge .bd{font-size:11.5px;color:var(--sub);margin-top:3px;line-height:1.45}
+  .badge .bt{font-size:11px;color:var(--amber);font-weight:700;margin-top:7px}
+  .badge.locked{opacity:.75}
+  .badge.locked .medal{background:#f1f4f8;border:2px dashed #cbd5e1;color:#94a3b8;box-shadow:none}
+  .badge.locked .bt{color:#94a3b8}
+
+  footer{margin-top:36px;text-align:center;font-size:12px;color:var(--sub)}
+
+  /* ===== 弹窗 ===== */
+  .modal-mask{
+    position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;
+    z-index:50;padding:20px;backdrop-filter:blur(2px);
+  }
+  .modal{
+    background:#fff;border-radius:20px;padding:26px 26px 22px;max-width:400px;width:100%;
+    box-shadow:0 24px 60px -12px rgba(15,23,42,.35);
+  }
+  .modal h3{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px}
+  .modal p{font-size:13.5px;color:var(--sub);margin-top:10px;line-height:1.6}
+  .modal .m-actions{display:flex;gap:10px;margin-top:18px;justify-content:flex-end}
+  .mbtn{min-height:44px;padding:10px 18px;border-radius:12px;font-size:14px;font-weight:700;border:none}
+  .mbtn.cancel{background:#f1f4f8;color:var(--ink)}
+  .mbtn.danger{background:var(--red);color:#fff}
+
+  /* ===== Toast ===== */
+  #toast{
+    position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(20px);opacity:0;
+    background:#1a2332;color:#fff;font-size:13.5px;font-weight:600;padding:11px 20px;border-radius:12px;
+    transition:all .3s cubic-bezier(.16,1,.3,1);z-index:60;pointer-events:none;box-shadow:0 10px 30px -8px rgba(0,0,0,.4);
+  }
+  #toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+  /* ===== 响应式 ===== */
+  @media(max-width:960px){
+    .stats{grid-template-columns:repeat(3,1fr)}
+    .grid-2{grid-template-columns:1fr}
+    .badges{grid-template-columns:repeat(3,1fr)}
+    .entry-form{grid-template-columns:1fr 1fr 1fr}
+  }
+  @media(max-width:720px){
+    .wrap{padding:16px 14px 48px}
+    .hero{padding:22px 20px}
+    .hero h1{font-size:20px}
+    .hero-streak{margin-left:0;text-align:left;width:100%;display:flex;align-items:baseline;gap:10px}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .badges{grid-template-columns:repeat(2,1fr)}
+    .entry-form{grid-template-columns:1fr 1fr}
+    .add-btn{grid-column:1/-1}
+    .course{grid-template-columns:44px 1fr;grid-template-rows:auto auto;row-gap:8px}
+    .course .pwrap,.course .cell{grid-column:2}
+    .cell{display:inline-block;margin-right:18px}
+    .panel{padding:18px 16px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 学习者信息 -->
+  <div class="hero">
+    <div class="hero-top">
+      <div class="avatar">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/><path d="M22 10v6"/></svg>
+      </div>
+      <div>
+        <h1>暑假学习工作台</h1>
+        <div class="meta">学习者：初中备考生 ｜ 学习平台：校内作业 + 学而思辅导 ｜ 数据：本地存储，自己掌握</div>
+      </div>
+      <div class="hero-streak">
+        <div class="num" id="streakNum">–</div>
+        <div class="lbl">最长连续学习纪录</div>
+      </div>
+    </div>
+    <div class="hero-tags" id="heroTags"></div>
+    <div class="hero-actions">
+      <button class="hbtn" onclick="exportJSON()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        导出 JSON 备份</button>
+      <button class="hbtn" onclick="document.getElementById('importFile').click()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        导入恢复</button>
+      <button class="hbtn danger" onclick="askClear()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        清空手动数据</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
+    </div>
+  </div>
+
+  <div class="backup-tip" id="backupTip">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span>手动记录已积累 <b id="backupCnt">0</b> 条，建议点击上方「导出 JSON 备份」保存一份。</span>
+  </div>
+
+  <!-- 今日录入 -->
+  <div class="entry-panel">
+    <h2><span class="dot"></span>今日学习录入</h2>
+    <form class="entry-form" id="entryForm">
+      <div class="field">
+        <label>日期</label>
+        <input type="date" id="fDate" required>
+      </div>
+      <div class="field">
+        <label>科目</label>
+        <select id="fSubj">
+          <option>语文</option><option>数学</option><option>英语</option>
+          <option>物理</option><option>化学</option><option>历史</option><option>道法</option>
+          <option>游戏</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>任务内容</label>
+        <input type="text" id="fTask" placeholder="如：学而思配套习题 / 背单词20个" required>
+      </div>
+      <div class="field">
+        <label>时长(分钟)</label>
+        <input type="number" id="fMin" min="1" max="600" placeholder="30" required>
+      </div>
+      <div class="field">
+        <label>反馈/备注（可选）</label>
+        <input type="text" id="fNote" placeholder="如：全部正确">
+      </div>
+      <button type="submit" class="add-btn">＋ 记一笔</button>
+    </form>
+    <div class="today-list" id="todayList"></div>
+  </div>
+
+  <!-- 总览 -->
+  <div class="stats" id="statsRow"></div>
+
+  <!-- 图表区 -->
+  <section>
+    <div class="sec-head"><h2>学习趋势与科目分布</h2><span id="chartRange"></span></div>
+    <div class="grid-2">
+      <div class="panel">
+        <svg id="dailyChart" viewBox="0 0 680 240" width="100%" role="img" aria-label="每日学习时长柱状图"></svg>
+        <div class="chart-note">
+          <span><i style="background:#0f766e"></i>当日学习时长</span>
+          <span><i style="background:#d97706"></i>巅峰日</span>
+          <span><i style="background:#e8ecf1"></i>休息 / 未记录</span>
+        </div>
+      </div>
+      <div class="panel">
+        <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+          <svg id="donut" viewBox="0 0 200 200" width="168" height="168" role="img" aria-label="科目时长分布环形图"></svg>
+          <div id="donutLegend" style="flex:1;min-width:150px;font-size:12.5px"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 在学课程 -->
+  <section>
+    <div class="sec-head"><h2>在学课程进度</h2><span>进度 = 计划周期内实际学习天数参与度 ｜ 预计完成：2026-08-16（暑假计划结束）</span></div>
+    <div class="panel course-list" id="courseList"></div>
+  </section>
+
+  <!-- 成就徽章 -->
+  <section>
+    <div class="sec-head"><h2>成就徽章</h2><span id="badgeSummary"></span></div>
+    <div class="badges" id="badgeGrid"></div>
+  </section>
+
+  <footer>基础数据来自《260810 暑假计划表.xlsx》（已剔除异常值）｜ 手动录入保存在本浏览器 localStorage，换设备前请先导出备份</footer>
+</div>
+
+<!-- 清空确认弹窗 -->
+<div class="modal-mask" id="clearModal">
+  <div class="modal">
+    <h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>确认清空手动录入的数据？</h3>
+    <p>将删除全部 <b id="clearCnt">0</b> 条手动记录（Excel 基础数据不受影响）。此操作不可恢复，建议先「导出 JSON 备份」。<br><br>请再次确认：点击下方红色按钮即永久删除。</p>
+    <div class="m-actions">
+      <button class="mbtn cancel" onclick="closeClear()">取消</button>
+      <button class="mbtn danger" onclick="doClear()">确认清空</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ================= 基础数据（来自 Excel，共 157 条，含游戏） ================= */
+const BASE=[["2026-07-13","语文",14,"商山早行",""],["2026-07-13","英语",13,"首字母","7/8.5"],["2026-07-13","物理",28,"河北区24年期末","浮力变化量;杠杆调节平衡"],["2026-07-13","游戏",60,"",""],["2026-07-13","数学",54,"学而思配套习题","第一讲第6题错误"],["2026-07-13","道法",13,"法治小知识",""],["2026-07-14","语文",10,"咸阳城东楼",""],["2026-07-14","英语",12,"首字母","5/7.5"],["2026-07-14","游戏",90,"",""],["2026-07-14","物理",28,"试卷",""],["2026-07-14","数学",40,"学而思配套习题",""],["2026-07-14","道法",14,"法治小知识",""],["2026-07-15","语文",18,"背唐诗1首",""],["2026-07-15","英语",43,"试卷","-2.5"],["2026-07-15","游戏",90,"",""],["2026-07-15","物理",21,"试卷1套","影响动能大小的因素;大气压强的大小"],["2026-07-15","数学",45,"学而思配套练习",""],["2026-07-15","道法",13,"摘抄时政要闻",""],["2026-07-16","语文",28,"唐诗1首，秦观",""],["2026-07-16","英语",12,"试卷",""],["2026-07-16","游戏",95,"",""],["2026-07-16","数学",40,"学而思配套作业",""],["2026-07-16","数学",28,"学而思复习",""],["2026-07-16","道法",20,"小论文",""],["2026-07-17","语文",10,"诗一首",""],["2026-07-17","英语",12,"首字母",""],["2026-07-17","语文",5,"古诗文阅读",""],["2026-07-17","游戏",120,"",""],["2026-07-17","数学",17,"学而思配套作业",""],["2026-07-17","道法",12,"小作文",""],["2026-07-18","语文",26,"默写古诗8首",""],["2026-07-18","英语",10,"首字母",""],["2026-07-18","游戏",100,"",""],["2026-07-18","数学",27,"学而思配套习题",""],["2026-07-19","游戏",260,"xbox",""],["2026-07-20","语文",9,"文言文阅读",""],["2026-07-20","英语",15,"首字母","8.5/8"],["2026-07-20","数学",25,"学而思配套",""],["2026-07-20","物理",15,"学而思复习",""],["2026-07-20","游戏",100,"xbox",""],["2026-07-21","语文",30,"曹刿论战第1段","熟练"],["2026-07-21","英语",9,"首字母",""],["2026-07-21","数学",51,"学而思配套题",""],["2026-07-21","物理",20,"浮力题",""],["2026-07-21","语文",11,"文言文阅读1篇","亡=逃亡"],["2026-07-21","英语",27,"秦老师作业","2个"],["2026-07-21","游戏",90,"",""],["2026-07-22","语文",43,"曹刿论战2、3段",""],["2026-07-22","英语",27,"试卷1张",""],["2026-07-22","数学",62,"学而思配套习题1",""],["2026-07-22","物理",18,"",""],["2026-07-22","语文",5,"文言文1篇",""],["2026-07-22","英语",22,"秦老师打卡作业","2个"],["2026-07-22","游戏",103,"",""],["2026-07-23","语文",22,"出师表","第一段"],["2026-07-23","英语",17,"E说教","2个"],["2026-07-23","数学",150,"学而思","10"],["2026-07-23","数学",31,"学而思配套练习",""],["2026-07-23","物理",15,"船球模型1",""],["2026-07-23","英语",39,"卷子",""],["2026-07-23","游戏",97,"",""],["2026-07-24","语文",40,"出师表","2、3段"],["2026-07-24","英语",20,"E教学","2个"],["2026-07-24","数学",150,"学而思","11次课"],["2026-07-24","数学",20,"学而思配套",""],["2026-07-24","物理",17,"船球模型2",""],["2026-07-24","语文",14,"文言文",""],["2026-07-24","英语",18,"首字母","8分、5分"],["2026-07-24","游戏",93,"",""],["2026-07-25","语文",24,"出师表","第4段"],["2026-07-25","英语",24,"E说教","2段"],["2026-07-25","数学",150,"学而思","撒花完结课"],["2026-07-25","数学",45,"新观察","韦达定理1"],["2026-07-25","物理",14,"船球模型3","进步"],["2026-07-25","英语",9,"首字母","7分5分"],["2026-07-25","语文",10,"文言文阅读",""],["2026-07-25","游戏",90,"",""],["2026-07-26","语文",24,"出师表6段","1-6背诵"],["2026-07-26","化学",13,"元素周期表",""],["2026-07-26","数学",27,"韦达定理2","代换"],["2026-07-26","物理",11,"露排比",""],["2026-07-26","语文",12,"文言文",""],["2026-07-26","英语",10,"首字母","7.5分/7分"],["2026-07-26","游戏",145,"Xbox",""],["2026-07-26","游戏",100,"Xbox",""],["2026-07-27","语文",7,"文言文","等：同样"],["2026-07-27","数学",17,"方程的公共根","带入、联立"],["2026-07-27","英语",12,"首字母","8.5分/7.5分"],["2026-07-27","化学",15,"",""],["2026-07-27","语文",20,"出师表","第7段"],["2026-07-27","英语",5,"E说教",""],["2026-07-27","游戏",85,"",""],["2026-07-28","语文",20,"出师表8段",""],["2026-07-28","英语",12,"首字母","5.5/9"],["2026-07-28","物理",17,"作业",""],["2026-07-28","语文",12,"文言文","大鼠"],["2026-07-29","英语",15,"E听说",""],["2026-07-29","英语",13,"首字母","9.5/8.5"],["2026-07-29","语文",9,"文言文",""],["2026-07-30","语文",32,"背默出师表",""],["2026-07-30","英语",28,"试卷",""],["2026-07-30","化学",4,"作业",""],["2026-07-30","物理",3,"作业",""],["2026-07-30","英语",15,"E听说",""],["2026-07-31","语文",5,"文言文",""],["2026-07-31","数学",35,"数学","22-24"],["2026-07-31","英语",16,"首字母","9分/8分"],["2026-07-31","化学",7,"作业",""],["2026-07-31","英语",15,"E听说",""],["2026-08-01","语文",30,"1/2首",""],["2026-08-01","数学",28,"P25-26",""],["2026-08-01","英语",20,"首字母/E听说",""],["2026-08-01","化学",15,"作业",""],["2026-08-01","物理",15,"作业",""],["2026-08-02","英语",15,"E听说",""],["2026-08-02","化学",15,"作业",""],["2026-08-02","物理",15,"作业",""],["2026-08-03","数学",20,"P27",""],["2026-08-04","语文",10,"北固楼",""],["2026-08-04","数学",33,"P28",""],["2026-08-04","英语",8,"首字母",""],["2026-08-04","化学",25,"作业",""],["2026-08-04","物理",5,"作业",""],["2026-08-04","语文",5,"文言文",""],["2026-08-04","游戏",34,"",""],["2026-08-05","语文",4,"过零丁洋",""],["2026-08-05","数学",28,"P29",""],["2026-08-05","英语",22,"E听说/首字母",""],["2026-08-05","化学",17,"作业",""],["2026-08-05","物理",7,"作业",""],["2026-08-05","语文",5,"文言文",""],["2026-08-05","游戏",32,"",""],["2026-08-06","语文",8,"潼关怀古",""],["2026-08-06","数学",33,"P31-32","错1"],["2026-08-06","英语",26,"E听说/首字母",""],["2026-08-06","化学",14,"作业",""],["2026-08-06","物理",6,"作业",""],["2026-08-06","语文",6,"文言文",""],["2026-08-06","游戏",33,"",""],["2026-08-07","语文",17,"背默古诗","默写3首"],["2026-08-07","数学",14,"P33-34","错1个"],["2026-08-07","英语",19,"E听说/首字母",""],["2026-08-07","化学",20,"作业",""],["2026-08-07","物理",18,"作业",""],["2026-08-07","英语",28,"E听说备赛",""],["2026-08-07","游戏",30,"",""],["2026-08-08","化学",10,"作业",""],["2026-08-08","物理",19,"作业",""],["2026-08-08","游戏",45,"游戏",""],["2026-08-09","游戏",52,"游戏",""],["2026-08-10","数学",28,"p35-36","P36-1错误"],["2026-08-10","英语",31,"试卷","自己判断"],["2026-08-10","化学",8,"p1-p3","问老师要答案"],["2026-08-10","物理",20,"学而思小测",""],["2026-08-10","物理",7,"p1-p4","问老师要答案"],["2026-08-10","游戏",38,"",""],["2026-08-10","游戏",32,"",""]];
+
+const PLAN_START="2026-07-13", PLAN_END="2026-08-16";
+const COURSES=[
+ {name:"数学",color:"#0f766e",note:"含学而思 12 次课"},
+ {name:"英语",color:"#2f80ed",note:"单词 / 首字母 / E听说"},
+ {name:"语文",color:"#d97706",note:"古诗文背默 / 文言文"},
+ {name:"物理",color:"#7c3aed",note:"学而思作业 / 浮力专题"},
+ {name:"化学",color:"#db2777",note:"新学科目 · 元素周期表"},
+ {name:"历史",color:"#92400e",note:"新课程 · 待启动"},
+ {name:"道法",color:"#64748b",note:"法治小知识 / 时政摘抄"}
+];
+const LS_KEY="wb_sjplan_records";
+
+/* ================= 数据层 ================= */
+function loadManual(){
+  try{const v=JSON.parse(localStorage.getItem(LS_KEY)||"[]");return Array.isArray(v)?v:[]}
+  catch(e){return[]}
+}
+function saveManual(list){localStorage.setItem(LS_KEY,JSON.stringify(list))}
+function allRecords(){
+  const base=BASE.map(function(r){return{id:null,date:r[0],subj:r[1],min:r[2],task:r[3],note:r[4],src:"base"}});
+  return base.concat(loadManual());
+}
+function todayStr(){
+  const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function daysBetween(a,b){return Math.round((new Date(b)-new Date(a))/86400000)}
+function elapsedPlanDays(){
+  const t=todayStr();
+  const end=t<PLAN_END?t:PLAN_END;
+  return Math.max(daysBetween(PLAN_START,end)+1,1);
+}
+
+/* ================= 统计 ================= */
+function computeStats(recs){
+  const study=recs.filter(function(r){return r.subj!=="游戏"});
+  const game=recs.filter(function(r){return r.subj==="游戏"});
+  const byDay={},bySubjDay={};
+  study.forEach(function(r){
+    byDay[r.date]=(byDay[r.date]||0)+r.min;
+    if(!bySubjDay[r.subj])bySubjDay[r.subj]={min:0,tasks:0,days:{},last:""};
+    const s=bySubjDay[r.subj];
+    s.min+=r.min;s.tasks++;s.days[r.date]=1;
+    if(r.date>s.last)s.last=r.date;
+  });
+  /* 连续天数 */
+  const daySet={};Object.keys(byDay).forEach(function(d){daySet[d]=1});
+  const dates=Object.keys(byDay).sort();
+  let longest=0,cur=0,prev=null;
+  dates.forEach(function(d){
+    if(prev&&daysBetween(prev,d)===1)cur++;else cur=1;
+    if(cur>longest)longest=cur;prev=d;
+  });
+  let streak=0;const t=todayStr();
+  let probe=daySet[t]?t:(daySet[addDays(t,-1)]?addDays(t,-1):null);
+  while(probe&&daySet[probe]){streak++;probe=addDays(probe,-1)}
+  const totalMin=study.reduce(function(a,r){return a+r.min},0);
+  const gameMin=game.reduce(function(a,r){return a+r.min},0);
+  let best={date:"",min:0};Object.keys(byDay).forEach(function(d){if(byDay[d]>best.min)best={date:d,min:byDay[d]}});
+  /* 单日最多学科数 */
+  let maxSubjDay=0;const daySubj={};
+  study.forEach(function(r){if(!daySubj[r.date])daySubj[r.date]={};daySubj[r.date][r.subj]=1});
+  Object.keys(daySubj).forEach(function(d){const n=Object.keys(daySubj[d]).length;if(n>maxSubjDay)maxSubjDay=n});
+  return{byDay:byDay,bySubjDay:bySubjDay,longest:longest,streak:streak,
+    totalMin:totalMin,gameMin:gameMin,totalTasks:study.length,activeDays:dates.length,
+    best:best,maxSubjDay:maxSubjDay,subjCount:Object.keys(bySubjDay).length,daySet:daySet,dates:dates};
+}
+function addDays(ds,n){
+  const d=new Date(ds+"T00:00:00");d.setDate(d.getDate()+n);
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function fmtDate(ds){return ds.slice(5).replace("-","-")}
+
+/* ================= 渲染 ================= */
+function renderAll(){
+  const recs=allRecords();
+  const S=computeStats(recs);
+  renderHero(S);renderStats(S);renderChart(S);renderDonut(S);
+  renderCourses(S);renderBadges(S);renderTodayList(recs);renderBackupTip();
+}
+
+function renderHero(S){
+  document.getElementById("streakNum").innerHTML=S.longest+'<small style="font-size:15px;font-weight:600"> 天</small>';
+  document.getElementById("heroTags").innerHTML=
+    '<span class="tag">计划周期：'+PLAN_START+' ～ '+PLAN_END.slice(5)+'</span>'
+    +'<span class="tag">已进行 '+elapsedPlanDays()+' 天 · '+S.activeDays+' 天有学习</span>'
+    +'<span class="tag">当前连续 '+S.streak+' 天</span>';
+}
+
+function renderStats(S){
+  const hours=Math.round(S.totalMin/60*10)/10;
+  const perDay=S.activeDays?Math.round(S.totalMin/S.activeDays):0;
+  const icons=[
+    '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+    '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>',
+    '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+    '<circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>'
+  ];
+  const earned=countEarned(S);
+  const cards=[
+    [COURSES.length+'<small>门</small>',"在学课程","语数英物化 + 历史 + 道法"],
+    [S.totalTasks+'<small>项</small>',"已完成学习任务","日均约 "+(S.activeDays?Math.round(S.totalTasks/S.activeDays*10)/10:0)+" 项"],
+    [hours+'<small>小时</small>',"累计学习时长",S.totalMin.toLocaleString()+" 分钟 · 日均 "+perDay+" 分钟"],
+    [S.longest+'<small>天</small>',"最长连续学习","当前连续 "+S.streak+" 天"],
+    [earned+'<small>/ 12 枚</small>',"成就徽章（证书）",earned>=12?"全部点亮，太棒了！":"继续加油解锁全部徽章"]
+  ];
+  document.getElementById("statsRow").innerHTML=cards.map(function(c,i){
+    return '<div class="stat"><div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+icons[i]+'</svg></div>'
+      +'<div class="v">'+c[0]+'</div><div class="k">'+c[1]+'</div><div class="extra">'+c[2]+'</div></div>';
+  }).join("");
+}
+
+function renderChart(S){
+  document.getElementById("chartRange").textContent=PLAN_START+" ～ "+todayStr()+" · 单位：分钟";
+  const svg=document.getElementById("dailyChart");
+  const days=[];let d=PLAN_START;const end=todayStr();
+  while(d<=end){days.push(d);d=addDays(d,1)}
+  const W=680,H=240,padL=34,padB=30,padT=16;
+  const max=Math.max(300,S.best.min+20);
+  const bw=(W-padL-6)/days.length;
+  let s="";
+  [0,100,200,300].forEach(function(v){
+    const y=H-padB-(v/max)*(H-padB-padT);
+    s+='<line x1="'+padL+'" y1="'+y+'" x2="'+W+'" y2="'+y+'" stroke="#eef1f5"/>'
+      +'<text x="'+(padL-6)+'" y="'+(y+4)+'" text-anchor="end" class="bar-tip">'+v+'</text>';
+  });
+  const step=Math.ceil(days.length/12);
+  days.forEach(function(day,i){
+    const v=S.byDay[day]||0;
+    const x=padL+i*bw+bw*0.18,w=bw*0.64;
+    const h=Math.max(v/max*(H-padB-padT),v>0?2:0);
+    const y=H-padB-h;
+    const isBest=day===S.best.date;
+    const fill=v===0?"#eef1f5":(isBest?"#d97706":"#0f766e");
+    s+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+w.toFixed(1)+'" height="'+h.toFixed(1)+'" rx="3" fill="'+fill+'">'
+      +'<title>'+day+'：'+v+' 分钟</title></rect>';
+    if(i%step===0)
+      s+='<text x="'+(x+w/2).toFixed(1)+'" y="'+(H-padB+14)+'" text-anchor="middle" class="bar-tip">'+day.slice(5)+'</text>';
+    if(isBest&&v>0)
+      s+='<text x="'+(x+w/2).toFixed(1)+'" y="'+(y-6).toFixed(1)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#d97706">'+v+'</text>';
+  });
+  svg.innerHTML=s;
+}
+
+function renderDonut(S){
+  const svg=document.getElementById("donut"),lg=document.getElementById("donutLegend");
+  const data=COURSES.map(function(c){
+    const sd=S.bySubjDay[c.name];
+    return{name:c.name,color:c.color,min:sd?sd.min:0};
+  }).filter(function(d){return d.min>0});
+  const total=data.reduce(function(a,b){return a+b.min},0)||1;
+  const cx=100,cy=100,r=78,ir=54;let angle=-90,s="";
+  data.forEach(function(d){
+    const a2=angle+d.min/total*360;
+    const la=a2-angle>180?1:0;
+    const p=function(rr,aa){return (cx+rr*Math.cos(aa*Math.PI/180)).toFixed(1)+" "+(cy+rr*Math.sin(aa*Math.PI/180)).toFixed(1)};
+    s+='<path d="M'+p(r,angle)+' A'+r+' '+r+' 0 '+la+' 1 '+p(r,a2)+' L'+p(ir,a2)+' A'+ir+' '+ir+' 0 '+la+' 0 '+p(ir,angle)+' Z" fill="'+d.color+'" stroke="#fff" stroke-width="2"><title>'+d.name+' '+(d.min/total*100).toFixed(1)+'%</title></path>';
+    angle=a2;
+  });
+  s+='<text x="100" y="94" text-anchor="middle" font-size="22" font-weight="800" fill="#1a2332">'+(Math.round(S.totalMin/60*10)/10)+'h</text>'
+    +'<text x="100" y="114" text-anchor="middle" font-size="11" fill="#64748b">累计学习</text>';
+  svg.innerHTML=s;
+  lg.innerHTML=data.map(function(d){
+    return '<div style="display:flex;align-items:center;gap:8px;padding:4px 0">'
+      +'<span style="width:10px;height:10px;border-radius:3px;background:'+d.color+';flex-shrink:0"></span>'
+      +'<span style="font-weight:600">'+d.name+'</span>'
+      +'<span style="margin-left:auto;color:#64748b">'+(Math.round(d.min/60*10)/10)+'h · '+(d.min/total*100).toFixed(1)+'%</span></div>';
+  }).join("");
+}
+
+function renderCourses(S){
+  const elapsed=elapsedPlanDays();
+  document.getElementById("courseList").innerHTML=COURSES.map(function(c){
+    const sd=S.bySubjDay[c.name];
+    const days=sd?Object.keys(sd.days).length:0;
+    const tasks=sd?sd.tasks:0;
+    const last=sd&&sd.last?sd.last.slice(5):"—";
+    const pct=Math.min(Math.round(days/elapsed*100),100);
+    let status;
+    if(days===0)status='<span class="new-tag">新课程 · 待启动</span>';
+    else if(days<elapsed*0.5)status='<span class="lag">进度滞后</span>';
+    else status='<span class="ok-tag">进行中</span>';
+    return '<div class="course">'
+      +'<div class="badge-ic" style="background:'+c.color+'">'+c.name.charAt(0)+'</div>'
+      +'<div><div class="name">'+c.name+'</div><div class="sub-info">'+c.note+'</div></div>'
+      +'<div class="pwrap"><div class="pbar"><i style="width:'+pct+'%;background:linear-gradient(90deg,'+c.color+'99,'+c.color+')"></i></div>'
+      +'<div class="pnum" style="color:'+c.color+'">'+pct+'% · '+days+'/'+elapsed+' 天</div></div>'
+      +'<div class="cell"><div class="cell-k">课时(任务)</div><div class="cell-v">'+tasks+' 节</div></div>'
+      +'<div class="cell"><div class="cell-k">最近学习</div><div class="cell-v">'+last+'</div></div>'
+      +'<div class="cell"><div class="cell-k">预计完成</div><div class="cell-v">08-16</div><br>'+status+'</div>'
+      +'</div>';
+  }).join("");
+}
+
+function badgeStates(S){
+  const mathTop=(function(){
+    let top="",topMin=0;
+    Object.keys(S.bySubjDay).forEach(function(k){if(S.bySubjDay[k].min>topMin){topMin=S.bySubjDay[k].min;top=k}});
+    return top==="数学";
+  })();
+  const engDays=S.bySubjDay["英语"]?Object.keys(S.bySubjDay["英语"].days).length:0;
+  /* 满勤：已进行天数内 0 缺勤 */
+  let missed=0;let d=PLAN_START;const end=todayStr()<PLAN_END?todayStr():PLAN_END;
+  while(d<=end){if(!S.daySet[d])missed++;d=addDays(d,1)}
+  return [
+    {n:"开营先锋",d:"暑假首日即完成学习计划",ok:S.activeDays>=1,t:S.activeDays>=1?"07-13 达成":""},
+    {n:"七日坚持",d:"连续学习满 7 天",ok:S.longest>=7,t:S.longest>=7?"已达成":"当前最长 "+S.longest+" 天"},
+    {n:"廿日磨剑",d:"连续学习 20 天不间断",ok:S.longest>=20,t:S.longest>=20?"已达成":"当前最长 "+S.longest+" 天"},
+    {n:"数学之星",d:"单科时长第一：数学",ok:mathTop,t:mathTop?"已达成":""},
+    {n:"英语全勤王",d:"英语打卡满 25 天",ok:engDays>=25,t:engDays>=25?"已达成":"已打卡 "+engDays+" 天"},
+    {n:"文理兼修",d:"覆盖全部 7 个学科",ok:S.subjCount>=7,t:S.subjCount>=7?"已达成":"已覆盖 "+S.subjCount+"/7 科"},
+    {n:"巅峰时刻",d:"单日学习突破 250 分钟",ok:S.best.min>=250,t:S.best.min>=250?S.best.date.slice(5)+" · "+S.best.min+" 分钟":"最佳 "+S.best.min+" 分钟"},
+    {n:"厚积薄发",d:"累计学习突破 48 小时",ok:S.totalMin>=2880,t:S.totalMin>=2880?"已达成":"还差 "+Math.ceil((2880-S.totalMin)/60)+" 小时"},
+    {n:"张弛有度",d:"学习时长 ＞ 游戏时长",ok:S.totalMin>S.gameMin,t:S.totalMin>S.gameMin?"学习 "+S.totalMin+"′ ＞ 游戏 "+S.gameMin+"′":"游戏超时啦"},
+    {n:"全能之日",d:"单日覆盖 5 个学科",ok:S.maxSubjDay>=5,t:S.maxSubjDay>=5?"已达成":"最佳单日 "+S.maxSubjDay+" 科"},
+    {n:"满勤传说",d:"计划周期内 0 缺勤",ok:missed===0,t:missed===0?"已达成":"缺勤 "+missed+" 天"},
+    {n:"早起达人",d:"连续 7 天 8:30 前起床",ok:false,t:"暂无作息数据"}
+  ];
+}
+function countEarned(S){return badgeStates(S).filter(function(b){return b.ok}).length}
+function renderBadges(S){
+  const states=badgeStates(S);
+  const earned=states.filter(function(b){return b.ok}).length;
+  document.getElementById("badgeSummary").textContent="已点亮 "+earned+" 枚 · 待解锁 "+(states.length-earned)+" 枚";
+  const earnedIcon='<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  const lockIcon='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+  document.getElementById("badgeGrid").innerHTML=states.map(function(b,i){
+    return '<div class="badge'+(b.ok?'':' locked')+'" style="--i:'+i+'">'
+      +'<div class="medal">'+(b.ok?earnedIcon:lockIcon)+'</div>'
+      +'<div class="bn">'+b.n+'</div><div class="bd">'+b.d+'</div>'
+      +'<div class="bt">'+(b.ok?'已点亮 · '+b.t:'未解锁 · '+b.t)+'</div></div>';
+  }).join("");
+}
+
+/* ================= 今日录入 ================= */
+function colorOf(subj){
+  const c=COURSES.filter(function(x){return x.name===subj})[0];
+  return c?c.color:"#94a3b8";
+}
+function renderTodayList(recs){
+  const t=todayStr();
+  const items=recs.filter(function(r){return r.date===t}).sort(function(a,b){
+    return (a.src==="base"?0:1)-(b.src==="base"?0:1);
+  });
+  const el=document.getElementById("todayList");
+  if(!items.length){
+    el.innerHTML='<div class="today-empty">今天还没有记录，用上方表单记下第一笔吧。</div>';return;
+  }
+  const total=items.filter(function(r){return r.subj!=="游戏"}).reduce(function(a,r){return a+r.min},0);
+  el.innerHTML='<div style="font-size:12.5px;color:var(--sub);font-weight:600">今日已录 '+items.length+' 条 · 学习 '+total+' 分钟</div>'
+    +items.map(function(r){
+      return '<div class="today-item">'
+        +'<span class="pill" style="background:'+colorOf(r.subj)+'">'+r.subj+'</span>'
+        +'<span class="t-task">'+(r.task||"（未填任务）")+(r.note?' <span style="color:var(--sub);font-size:12px">· '+r.note+'</span>':'')+'</span>'
+        +'<span class="t-min">'+r.min+'′</span>'
+        +'<span class="src '+(r.src==="base"?"base":"manual")+'">'+(r.src==="base"?"表格":"手动")+'</span>'
+        +(r.src==="manual"
+          ?'<button class="del-btn" onclick="delRecord(\''+r.id+'\')" title="删除"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>'
+          :'')
+        +'</div>';
+    }).join("");
+}
+
+document.getElementById("entryForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  const date=document.getElementById("fDate").value;
+  const subj=document.getElementById("fSubj").value;
+  const task=document.getElementById("fTask").value.trim();
+  const min=parseInt(document.getElementById("fMin").value,10);
+  const note=document.getElementById("fNote").value.trim();
+  if(!date||!task||!min||min<1){toast("请完整填写日期、任务和时长");return}
+  const list=loadManual();
+  list.push({id:"m"+Date.now()+Math.floor(Math.random()*1000),date:date,subj:subj,min:min,task:task,note:note,src:"manual"});
+  saveManual(list);
+  document.getElementById("fTask").value="";document.getElementById("fMin").value="";document.getElementById("fNote").value="";
+  toast("已记录："+subj+" "+min+" 分钟");
+  renderAll();
+});
+
+function delRecord(id){
+  saveManual(loadManual().filter(function(r){return r.id!==id}));
+  toast("已删除该条记录");
+  renderAll();
+}
+
+/* ================= 备份 / 恢复 / 清空 ================= */
+function exportJSON(){
+  const list=loadManual();
+  const blob=new Blob([JSON.stringify({app:"暑假学习工作台",exportedAt:new Date().toISOString(),records:list},null,2)],{type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="暑假学习工作台-备份-"+todayStr()+".json";
+  a.click();URL.revokeObjectURL(a.href);
+  toast("已导出 "+list.length+" 条手动记录");
+}
+function importJSON(ev){
+  const file=ev.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(){
+    try{
+      const data=JSON.parse(reader.result);
+      const incoming=Array.isArray(data)?data:data.records;
+      if(!Array.isArray(incoming))throw 0;
+      const cur=loadManual();const ids={};cur.forEach(function(r){ids[r.id]=1});
+      let added=0;
+      incoming.forEach(function(r){
+        if(r&&r.date&&r.subj&&r.min>0){
+          if(!r.id||ids[r.id])r.id="m"+Date.now()+Math.floor(Math.random()*100000)+added;
+          ids[r.id]=1;
+          cur.push({id:r.id,date:r.date,subj:r.subj,min:Math.round(r.min),task:r.task||"",note:r.note||"",src:"manual"});
+          added++;
+        }
+      });
+      saveManual(cur);renderAll();
+      toast("导入成功：新增 "+added+" 条记录");
+    }catch(e){toast("导入失败：文件格式不正确")}
+  };
+  reader.readAsText(file);
+  ev.target.value="";
+}
+function askClear(){
+  const n=loadManual().length;
+  if(n===0){toast("暂无手动记录可清空");return}
+  document.getElementById("clearCnt").textContent=n;
+  document.getElementById("clearModal").style.display="flex";
+}
+function closeClear(){document.getElementById("clearModal").style.display="none"}
+function doClear(){
+  saveManual([]);closeClear();renderAll();toast("已清空全部手动记录");
+}
+function renderBackupTip(){
+  const n=loadManual().length;
+  const tip=document.getElementById("backupTip");
+  if(n>=30){tip.style.display="flex";document.getElementById("backupCnt").textContent=n}
+  else tip.style.display="none";
+}
+
+/* ================= Toast ================= */
+let toastTimer=null;
+function toast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){t.classList.remove("show")},2200);
+}
+
+/* ================= 初始化 ================= */
+document.getElementById("fDate").value=todayStr();
+renderAll();
+</script>
+</body>
+</html>
